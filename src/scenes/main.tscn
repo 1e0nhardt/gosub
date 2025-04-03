@@ -1,0 +1,173 @@
+[gd_scene load_steps=4 format=3 uid="uid://cbkm7rji7557q"]
+
+[ext_resource type="Script" uid="uid://dlq5b3xgkd2ui" path="res://scenes/main.gd" id="1_o5qli"]
+
+[sub_resource type="ImageTexture" id="ImageTexture_o5qli"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0wfyh"]
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o5qli")
+
+[node name="MainLayout" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MenuBar" type="HBoxContainer" parent="MainLayout"]
+layout_mode = 2
+
+[node name="FileButton" type="Button" parent="MainLayout/MenuBar"]
+layout_mode = 2
+text = "File"
+
+[node name="EditButton" type="Button" parent="MainLayout/MenuBar"]
+layout_mode = 2
+text = "Edit"
+
+[node name="HelpButton" type="Button" parent="MainLayout/MenuBar"]
+layout_mode = 2
+text = "Help"
+
+[node name="VSplitContainer" type="VSplitContainer" parent="MainLayout"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HSplitContainer" type="HSplitContainer" parent="MainLayout/VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VideoInfo" type="VBoxContainer" parent="MainLayout/VSplitContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="Viewport" type="TextureRect" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+texture = SubResource("ImageTexture_o5qli")
+expand_mode = 1
+
+[node name="ControlBar" type="HBoxContainer" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo"]
+layout_mode = 2
+
+[node name="TimeLabel" type="Label" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "00:41:29.02/00:46:29.06"
+
+[node name="CenterHBox" type="HBoxContainer" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="PrevButton" type="Button" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/CenterHBox"]
+layout_mode = 2
+text = "Prev
+"
+
+[node name="PlayButton" type="Button" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/CenterHBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Play"
+
+[node name="NextButton" type="Button" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/CenterHBox"]
+layout_mode = 2
+text = "Next"
+
+[node name="RightHbox" type="HBoxContainer" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="AspectRatioButton" type="Button" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/RightHbox"]
+layout_mode = 2
+text = "16:9"
+
+[node name="FullscreenButton" type="Button" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/RightHbox"]
+layout_mode = 2
+text = "Fullscreen"
+
+[node name="Workspace" type="VBoxContainer" parent="MainLayout/VSplitContainer/HSplitContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainLayout/VSplitContainer/HSplitContainer/Workspace"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MessagesVBox" type="VBoxContainer" parent="MainLayout/VSplitContainer/HSplitContainer/Workspace/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainLayout/VSplitContainer/HSplitContainer/Workspace/ScrollContainer/MessagesVBox"]
+layout_mode = 2
+text = "test"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainLayout/VSplitContainer/HSplitContainer/Workspace"]
+layout_mode = 2
+
+[node name="MessageEdit" type="TextEdit" parent="MainLayout/VSplitContainer/HSplitContainer/Workspace/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+wrap_mode = 1
+scroll_smooth = true
+scroll_fit_content_height = true
+
+[node name="SendButton" type="Button" parent="MainLayout/VSplitContainer/HSplitContainer/Workspace/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Send"
+
+[node name="TimelineVBox" type="VBoxContainer" parent="MainLayout/VSplitContainer"]
+layout_mode = 2
+
+[node name="TimelineControlBar" type="HBoxContainer" parent="MainLayout/VSplitContainer/TimelineVBox"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="MainLayout/VSplitContainer/TimelineVBox/TimelineControlBar"]
+layout_mode = 2
+text = "Mode
+"
+
+[node name="Button3" type="Button" parent="MainLayout/VSplitContainer/TimelineVBox/TimelineControlBar"]
+layout_mode = 2
+text = "Filter
+"
+
+[node name="Button4" type="Button" parent="MainLayout/VSplitContainer/TimelineVBox/TimelineControlBar"]
+layout_mode = 2
+text = "Feature
+"
+
+[node name="Button5" type="Button" parent="MainLayout/VSplitContainer/TimelineVBox/TimelineControlBar"]
+layout_mode = 2
+text = "Scale"
+
+[node name="TimelineComp" type="VBoxContainer" parent="MainLayout/VSplitContainer/TimelineVBox"]
+custom_minimum_size = Vector2(0, 150)
+layout_mode = 2
+
+[node name="ProgressSlider" type="HSlider" parent="MainLayout/VSplitContainer/TimelineVBox/TimelineComp"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MainLayout/VSplitContainer/TimelineVBox/TimelineComp"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_0wfyh")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]

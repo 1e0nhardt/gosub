@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bos6m5pea4g0e"]
+
+[ext_resource type="Script" uid="uid://1i2fpd32a7hj" path="res://global/deep_seek_api.gd" id="1_5bk3i"]
+
+[node name="DeepSeekApi" type="Node"]
+script = ExtResource("1_5bk3i")
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]

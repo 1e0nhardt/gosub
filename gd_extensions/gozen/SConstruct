@@ -1,0 +1,38 @@
+import os
+import platform as os_platform
+import subprocess
+
+env = SConscript("../godot_cpp/SConstruct")
+env.Append(CPPPATH=['src'])
+env.Append(LIBS=[
+    'avcodec',
+    'avformat',
+    'avfilter',
+    'avdevice',
+    'avutil',
+    'swscale',
+    'swresample',
+])
+
+num_jobs = ARGUMENTS.get('jobs', 16)
+platform = ARGUMENTS.get('platform', 'windows')
+
+if os_platform.system().lower() == 'windows':
+    env.Append(LIBS=[
+        'avcodec.lib',
+        'avformat.lib',
+        'avfilter.lib',
+        'avdevice.lib',
+        'avutil.lib',
+        'swscale.lib',
+        'swresample.lib',
+    ])
+
+    env.Append(CPPPATH=['ffmpeg_bin/include'])
+    env.Append(LIBPATH=['ffmpeg_bin/bin'])
+
+src = Glob("src/*.cpp")
+libpath = 'libgozen{}{}'.format(env['suffix'], env['SHLIBSUFFIX'])
+shardlib = env.SharedLibrary(libpath, src)
+
+Default(shardlib)
