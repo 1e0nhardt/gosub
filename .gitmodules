@@ -1,0 +1,6 @@
+[submodule "gd_extensions/godot_cpp"]
+	path = gd_extensions/godot_cpp
+	url = https://github.com/godotengine/godot-cpp.git
+[submodule "gd_extensions/gozen/ffmpeg"]
+	path = gd_extensions/gozen/ffmpeg
+	url = https://github.com/FFmpeg/FFmpeg.git
