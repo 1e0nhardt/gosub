@@ -2,6 +2,10 @@
 
 src/.godot/
 src/assets/test.mp4
+src/bin/
+
+src/scripts/parser/
+src/scripts/renderer/
 
 gd_extensions/gozen/ffmpeg_bin
 

@@ -1,6 +1,8 @@
 class_name DeepSeekChatStream
 extends DeepseekChat
 
+signal stream_data_received(message: String)
+
 var http_client: HTTPClient
 
 
@@ -30,7 +32,7 @@ func send_message(message: String) -> void:
 
 
 func send_message_without_history(message: String) -> void:
-    var new_messages := [SYSTEM_MESSAGE]
+    var new_messages := [system_message]
     new_messages.append({
         "role": "user",
         "content": message
@@ -45,6 +47,7 @@ func get_message_from_stream_data(stream_data: String) -> String:
     var json: Dictionary
     for line: String in data:
         if line.find("[DONE]") != -1:
+            message += "[DONE]"
             continue
         line = line.split(":", false, 1)[1]
         json = JSON.parse_string(line)
@@ -61,21 +64,20 @@ func poll() -> void:
 
     if http_client.get_status() == HTTPClient.STATUS_BODY or http_client.get_status() == HTTPClient.STATUS_CONNECTED:
         if http_client.has_response():
-            var headers = http_client.get_response_headers_as_dictionary() # Get response headers.
-            Logger.info("code: %d" % http_client.get_response_code()) # Show response code.
-            Logger.info(headers) # Show headers.
-
+            # var headers = http_client.get_response_headers_as_dictionary() # Get response headers.
+            # Logger.info("code: %d" % http_client.get_response_code()) # Show response code.
+            # Logger.info(headers) # Show headers.
             if http_client.is_response_chunked():
                 # Does it use chunks?
-                Logger.info("Response is Chunked!")
+                # Logger.info("Response is Chunked!")
+                pass
             else:
                 # Or just plain Content-Length
                 var bl = http_client.get_response_body_length()
                 Logger.info("Response Length: %d" % bl)
 
             # This method works for both anyway
-
-            var rb = PackedByteArray() # Array that will hold the data.
+            # var rb = PackedByteArray() # Array that will hold the data.
 
             while http_client.get_status() == HTTPClient.STATUS_BODY:
                 # While there is body left to be read
@@ -85,10 +87,12 @@ func poll() -> void:
                 if chunk.size() == 0:
                     continue
                 else:
-                    rb = rb + chunk # Append to read buffer.
-                Logger.info(chunk.get_string_from_utf8())
+                    # stream_data_received.emit(chunk.get_string_from_utf8())
+                    stream_data_received.emit(get_message_from_stream_data(chunk.get_string_from_utf8()))
+                    # rb = rb + chunk # Append to read buffer.
+                # Logger.info(chunk.get_string_from_utf8())
             # Done!
 
-            Logger.info("bytes got: %d" % rb.size())
+            # Logger.info("bytes got: %d" % rb.size())
             # var text = rb.get_string_from_utf8()
             # Logger.info("Text: %s" % text)

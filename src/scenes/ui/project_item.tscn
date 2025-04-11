@@ -1,0 +1,29 @@
+[gd_scene load_steps=4 format=3 uid="uid://clhf06kdgoh7k"]
+
+[ext_resource type="Script" uid="uid://d0ck80satlun7" path="res://scenes/ui/project_item.gd" id="1_gl5jj"]
+[ext_resource type="Texture2D" uid="uid://bhpbsfkdbftct" path="res://icon.svg" id="2_gl5jj"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2k77o"]
+texture = ExtResource("2_gl5jj")
+
+[node name="ProjectItem" type="MarginContainer"]
+custom_minimum_size = Vector2(160, 120)
+offset_right = 64.0
+offset_bottom = 27.0
+script = ExtResource("1_gl5jj")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxTexture_2k77o")
+
+[node name="NameLabel" type="Label" parent="VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "项目标题"
+horizontal_alignment = 1
+text_overrun_behavior = 3

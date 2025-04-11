@@ -43,21 +43,21 @@ func generic_log(message, log_level = LogLevel.INFO, opt = {}):
     var stack_array := []
     if not Engine.is_editor_hint():
         stack_array = get_stack()
-        var desired_stack_index = 2 if stack_array.size() >= 3 else 0
+        var desire_index = 2
+        if stack_array.size() >= 3:
+            var node_name = opt.get("node_name", "")
+            if node_name != "":
+                node_name += ":"
 
-        var node_name = opt.get("node_name", "")
-        if node_name != "":
-            node_name += ":"
+            var func_name = ""
+            if CONFIG["loc_info_with_method_name"]:
+                func_name = stack_array[desire_index]["function"] + ":"
 
-        var func_name = ""
-        if CONFIG["loc_info_with_method_name"]:
-            func_name = stack_array[desired_stack_index]["function"] + ":"
-
-        loc_info = "%s%s:%s%d" % [
-            node_name,
-            stack_array[desired_stack_index]["source"].split("/")[-1],
-            func_name,
-            stack_array[desired_stack_index]["line"]]
+            loc_info = "%s%s:%s%d" % [
+                node_name,
+                stack_array[desire_index]["source"].split("/")[-1],
+                func_name,
+                stack_array[desire_index]["line"]]
 
     var message_string = _format_message(message, opt)
 

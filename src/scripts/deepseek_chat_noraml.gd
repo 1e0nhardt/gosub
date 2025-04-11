@@ -1,6 +1,8 @@
 class_name DeepseekChatNormal
 extends DeepseekChat
 
+signal message_received(content: String)
+
 var http_request: HTTPRequest
 
 
@@ -12,11 +14,12 @@ func _init(a_http_request: HTTPRequest) -> void:
 
 func send_message(message: String) -> void:
     add_user_message(message)
+    # http_request.cancel_request()
     http_request.request(CHAT_COMPLETE_URL, deepseek_headers, HTTPClient.METHOD_POST, JSON.stringify(payload))
 
 
 func send_message_without_history(message: String) -> void:
-    var new_messages := [SYSTEM_MESSAGE]
+    var new_messages := [system_message]
     new_messages.append({
         "role": "user",
         "content": message

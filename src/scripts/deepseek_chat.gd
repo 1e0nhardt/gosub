@@ -1,18 +1,15 @@
 class_name DeepseekChat
 extends RefCounted
 
-@warning_ignore("UNUSED_SIGNAL")
-signal message_received(content: String)
-
 const DEEPSEEK_HOST = "https://api.deepseek.com"
 const CHAT_COMPLETE_URL = "https://api.deepseek.com/chat/completions"
 const AUTHORIZATION_HEADER = "Authorization: Bearer %s"
 const SYSTEM_MESSAGE = {
     "role": "system",
-    "content": "You are a helpful assistant"
+    "content": Prompts.DEFAULT
 }
 
-var messages := [SYSTEM_MESSAGE]
+var messages := [SYSTEM_MESSAGE.duplicate()]
 var payload := {
     "messages": [],
     "model": "deepseek-chat",
@@ -37,10 +34,10 @@ var deepseek_headers := [
     "Content-Type: application/json",
     "Accept: application/json",
 ]
+var system_message := SYSTEM_MESSAGE.duplicate()
 
 
 func _init() -> void:
-    Logger.info("DeepseekChat initialized.")
     payload_tmp = payload.duplicate(true)
     payload["messages"] = messages
     deepseek_headers.append(AUTHORIZATION_HEADER % get_deepseek_api_key())
@@ -79,3 +76,7 @@ func get_message() -> String:
 
 func get_deepseek_api_key() -> String:
     return "sk-4568478c989149daa5e6f4c9f8dcfa1d"
+
+
+func set_system_prompt(prompt: String) -> void:
+    system_message["content"] = prompt

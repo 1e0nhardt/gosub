@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://dplkhcy6toi8g"]
+
+[ext_resource type="Script" uid="uid://bdwn6v0k7x1lb" path="res://scenes/ui/custom_tab_button.gd" id="1_mkmee"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_mkmee"]
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_mkmee"]
+color = Color(0.0431373, 0.603922, 0.752941, 1)
+thickness = 2
+
+[node name="CustomTabButton" type="Button"]
+offset_right = 37.0
+offset_bottom = 31.0
+theme_override_colors/font_hover_pressed_color = Color(0.0431373, 0.603922, 0.752941, 1)
+theme_override_colors/font_hover_color = Color(0.0431373, 0.603922, 0.752941, 1)
+theme_override_colors/font_pressed_color = Color(0.0431373, 0.603922, 0.752941, 1)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_mkmee")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_mkmee")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_mkmee")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_mkmee")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_mkmee")
+toggle_mode = true
+text = "Tab"
+flat = true
+script = ExtResource("1_mkmee")
+main_color = Color(0.0431373, 0.603922, 0.752941, 1)
+focus_stylebox = SubResource("StyleBoxLine_mkmee")

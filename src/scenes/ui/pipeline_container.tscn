@@ -1,0 +1,82 @@
+[gd_scene load_steps=3 format=3 uid="uid://c72l875u7gwpv"]
+
+[ext_resource type="Script" uid="uid://cwr1dfprj0i7r" path="res://scenes/ui/pipeline_container.gd" id="1_7ehok"]
+[ext_resource type="PackedScene" uid="uid://0aj0bohe4mnr" path="res://scenes/ui/progress_indicator.tscn" id="2_2aq3f"]
+
+[node name="PipelineContainer" type="VBoxContainer"]
+offset_right = 344.0
+offset_bottom = 336.0
+script = ExtResource("1_7ehok")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 2
+text = "Video Translate Pipeline"
+horizontal_alignment = 1
+
+[node name="UrlInputHbox" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UrlInputHbox"]
+layout_mode = 2
+text = "URL:"
+
+[node name="UrlEdit" type="LineEdit" parent="UrlInputHbox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "https://www.youtube.com/watch?v=lYQmQGDLSJU"
+
+[node name="StartButton" type="Button" parent="UrlInputHbox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Start"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ProgressIndicator" parent="HBoxContainer" instance=ExtResource("2_2aq3f")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="StageVbox" type="VBoxContainer" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Download Video" type="Button" parent="HBoxContainer/StageVbox"]
+layout_mode = 2
+text = "Download Video"
+flat = true
+alignment = 0
+
+[node name="ExtractAudio" type="Button" parent="HBoxContainer/StageVbox"]
+layout_mode = 2
+text = "Extract Audio"
+flat = true
+alignment = 0
+
+[node name="Transcribe Audio" type="Button" parent="HBoxContainer/StageVbox"]
+layout_mode = 2
+text = "Transcribe Audio"
+flat = true
+alignment = 0
+
+[node name="AiTranslate" type="Button" parent="HBoxContainer/StageVbox"]
+layout_mode = 2
+text = "AI Translate"
+flat = true
+alignment = 0
+
+[node name="EditSubtitle" type="Button" parent="HBoxContainer/StageVbox"]
+layout_mode = 2
+text = "Edit Subtitle"
+flat = true
+alignment = 0
+
+[node name="Render" type="Button" parent="HBoxContainer/StageVbox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Render"
+flat = true
+alignment = 0

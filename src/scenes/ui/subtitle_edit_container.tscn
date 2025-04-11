@@ -1,0 +1,55 @@
+[gd_scene load_steps=3 format=3 uid="uid://dvphlalmd6tw"]
+
+[ext_resource type="Script" uid="uid://bfyyyld2u62ph" path="res://scenes/ui/subtitle_edit_container.gd" id="1_xh51t"]
+[ext_resource type="Script" uid="uid://tm6x6ihwjgc0" path="res://scenes/ui/subtitle_edit.gd" id="2_i7e1j"]
+
+[node name="SubtitleEditContainer" type="VBoxContainer"]
+offset_right = 517.0
+offset_bottom = 586.0
+script = ExtResource("1_xh51t")
+
+[node name="SubtitleEdit" type="CodeEdit" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+wrap_mode = 1
+gutters_draw_line_numbers = true
+script = ExtResource("2_i7e1j")
+
+[node name="ControlBar" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="PrevClipButton" type="Button" parent="ControlBar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "跳转到上
+一个片段"
+
+[node name="NextClipButton" type="Button" parent="ControlBar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "跳转到下
+一个片段"
+
+[node name="CombineNextButton" type="Button" parent="ControlBar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "与下一个
+片段合并"
+
+[node name="ReasrButton" type="Button" parent="ControlBar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "重新识别
+当前片段"
+
+[node name="GotoNextLongSentenceButton" type="Button" parent="ControlBar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "跳转到下
+一个长句"

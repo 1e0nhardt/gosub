@@ -12,6 +12,7 @@ config_version=5
 
 config/name="Gosub"
 config/version="0.0.1"
+run/main_scene="uid://b16h34whyirj5"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="godosub"
 config/features=PackedStringArray("4.4", "Forward Plus")
@@ -22,6 +23,10 @@ config/icon="res://icon.svg"
 
 Logger="*res://global/logger.gd"
 DeepSeekApi="*res://global/deep_seek_api.tscn"
+ExecuterThreadPool="*res://global/executer_thread_pool.gd"
+DeepseekThread="*res://global/deepseek_thread.gd"
+EventBus="*res://global/event_bus.gd"
+ProjectManager="*res://global/project_manager.gd"
 
 [debug]
 
