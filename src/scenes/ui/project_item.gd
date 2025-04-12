@@ -30,7 +30,7 @@ func set_project(p_project: Project) -> void:
 
 
 func update_thumbnail() -> void:
-    if not project.thumbnail_path:
+    if not FileAccess.file_exists(project.thumbnail_path):
         return
 
     var texture_stylebox := StyleBoxTexture.new()

@@ -5,6 +5,7 @@ extends Resource
 @export var project_name: String = ""
 @export var video_url = ""
 
+@export var video_path: String = ""
 @export var video_title: String = ""
 
 @export var pipeline_stage := -1
@@ -16,8 +17,6 @@ var project_folder: String:
     get(): return ProjectManager.PROJECT_FILE_FOLDER.path_join(uid_string) + "/"
 var project_file_path: String:
     get(): return ProjectManager.PROJECT_FILE_FOLDER.path_join(uid_string).path_join("project.tres")
-var video_path: String:
-    get(): return get_save_basename() + ".mp4"
 var thumbnail_path: String:
     get(): return get_save_basename() + ".png"
 var audio_path: String:
@@ -28,10 +27,6 @@ var output_video_title: String:
     get(): return sanitize_path(video_title)
 
 var subtitle_track: SubtitleTrack = SubtitleTrack.new()
-
-
-# func on_update(delta: float) -> void:
-#     pass
 
 
 func save() -> void:
@@ -49,6 +44,9 @@ func save() -> void:
 func load() -> void:
     EventBus.project_name_changed.emit.call_deferred(project_name)
     EventBus.pipeline_stage_changed.emit.call_deferred(pipeline_stage)
+
+    if not video_path:
+        video_path = get_save_basename() + ".mp4"
 
     if not Util.check_path(video_path):
         return

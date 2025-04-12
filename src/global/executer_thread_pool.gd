@@ -57,12 +57,13 @@ func executer_thread(execute_params: Dictionary, callback: Callable) -> void:
             }
         "download_video":
             var video_basename = execute_params["save_basename"] as String
+            ProjectManager.current_project.video_path = video_basename + ".mp4"
             err_flag = Executer.download_video(execute_params["url"], video_basename + ".mp4")
             result = {
                 "succeed": err_flag,
             }
         "extract_audio":
-            err_flag = Executer.extract_audio(execute_params["video_path"], execute_params["video_path"].get_basename() + ".wav")
+            err_flag = Executer.extract_audio(execute_params["video_path"], ProjectManager.current_project.get_save_basename() + ".wav")
             result = {
                 "succeed": err_flag,
             }
@@ -88,7 +89,7 @@ func executer_thread(execute_params: Dictionary, callback: Callable) -> void:
             var ass_path = execute_params["ass_path"]
             var video_title = execute_params["video_title"]
             err_flag = Executer.render_video_with_hard_subtitles(
-                ass_path.get_basename() + ".mp4",
+                ProjectManager.current_project.video_path,
                 ass_path,
                 ass_path.get_base_dir().path_join("%s.mp4" % video_title),
                 execute_params.get("bit_rate", "6M"),

@@ -62,11 +62,11 @@ func _ready() -> void:
     progress_slider.drag_ended.connect(_on_progress_slider_drag_ended)
     project_name_edit.mouse_entered.connect(func(): mouse_on_project_name_edit = true)
     project_name_edit.mouse_exited.connect(func(): mouse_on_project_name_edit = false)
-
-    # ProjectManager.show_blocker()
-    # await get_tree().create_timer(2).timeout
-    # ProjectManager.hide_blocker()
-    ProjectManager.show_message("Welcome to Gosub!", "This is a easy to use video translate tool.")
+    project_name_edit.text_submitted.connect(func(new_text):
+        var new_name = new_text.replace("*", "")
+        ProjectManager.current_project.project_name = new_name
+        _on_project_name_changed(new_name)
+    )
 
 
 func _input(event: InputEvent) -> void:
@@ -77,7 +77,7 @@ func _input(event: InputEvent) -> void:
         else:
             project_name_edit.editable = false
             project_name_edit.selecting_enabled = false
-            ProjectManager.current_project.project_name = project_name_edit.text
+            ProjectManager.current_project.project_name = project_name_edit.text.replace("*", "")
 
     if event is InputEventKey:
         if event.is_pressed() and event.keycode == KEY_S and event.ctrl_pressed:
@@ -108,6 +108,9 @@ func _process(delta) -> void:
 
 
 func open_video(filepath: String):
+    if not is_node_ready():
+        await ready
+
     if not filepath:
         return
 
@@ -122,18 +125,20 @@ func open_video(filepath: String):
     frame_rate = raw_frame_rate
     progress_slider.max_value = max_frame
 
-    seek_frame(1)
-    var thumbnail_image = Image.load_from_file(ProjectManager.current_project.thumbnail_path)
-    viewport.texture.set_image(thumbnail_image)
+    seek_frame(1, true)
+    if FileAccess.file_exists(ProjectManager.current_project.thumbnail_path):
+        var thumbnail_image = Image.load_from_file(ProjectManager.current_project.thumbnail_path)
+        viewport.texture.set_image(thumbnail_image)
 
 
 func seek_frame(frame_number: int, flush_canvas = false):
+    if frame_number < 0 or frame_number >= max_frame:
+        Logger.info("Invalid frame number: %s" % frame_number)
+        return
+
+    var img = video.seek_frame(frame_number)
     if flush_canvas:
-        video.seek_frame(frame_number - 1)
-        if frame_number <= max_frame:
-            viewport.texture.set_image(video.next_frame())
-    else:
-        video.seek_frame(frame_number)
+        viewport.texture.set_image(img)
     current_frame = frame_number
     audio_stream_player.play(current_time)
     audio_stream_player.stream_paused = !is_playing

@@ -3,6 +3,7 @@ extends VBoxContainer
 
 @onready var url_edit: LineEdit = %UrlEdit
 @onready var start_button: Button = %StartButton
+@onready var load_button: Button = %LoadButton
 @onready var render: Button = %Render
 @onready var progress_indicator: ProgressIndicator = %ProgressIndicator
 
@@ -11,6 +12,7 @@ func _ready() -> void:
     EventBus.pipeline_stage_changed.connect(func(stage): progress_indicator.stage = stage)
     EventBus.ai_translate_finished.connect(_ai_translate_callback)
     start_button.pressed.connect(_start_pipeline)
+    load_button.pressed.connect(_load_local_video)
     render.pressed.connect(func():
         ExecuterThreadPool.request_thread_execution(
             {
@@ -35,9 +37,19 @@ func set_stage(n: int) -> void:
     progress_indicator.stage = n
 
 
+func _load_local_video() -> void:
+    ProjectManager.load_video(
+        func(file_path: String):
+            ProjectManager.current_project.video_path = file_path
+            ProjectManager.current_project.video_title = file_path.get_file().get_basename()
+            url_edit.text = file_path
+            _download_video_callback({ "succeed": true })
+    )
+
+
 func _start_pipeline() -> void:
-    var video_url = url_edit.text
-    if video_url == "":
+    var video_url = url_edit.text.strip_edges()
+    if not video_url.begins_with("http"):
         return
 
     Logger.info("Start pipeline...")
@@ -82,13 +94,14 @@ func _download_video_callback(response: Dictionary) -> void:
         return
 
     set_stage(0)
-    EventBus.video_changed.emit(ProjectManager.current_project.get_save_basename() + ".mp4")
+
+    EventBus.video_changed.emit(ProjectManager.current_project.video_path)
 
     Logger.info("Extracting audio...")
     ExecuterThreadPool.request_thread_execution(
         {
             "type": "extract_audio",
-            "video_path": ProjectManager.current_project.get_save_basename() + ".mp4",
+            "video_path": ProjectManager.current_project.video_path,
         },
         _extract_audio_callback
     )
@@ -120,13 +133,6 @@ func _transcribe_audio_callback(response: Dictionary) -> void:
 
     set_stage(2)
 
-    # ExecuterThreadPool.request_thread_execution.call_deferred(
-    #     {
-    #         "type": "ai_translate",
-    #         "json_path": ProjectManager.current_project.get_save_basename() + ".json",
-    #     },
-    #     _ai_translate_callback
-    # )
     DeepSeekApi.json_to_clips(ProjectManager.current_project.get_save_basename() + ".json")
 
 
