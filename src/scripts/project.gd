@@ -40,7 +40,7 @@ func save() -> void:
     else:
         modify_time = Util.get_current_timestamp()
         dirty = false
-        EventBus.project_saved.emit(project_name)
+        EventBus.project_saved.emit()
         Logger.info("Project <%s> saved." % project_name)
 
 

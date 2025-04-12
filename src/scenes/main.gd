@@ -187,5 +187,5 @@ func _on_project_name_changed(project_name: String) -> void:
     project_name_edit.text = project_name + suffix
 
 
-func _on_project_saved(project_name: String) -> void:
-    project_name_edit.text = project_name
+func _on_project_saved() -> void:
+    project_name_edit.text = ProjectManager.current_project.project_name

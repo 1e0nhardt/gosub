@@ -15,8 +15,10 @@ func _ready():
     EventBus.subtitle_clip_index_updated.connect(_on_subtitle_clip_index_updated)
     EventBus.subtitle_clips_updated.connect(func():
         text = subtitle_track.get_full_text()
-        highlight_clip(subtitle_track.current_clip_index)
+        focus_clip(subtitle_track.current_clip_index)
     )
+    EventBus.project_saved.connect(save_subtitle)
+
     default_background_color = get_line_background_color(0)
 
     # 右键菜单
@@ -53,6 +55,7 @@ func save_subtitle():
     if subtitle_track.num_clips == 0:
         return
 
+    #TODO 检查文本的合法性
     subtitle_track.update_subtitle_clips(text)
     subtitle_track.export_subtitle_file()
 
@@ -69,6 +72,10 @@ func highlight_clip(clip_index: int):
     last_highlight_clip_index = clip_index
 
 
-func _on_subtitle_clip_index_updated():
-    highlight_clip(subtitle_track.current_clip_index)
+func focus_clip(clip_index: int) -> void:
+    highlight_clip(clip_index)
     set_line_as_center_visible(subtitle_track.current_clip_index * 4)
+
+
+func _on_subtitle_clip_index_updated():
+    focus_clip(subtitle_track.current_clip_index)

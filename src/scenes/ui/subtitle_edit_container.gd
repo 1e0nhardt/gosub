@@ -1,7 +1,7 @@
 class_name SubtitleEditContainer
 extends VBoxContainer
 
-@onready var subtitle_edit: CodeEdit = %SubtitleEdit
+@onready var subtitle_edit: SubtitleEdit = %SubtitleEdit
 @onready var prev_clip_button: Button = %PrevClipButton
 @onready var next_clip_button: Button = %NextClipButton
 @onready var combine_next_button: Button = %CombineNextButton
@@ -42,6 +42,7 @@ func _on_goto_next_long_sentence_button_pressed():
 func _on_combine_next_button_pressed():
     subtitle_edit.subtitle_track.merge_with_next_clip()
     subtitle_edit.text = subtitle_edit.subtitle_track.get_full_text()
+    subtitle_edit.focus_clip(subtitle_edit.subtitle_track.current_clip_index)
 
 
 func _on_reasr_button_pressed():

@@ -100,7 +100,7 @@ func _on_split_pressed() -> void:
 func text_to_clips() -> Array:
     var text = text_edit.text.strip_edges()
     var splits := text.split("\n")
-    var data = json_data["transcription"]
+    var data: Array = json_data["transcription"].filter(func(e): return e["text"] != "")
     var index = 0
     var clips := []
     for split in splits:

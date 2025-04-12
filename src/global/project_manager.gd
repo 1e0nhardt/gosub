@@ -23,8 +23,10 @@ func _notification(what: int) -> void:
     elif what == NOTIFICATION_PREDELETE:
         # if is_instance_valid(_file_dialog):
         #     _file_dialog.queue_free()
-        # if is_instance_valid(_info_popup):
-        #     _info_popup.queue_free()
+        if is_instance_valid(_info_popup):
+            _info_popup.queue_free()
+        if is_instance_valid(_reasr_popup):
+            _reasr_popup.queue_free()
         if is_instance_valid(_controls_blocker):
             _controls_blocker.queue_free()
 

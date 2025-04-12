@@ -165,8 +165,8 @@ static func parse_edit_text(content: String) -> Array[SubtitleClip]:
         # 时间行
         reg_match = treg.search(lines[i].strip_edges())
         if reg_match:
-            subtitle_clip.start = reg_match.get_string(1)
-            subtitle_clip.end = reg_match.get_string(2)
+            subtitle_clip.start = Util.time_str2ms(reg_match.get_string(1))
+            subtitle_clip.end = Util.time_str2ms(reg_match.get_string(2))
         else:
             Logger.warn("Time label is invalid! => %s" % lines[i])
         i += 1
