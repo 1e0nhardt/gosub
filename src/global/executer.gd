@@ -72,6 +72,10 @@ static func transcribe_audio(audio_file_path: String, output_path: String = "") 
     return executer_helper.execute()
 
 
+## 使用 whisper.cpp 转录音频片段  [br]
+## [param audio_file_path] 音频文件绝对路径
+## [param offset_from] 开始时间
+## [param offset_to] 结束时间
 static func transcribe_segment(audio_file_path: String, offset_from: int, offset_to: int) -> bool:
     var whisper_cli_path = get_real_path("bin/whisper/cuda/whisper-cli.exe")
     var model_path = get_real_path("bin/whisper/models/ggml-base.en.bin")
@@ -83,6 +87,21 @@ static func transcribe_segment(audio_file_path: String, offset_from: int, offset
         offset_to - offset_from
     ]
     var executer_helper = ExecuterHelper.new(whisper_cli_path)
+    executer_helper.set_args(args)
+    return executer_helper.execute()
+
+
+static func render_video_with_hard_subtitles(video_file_path: String, subtitles_path: String, output_path: String = "", bit_rate: String = "6M") -> bool:
+    if FileAccess.file_exists(output_path):
+        return true
+
+    var ffmpeg_path = get_real_path("bin/ffmpeg.exe")
+    # 滤镜参数中 `:` 是特殊字符，需要转义，否则会报错
+    subtitles_path = subtitles_path.replace(":", "\\:")
+
+    var args = '-i "%s" -vf "subtitles=\'%s\'" -b:v %s "%s"' % [video_file_path, subtitles_path, bit_rate, output_path]
+    Logger.info(args)
+    var executer_helper = ExecuterHelper.new(ffmpeg_path)
     executer_helper.set_args(args)
     return executer_helper.execute()
 

@@ -84,6 +84,18 @@ func executer_thread(execute_params: Dictionary, callback: Callable) -> void:
                 "succeed": err_flag,
                 "data": json
             }
+        "render_video":
+            var ass_path = execute_params["ass_path"]
+            var video_title = execute_params["video_title"]
+            err_flag = Executer.render_video_with_hard_subtitles(
+                ass_path.get_basename() + ".mp4",
+                ass_path,
+                ass_path.get_base_dir().path_join("%s.mp4" % video_title),
+                execute_params.get("bit_rate", "6M"),
+            )
+            result = {
+                "succeed": err_flag
+            }
 
     executer_thread_mutex.lock()
     executer_thread_queue.append([callback, result])

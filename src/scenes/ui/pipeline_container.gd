@@ -11,8 +11,24 @@ func _ready() -> void:
     EventBus.pipeline_stage_changed.connect(func(stage): progress_indicator.stage = stage)
     EventBus.ai_translate_finished.connect(_ai_translate_callback)
     start_button.pressed.connect(_start_pipeline)
-    # url_edit.text = "https://www.youtube.com/watch?v=nICWuof91iY"
-    url_edit.text = "https://www.youtube.com/watch?v=FR618z5xEiM"
+    render.pressed.connect(func():
+        ExecuterThreadPool.request_thread_execution(
+            {
+                "type": "render_video",
+                "ass_path": ProjectManager.current_project.get_save_basename() + ".ass",
+                "video_title": ProjectManager.current_project.output_video_title,
+                "bit_rate": "6M",
+            },
+            func(response):
+                var err_flag = response["succeed"]
+                if not err_flag:
+                    Logger.warn("Render video failed!")
+                    return
+                set_stage(5)
+        )
+    )
+
+    url_edit.text = ProjectManager.current_project.video_url
 
 
 func set_stage(n: int) -> void:

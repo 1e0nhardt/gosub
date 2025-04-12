@@ -24,6 +24,8 @@ var audio_path: String:
     get(): return get_save_basename() + ".wav"
 var transcribe_result_path: String:
     get(): return get_save_basename() + ".json"
+var output_video_title: String:
+    get(): return sanitize_path(video_title)
 
 var subtitle_track: SubtitleTrack = SubtitleTrack.new()
 
@@ -76,6 +78,19 @@ func set_video_title(title: String, use_as_project_name: bool = false) -> void:
 
 func get_save_basename() -> String:
     return ProjectSettings.globalize_path(project_folder.path_join(uid_string))
+
+
+func sanitize_path(path: String) -> String:
+    path = path.replace("\\", "")
+    path = path.replace("/", "")
+    path = path.replace("?", "")
+    path = path.replace("*", "")
+    path = path.replace(":", "")
+    path = path.replace("\"", "")
+    path = path.replace("<", "")
+    path = path.replace(">", "")
+    path = path.replace("|", "")
+    return path
 
 
 func to_pretty() -> Dictionary:
