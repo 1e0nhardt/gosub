@@ -63,7 +63,8 @@ static func time_ms2str(millisecond: int, format = "ass") -> String:
     var hours = minutes / 60
     minutes %= 60
     if format == "ass":
-        return "%02d:%02d:%02d.%03d" % [hours, minutes, seconds, ms]
+        ms /= 10
+        return "%02d:%02d:%02d.%02d" % [hours, minutes, seconds, ms]
     else:
         return "%02d:%02d:%02d,%03d" % [hours, minutes, seconds, ms]
 
@@ -82,11 +83,12 @@ static func time_str2float(time_str: String, format = "ass") -> float:
     var ms
     if format == "ass":
         tmp_arr = sec_ms.split(".")
+        ms = int(tmp_arr[1]) / 100.0
     else:
         tmp_arr = sec_ms.split(",")
+        ms = int(tmp_arr[1]) / 1000.0
     seconds = tmp_arr[0]
-    ms = tmp_arr[1]
-    return float(int(hrs) * 3600 + int(mins) * 60 + int(seconds)) + int(ms) / 1000.0
+    return float(int(hrs) * 3600 + int(mins) * 60 + int(seconds)) + ms
 
 
 static func time_str2ms(time_str: String, format = "ass") -> int:
