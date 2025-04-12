@@ -72,6 +72,21 @@ static func transcribe_audio(audio_file_path: String, output_path: String = "") 
     return executer_helper.execute()
 
 
+static func transcribe_segment(audio_file_path: String, offset_from: int, offset_to: int) -> bool:
+    var whisper_cli_path = get_real_path("bin/whisper/cuda/whisper-cli.exe")
+    var model_path = get_real_path("bin/whisper/models/ggml-base.en.bin")
+    var args = '-m "%s" -f "%s" -of "%s" -ot %d -d %d --output-json --split-on-word -ml 1' % [
+        model_path,
+        audio_file_path,
+        audio_file_path.get_base_dir().path_join("temp_segment"),
+        offset_from,
+        offset_to - offset_from
+    ]
+    var executer_helper = ExecuterHelper.new(whisper_cli_path)
+    executer_helper.set_args(args)
+    return executer_helper.execute()
+
+
 ## 辅助类
 class ExecuterHelper extends RefCounted:
     var _executable_path: String = ""

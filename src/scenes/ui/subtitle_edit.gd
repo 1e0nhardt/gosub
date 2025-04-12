@@ -11,10 +11,12 @@ var subtitle_track: SubtitleTrack:
 
 
 func _ready():
-    Logger.info("SubtitleEdit ready.")
-
     EventBus.subtitle_loaded.connect(load_subtitle)
     EventBus.subtitle_clip_index_updated.connect(_on_subtitle_clip_index_updated)
+    EventBus.subtitle_clips_updated.connect(func():
+        text = subtitle_track.get_full_text()
+        highlight_clip(subtitle_track.current_clip_index)
+    )
     default_background_color = get_line_background_color(0)
 
     # 右键菜单

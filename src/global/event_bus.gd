@@ -12,6 +12,8 @@ signal video_paused(pause_or_play: bool)
 
 signal subtitle_clip_index_updated
 signal subtitle_loaded
+signal subtitle_clips_updated
+signal clips_translated(clips: Array)
 
 signal ai_translate_progress_updated(progress: float)
 signal ai_translate_finished

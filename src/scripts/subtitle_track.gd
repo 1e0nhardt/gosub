@@ -49,6 +49,21 @@ func merge_with_next_clip() -> void:
     subtitle_clips.remove_at(current_clip_index + 1)
 
 
+func try_update_current_clip_with_clips(clips: Array) -> void:
+    if clips.size() == 0:
+        return
+
+    if clips[0].first_text == "":
+        clips[0].first_text = current_clip.first_text
+
+    clips.reverse()
+    for clip in clips:
+        subtitle_clips.insert(current_clip_index + 1, clip)
+
+    subtitle_clips.remove_at(current_clip_index)
+    EventBus.subtitle_clips_updated.emit()
+
+
 func get_next_long_sentence_index() -> int:
     var i = current_clip_index + 1
     while i < num_clips:
@@ -131,9 +146,6 @@ func update(play_time: float):
         current_clip_index = bin_search(play_time, current_clip_index, num_clips - 1)
     else:
         current_clip_index = bin_search(play_time, 0, current_clip_index)
-
-    Logger.info(play_time)
-    Logger.info(current_clip_index)
 
 
 func bin_search(play_time: float, left: int, right: int) -> int:

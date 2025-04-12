@@ -1,0 +1,88 @@
+[gd_scene load_steps=5 format=3 uid="uid://dhnt1bmucarne"]
+
+[ext_resource type="Script" uid="uid://dqfafsaulj1qr" path="res://scenes/ui/popups/info_popup.gd" id="1_jhn8w"]
+[ext_resource type="Texture2D" uid="uid://b6rwwby1oh8r5" path="res://assets/icons/icon-close-small.svg" id="2_783eq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_783eq"]
+bg_color = Color(0.215686, 0.219608, 0.294118, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xosqj"]
+bg_color = Color(0.0901961, 0.0823529, 0.109804, 1)
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="InfoPopup" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 641.0
+offset_bottom = 246.0
+script = ExtResource("1_jhn8w")
+title_stylebox = SubResource("StyleBoxFlat_783eq")
+content_stylebox = SubResource("StyleBoxFlat_xosqj")
+
+[node name="Layout" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleBar" type="MarginContainer" parent="Layout"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 2
+
+[node name="TitleBox" type="HBoxContainer" parent="Layout/TitleBar"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Layout/TitleBar/TitleBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Information"
+
+[node name="CloseButton" type="Button" parent="Layout/TitleBar/TitleBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+icon = ExtResource("2_783eq")
+flat = true
+expand_icon = true
+
+[node name="Content" type="MarginContainer" parent="Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 10
+
+[node name="ContentHBox" type="HBoxContainer" parent="Layout/Content"]
+layout_mode = 2
+
+[node name="LeftImage" type="TextureRect" parent="Layout/Content/ContentHBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="ContentVBox" type="VBoxContainer" parent="Layout/Content/ContentHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TopImage" type="TextureRect" parent="Layout/Content/ContentHBox/ContentVBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="ContentLabel" type="RichTextLabel" parent="Layout/Content/ContentHBox/ContentVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+fit_content = true
+
+[node name="ButtonBar" type="HBoxContainer" parent="Layout/Content/ContentHBox/ContentVBox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2

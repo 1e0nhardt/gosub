@@ -14,6 +14,8 @@ func _ready() -> void:
     next_clip_button.pressed.connect(_on_next_clip_button_pressed)
     goto_next_long_sentence_button.pressed.connect(_on_goto_next_long_sentence_button_pressed)
     combine_next_button.pressed.connect(_on_combine_next_button_pressed)
+    reasr_button.pressed.connect(_on_reasr_button_pressed)
+
     # 编辑时暂停，按esc退出编辑，继续播放。
     subtitle_edit.focus_entered.connect(func(): EventBus.video_paused.emit(false))
     subtitle_edit.yield_focus.connect(func(): EventBus.video_paused.emit(true))
@@ -46,20 +48,24 @@ func _on_reasr_button_pressed():
     if subtitle_edit.subtitle_track.num_clips == 0:
         return
 
-    EventBus.video_paused.emit(true)
+    EventBus.video_paused.emit(false)
+    reasr_button.disabled = true
 
-#     WS.send({
-#         "type": "asr",
-#         "payload": {
-#             "audio_path": Config.get_app_value("audio_path"),
-#             "time_range": subtitle_edit.subtitle_track.current_clip.get_clip_time_range()
-#         }
-#     })
-#     %AsrEdit.raw_clip_first_text = subtitle_edit.subtitle_track.current_clip.first_text
-#     asr_popup_panel.show()
-# func _on_asr_popup_cancel_button_pressed():
-#     asr_popup_panel.hide()
-# func _on_confirm_btton_pressed():
-#     asr_popup_panel.hide()
-#     subtitle_edit.try_update_current_clip_with_clips(%AsrEdit.asr_words.clips)
+    ExecuterThreadPool.request_thread_execution(
+        {
+            "type": "transcribe_segment",
+            "audio_path": ProjectManager.current_project.audio_path,
+            "from": subtitle_edit.subtitle_track.current_clip.start,
+            "to": subtitle_edit.subtitle_track.current_clip.end
+        },
+        func(response: Dictionary):
+            reasr_button.disabled = false
+
+            var err_flag = response["succeed"]
+            if not err_flag:
+                Logger.warn("Transcribe failed!")
+                return
+
+            ProjectManager.show_asr_edit(response["data"])
+    )
 #endregion

@@ -109,3 +109,29 @@ func json_to_clips(json_path: String) -> bool:
 
     Logger.info("translate time cost: %s" % Util.time_ms2str(Time.get_ticks_msec() - start_time))
     return true
+
+
+func translate_clips(clips: Array) -> void:
+    deepseek_chat_normal.set_system_prompt.call_deferred(Prompts.GOSUB_TRANSLATE)
+    var source_contents := ""
+
+    for i in range(0, len(clips), 8):
+        for j in 8:
+            if i + j >= len(clips):
+                break
+            source_contents += clips[i + j].list_line()
+
+        chat_once(source_contents, true)
+        await message_received
+        var result = received_message
+        var result_contents = result.split("\n")
+        for j in range(len(result_contents)):
+            if result_contents[j].begins_with("[") == false:
+                Logger.info("Unexpected result: " + result_contents[j])
+                continue
+
+            clips[i + j].first_text = result_contents[j].split("]")[1].strip_edges()
+        source_contents = ""
+        received_message = ""
+
+    EventBus.clips_translated.emit.call_deferred(clips)

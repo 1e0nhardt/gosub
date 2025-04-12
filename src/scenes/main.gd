@@ -63,6 +63,11 @@ func _ready() -> void:
     project_name_edit.mouse_entered.connect(func(): mouse_on_project_name_edit = true)
     project_name_edit.mouse_exited.connect(func(): mouse_on_project_name_edit = false)
 
+    # ProjectManager.show_blocker()
+    # await get_tree().create_timer(2).timeout
+    # ProjectManager.hide_blocker()
+    ProjectManager.show_message("Welcome to Gosub!", "This is a easy to use video translate tool.")
+
 
 func _input(event: InputEvent) -> void:
     if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():

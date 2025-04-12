@@ -6,6 +6,7 @@ src/bin/
 
 src/scripts/parser/
 src/scripts/renderer/
+src/test
 
 gd_extensions/gozen/ffmpeg_bin
 

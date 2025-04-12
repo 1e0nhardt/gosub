@@ -77,6 +77,13 @@ func executer_thread(execute_params: Dictionary, callback: Callable) -> void:
             result = {
                 "succeed": err_flag,
             }
+        "transcribe_segment":
+            err_flag = Executer.transcribe_segment(execute_params["audio_path"], execute_params["from"], execute_params["to"])
+            var json: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(ProjectManager.current_project.project_folder.path_join("temp_segment.json")))
+            result = {
+                "succeed": err_flag,
+                "data": json
+            }
 
     executer_thread_mutex.lock()
     executer_thread_queue.append([callback, result])
