@@ -48,9 +48,6 @@ func load() -> void:
     if not video_path:
         video_path = get_save_basename() + ".mp4"
 
-    if not Util.check_path(video_path):
-        return
-
     EventBus.video_changed.emit.call_deferred(video_path)
 
     var ass_path := get_save_basename() + ".ass"

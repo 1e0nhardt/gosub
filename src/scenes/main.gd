@@ -1,5 +1,8 @@
 extends Control
 
+@export var menu_bar_stylebox: StyleBox
+@export var bg_stylebox: StyleBox
+
 var is_playing: bool = false
 var max_frame: int = 0
 var raw_frame_rate: float = 0
@@ -29,16 +32,12 @@ var mouse_on_project_name_edit: bool = false
 @onready var project_name_edit: LineEdit = %ProjectNameEdit
 @onready var subtitle_label: Label = %SubtitleLabel
 @onready var subtitle_label2: Label = %SubtitleLabel2
+@onready var menu_bar: HBoxContainer = %MenuBar
+@onready var vsplit_container: VSplitContainer = %VSplitContainer
 
 
 func _ready() -> void:
-    ProjectManager.load_project()
-
-    # 获取主窗口
-    var window = get_window()
-    var window_size = Vector2i(1920, 1080)
-    Util.center_main_window(window, window_size)
-    window.unresizable = false
+    ProjectManager.show_select_project_popup()
 
     EventBus.project_name_changed.connect(_on_project_name_changed)
     EventBus.project_saved.connect(_on_project_saved)
@@ -68,6 +67,13 @@ func _ready() -> void:
         _on_project_name_changed(new_name)
     )
 
+    queue_redraw.call_deferred()
+
+
+func _draw() -> void:
+    draw_style_box(menu_bar_stylebox, Rect2(Vector2.ZERO, menu_bar.size))
+    draw_style_box(bg_stylebox, Rect2(Vector2(0, menu_bar.size.y), vsplit_container.size))
+
 
 func _input(event: InputEvent) -> void:
     if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
@@ -77,7 +83,8 @@ func _input(event: InputEvent) -> void:
         else:
             project_name_edit.editable = false
             project_name_edit.selecting_enabled = false
-            ProjectManager.current_project.project_name = project_name_edit.text.replace("*", "")
+            if ProjectManager.current_project:
+                ProjectManager.current_project.project_name = project_name_edit.text.replace("*", "")
 
     if event is InputEventKey:
         if event.is_pressed() and event.keycode == KEY_S and event.ctrl_pressed:
@@ -111,10 +118,10 @@ func open_video(filepath: String):
     if not is_node_ready():
         await ready
 
+    video.close_video()
+
     if not filepath:
         return
-
-    video.close_video()
 
     Logger.info("Video Path: %s" % filepath)
 

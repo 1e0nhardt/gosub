@@ -1,12 +1,14 @@
 extends Node
 
 const PROJECT_FILE_FOLDER = "user://projects/"
+const SELECT_PROJECT_POPUP_SCENE = preload("res://scenes/ui/popups/select_project_popup.tscn")
 const INFO_POPUP_SCENE = preload("res://scenes/ui/popups/info_popup.tscn")
 const REASR_POPUP_SCENE = preload("res://scenes/ui/popups/reasr_popup.tscn")
 
 var current_project: Project = null
 var registered_projects: Dictionary[String, Project] = {}
 
+var _select_project_popup: SelectProjectPopup = null
 var _info_popup: InfoPopup = null
 var _reasr_popup: ReasrPopup = null
 var _controls_blocker: PopupManager.PopupControl = null
@@ -105,6 +107,19 @@ func register_projects() -> void:
 
     Logger.info(registered_projects)
 #endregion Project Management
+
+
+func get_select_project_popup() -> SelectProjectPopup:
+    if not _select_project_popup:
+        _select_project_popup = SELECT_PROJECT_POPUP_SCENE.instantiate()
+
+    return _select_project_popup
+
+
+func show_select_project_popup(popup_size: Vector2 = Vector2(700, 360)) -> void:
+    var popup := get_select_project_popup()
+    popup.size = popup_size
+    popup.popup_anchored(Vector2(0.5, 0.5), PopupManager.Direction.OMNI, true)
 
 
 func get_info_popup() -> InfoPopup:

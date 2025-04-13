@@ -1,18 +1,16 @@
 [gd_scene load_steps=3 format=3 uid="uid://b16h34whyirj5"]
 
-[ext_resource type="Script" uid="uid://bfweggnye0wx8" path="res://scenes/startup_screen.gd" id="1_rnepr"]
+[ext_resource type="Script" uid="uid://bfweggnye0wx8" path="res://scenes/ui/popups/select_project_popup.gd" id="1_k5ykc"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_rnepr"]
 font_size = 24
 
-[node name="StartupScreen" type="Control"]
+[node name="SelectProjectPopup" type="Control"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("1_rnepr")
+anchors_preset = 0
+offset_right = 821.0
+offset_bottom = 536.0
+script = ExtResource("1_k5ykc")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1

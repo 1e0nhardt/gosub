@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Gosub"
 config/version="0.0.1"
-run/main_scene="uid://b16h34whyirj5"
+run/main_scene="uid://cbkm7rji7557q"
 config/use_custom_user_dir=true
 config/custom_user_dir_name="godosub"
 config/features=PackedStringArray("4.4", "Forward Plus")

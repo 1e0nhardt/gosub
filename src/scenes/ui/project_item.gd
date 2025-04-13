@@ -1,6 +1,8 @@
 class_name ProjectItem
 extends MarginContainer
 
+signal project_selected(p: Project)
+
 var project: Project
 
 @onready var panel_container: PanelContainer = %PanelContainer
@@ -14,13 +16,7 @@ func _ready() -> void:
 func _on_panel_container_gui_input(event: InputEvent) -> void:
     if event is InputEventMouseButton:
         if event.button_index == MOUSE_BUTTON_LEFT and event.double_click:
-            open_project()
-
-
-func open_project() -> void:
-    ProjectManager.current_project = project
-    # TODO open main scene
-    get_tree().change_scene_to_file("res://scenes/main.tscn")
+            project_selected.emit(project)
 
 
 func set_project(p_project: Project) -> void:

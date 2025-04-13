@@ -30,7 +30,8 @@ func _ready() -> void:
         )
     )
 
-    url_edit.text = ProjectManager.current_project.video_url
+    if ProjectManager.current_project:
+        url_edit.text = ProjectManager.current_project.video_url
 
 
 func set_stage(n: int) -> void:
