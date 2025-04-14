@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cbkm7rji7557q"]
+[gd_scene load_steps=15 format=3 uid="uid://cbkm7rji7557q"]
 
 [ext_resource type="Script" uid="uid://dlq5b3xgkd2ui" path="res://scenes/main.gd" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://bn14hy61lju6w" path="res://scenes/ui/custom_tab_container.tscn" id="2_0wfyh"]
@@ -8,16 +8,19 @@
 [ext_resource type="Texture2D" uid="uid://dqmg41fqhpgnc" path="res://assets/icons/icon-maximize.svg" id="4_tefeu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tefeu"]
-bg_color = Color(0.027451, 0.027451, 0.0352941, 1)
+bg_color = Color(0.0941176, 0.0941176, 0.0941176, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o6xl0"]
-bg_color = Color(0.0666667, 0.0705882, 0.101961, 1)
+bg_color = Color(0.211765, 0.211765, 0.211765, 1)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0wfyh"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sugp2"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jyhfs"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tipki"]
+bg_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
 
 [sub_resource type="ImageTexture" id="ImageTexture_o5qli"]
 
@@ -94,10 +97,14 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 6
+theme_override_styles/split_bar_background = SubResource("StyleBoxFlat_tipki")
 
 [node name="HSplitContainer" type="HSplitContainer" parent="MainLayout/VSplitContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_constants/separation = 6
+theme_override_styles/split_bar_background = SubResource("StyleBoxFlat_tipki")
 
 [node name="VideoInfo" type="VBoxContainer" parent="MainLayout/VSplitContainer/HSplitContainer"]
 layout_mode = 2

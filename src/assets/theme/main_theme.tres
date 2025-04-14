@@ -1,0 +1,47 @@
+[gd_resource type="Theme" load_steps=7 format=3 uid="uid://dvmm57eyj0pq"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_7hixu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e04sg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e04sg"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.4, 0.4, 0.4, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7hixu"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.3, 0.3, 0.3, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4001u"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.3, 0.445, 0.6, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4001u"]
+
+[resource]
+SettingButton/base_type = &"Button"
+SettingButton/styles/disabled = SubResource("StyleBoxEmpty_7hixu")
+SettingButton/styles/focus = SubResource("StyleBoxEmpty_e04sg")
+SettingButton/styles/hover = SubResource("StyleBoxFlat_e04sg")
+SettingButton/styles/normal = SubResource("StyleBoxFlat_7hixu")
+SettingButton/styles/pressed = SubResource("StyleBoxFlat_4001u")
+SettingCheckBox/base_type = &"CheckBox"
+SettingCheckBox/styles/focus = SubResource("StyleBoxEmpty_4001u")

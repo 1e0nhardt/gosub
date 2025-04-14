@@ -2,12 +2,17 @@ extends Node
 
 const PROJECT_FILE_FOLDER = "user://projects/"
 const SELECT_PROJECT_POPUP_SCENE = preload("res://scenes/ui/popups/select_project_popup.tscn")
+const SETTINGS_POPUP_SCENE = preload("res://scenes/ui/popups/settings_popup.tscn")
 const INFO_POPUP_SCENE = preload("res://scenes/ui/popups/info_popup.tscn")
 const REASR_POPUP_SCENE = preload("res://scenes/ui/popups/reasr_popup.tscn")
+const SETTINGS_PATH: String = "user://settings.json"
+
+var settings: Dictionary = {}
 
 var current_project: Project = null
 var registered_projects: Dictionary[String, Project] = {}
 
+var _settings_popup: SettingsPopup = null
 var _select_project_popup: SelectProjectPopup = null
 var _info_popup: InfoPopup = null
 var _reasr_popup: ReasrPopup = null
@@ -18,6 +23,11 @@ var _file_dialog_finalize_callable: Callable = Callable()
 
 
 func _init() -> void:
+    if FileAccess.file_exists(SETTINGS_PATH):
+        settings = JSON.parse_string(FileAccess.get_file_as_string(SETTINGS_PATH))
+    else:
+        settings = Constant.DEFAULT_SETTINGS
+
     Util.ensure_dir(PROJECT_FILE_FOLDER)
     register_projects()
 
@@ -34,6 +44,26 @@ func _notification(what: int) -> void:
             _reasr_popup.queue_free()
         if is_instance_valid(_controls_blocker):
             _controls_blocker.queue_free()
+
+
+func save_settings() -> void:
+    var file = FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
+    file.store_string(JSON.stringify(settings))
+    file.close()
+
+
+func get_setting_value(path: String) -> Variant:
+    var dict = settings
+    for p in path.split("/", false):
+        dict = dict.get(p, {})
+    return dict.get("data", null)
+
+
+func set_setting_value(path: String, value: Variant) -> void:
+    var value_dict = settings
+    for p in path.split("/", false):
+        value_dict = value_dict.get(p)
+    value_dict["data"] = value
 
 
 #region Project Management
@@ -74,6 +104,7 @@ func load_project_from_file(path: String) -> void:
 func load_project() -> void:
     if current_project:
         current_project.load()
+        EventBus.project_loaded.emit()
     else:
         Logger.warn("Invalid project.")
 
@@ -105,8 +136,21 @@ func register_projects() -> void:
     else:
         Logger.info("An error occurred when trying to access the dir_path.")
 
-    Logger.info(registered_projects)
+    # Logger.info(registered_projects)
 #endregion Project Management
+
+
+func get_settings_popup() -> SettingsPopup:
+    if not _settings_popup:
+        _settings_popup = SETTINGS_POPUP_SCENE.instantiate()
+
+    return _settings_popup
+
+
+func show_settings_popup(popup_size: Vector2 = Vector2(1000, 640)) -> void:
+    var popup := get_settings_popup()
+    popup.size = popup_size
+    popup.popup_anchored(Vector2(0.5, 0.5), PopupManager.Direction.OMNI, true)
 
 
 func get_select_project_popup() -> SelectProjectPopup:
@@ -116,7 +160,7 @@ func get_select_project_popup() -> SelectProjectPopup:
     return _select_project_popup
 
 
-func show_select_project_popup(popup_size: Vector2 = Vector2(700, 360)) -> void:
+func show_select_project_popup(popup_size: Vector2 = Vector2(724, 384)) -> void:
     var popup := get_select_project_popup()
     popup.size = popup_size
     popup.popup_anchored(Vector2(0.5, 0.5), PopupManager.Direction.OMNI, true)
@@ -166,6 +210,9 @@ func show_blocker() -> void:
         _controls_blocker = PopupManager.PopupControl.new()
 
     _controls_blocker.size = get_window().size
+    if PopupManager.is_popup_shown(_controls_blocker):
+        return
+
     PopupManager.show_popup(_controls_blocker, Vector2.ZERO, PopupManager.Direction.BOTTOM_RIGHT)
 
 

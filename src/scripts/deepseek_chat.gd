@@ -4,12 +4,8 @@ extends RefCounted
 const DEEPSEEK_HOST = "https://api.deepseek.com"
 const CHAT_COMPLETE_URL = "https://api.deepseek.com/chat/completions"
 const AUTHORIZATION_HEADER = "Authorization: Bearer %s"
-const SYSTEM_MESSAGE = {
-    "role": "system",
-    "content": Prompts.DEFAULT
-}
 
-var messages := [SYSTEM_MESSAGE.duplicate()]
+var messages := [system_message_dict.duplicate()]
 var payload := {
     "messages": [],
     "model": "deepseek-chat",
@@ -34,8 +30,11 @@ var deepseek_headers := [
     "Content-Type: application/json",
     "Accept: application/json",
 ]
-var system_message := SYSTEM_MESSAGE.duplicate()
 
+var system_message_dict := {
+    "role": "system",
+    "content": ProjectManager.get_setting_value("/llm/deepseek/prompt/chat")
+}
 
 func _init() -> void:
     payload_tmp = payload.duplicate(true)
@@ -58,7 +57,7 @@ func add_assistant_message(message: String):
 
 
 func clear_history_messages():
-    messages = [SYSTEM_MESSAGE]
+    messages = [system_message_dict.duplicate()]
     payload["messages"] = messages
 
 
@@ -75,8 +74,14 @@ func get_message() -> String:
 
 
 func get_deepseek_api_key() -> String:
-    return "sk-4568478c989149daa5e6f4c9f8dcfa1d"
+    var api_key = ProjectManager.get_setting_value("/llm/deepseek/api_key")
+    if not api_key:
+        Logger.warn("DeepseekChat: No API key found. Please set it in the project settings.")
+        return ""
+
+    return api_key.strip_edges()
 
 
 func set_system_prompt(prompt: String) -> void:
-    system_message["content"] = prompt
+    system_message_dict["content"] = prompt
+    ProjectManager.set_setting_value("/llm/deepseek/prompt/chat", prompt)

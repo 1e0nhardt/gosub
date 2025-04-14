@@ -4,12 +4,12 @@
 [ext_resource type="Texture2D" uid="uid://b6rwwby1oh8r5" path="res://assets/icons/icon-close-small.svg" id="2_783eq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_783eq"]
-bg_color = Color(0.215686, 0.219608, 0.294118, 1)
+bg_color = Color(0.188235, 0.188235, 0.188235, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xosqj"]
-bg_color = Color(0.0901961, 0.0823529, 0.109804, 1)
+bg_color = Color(0.211765, 0.211765, 0.211765, 1)
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 

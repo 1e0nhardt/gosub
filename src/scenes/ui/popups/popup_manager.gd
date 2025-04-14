@@ -238,11 +238,17 @@ static func show_popup(popup: PopupControl, position: Vector2, direction: Direct
     if not _instance:
         return
 
+    if is_popup_shown(popup):
+        return
+
     _instance.create_positioned_popup(popup, position, direction, blocking)
 
 
 static func show_popup_anchored(popup: PopupControl, anchor_position: Vector2, direction: Direction, blocking: bool = true) -> void:
     if not _instance:
+        return
+
+    if is_popup_shown(popup):
         return
 
     _instance.create_anchored_popup(popup, anchor_position, direction, blocking)

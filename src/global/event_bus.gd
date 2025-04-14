@@ -3,6 +3,7 @@ extends Node
 @warning_ignore_start("unused_signal")
 signal project_name_changed(new_name: String)
 signal project_saved
+signal project_loaded
 
 signal pipeline_stage_changed(stage: int)
 

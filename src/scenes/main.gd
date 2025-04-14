@@ -89,6 +89,8 @@ func _input(event: InputEvent) -> void:
     if event is InputEventKey:
         if event.is_pressed() and event.keycode == KEY_S and event.ctrl_pressed:
             ProjectManager.save_project()
+        if event.is_pressed() and event.keycode == KEY_Q and event.ctrl_pressed:
+            ProjectManager.show_settings_popup()
 
 
 func _process(delta) -> void:
@@ -120,10 +122,10 @@ func open_video(filepath: String):
 
     video.close_video()
 
-    if not filepath:
+    if not FileAccess.file_exists(filepath):
         return
 
-    Logger.info("Video Path: %s" % filepath)
+    # Logger.info("Video Path: %s" % filepath)
 
     video.open_video(filepath)
     audio_stream_player.stream = video.get_audio()

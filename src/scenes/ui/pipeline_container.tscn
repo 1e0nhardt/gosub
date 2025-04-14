@@ -24,17 +24,6 @@ text = "URL:"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-text = "https://www.youtube.com/watch?v=lYQmQGDLSJU"
-
-[node name="StartButton" type="Button" parent="UrlInputHbox"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Start"
-
-[node name="LoadButton" type="Button" parent="UrlInputHbox"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Load"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 2
@@ -49,37 +38,89 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="Download Video" type="Button" parent="HBoxContainer/StageVbox"]
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/StageVbox"]
 layout_mode = 2
-text = "Download Video"
-flat = true
-alignment = 0
 
-[node name="ExtractAudio" type="Button" parent="HBoxContainer/StageVbox"]
+[node name="PrepareVideo" type="Label" parent="HBoxContainer/StageVbox/HBoxContainer"]
+layout_mode = 2
+text = "Prepare Video"
+
+[node name="Spacer" type="Control" parent="HBoxContainer/StageVbox/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DownloadButton" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Download"
+
+[node name="LoadButton" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Load"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/StageVbox"]
+layout_mode = 2
+
+[node name="ExtractAudio" type="Label" parent="HBoxContainer/StageVbox/HBoxContainer2"]
 layout_mode = 2
 text = "Extract Audio"
-flat = true
-alignment = 0
 
-[node name="Transcribe Audio" type="Button" parent="HBoxContainer/StageVbox"]
+[node name="Spacer" type="Control" parent="HBoxContainer/StageVbox/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="HBoxContainer/StageVbox"]
+layout_mode = 2
+
+[node name="Transcribe Audio" type="Label" parent="HBoxContainer/StageVbox/HBoxContainer3"]
 layout_mode = 2
 text = "Transcribe Audio"
-flat = true
-alignment = 0
 
-[node name="AiTranslate" type="Button" parent="HBoxContainer/StageVbox"]
+[node name="Spacer" type="Control" parent="HBoxContainer/StageVbox/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="HBoxContainer/StageVbox"]
+layout_mode = 2
+
+[node name="AiTranslate" type="Label" parent="HBoxContainer/StageVbox/HBoxContainer4"]
 layout_mode = 2
 text = "AI Translate"
-flat = true
-alignment = 0
 
-[node name="EditSubtitle" type="Button" parent="HBoxContainer/StageVbox"]
+[node name="Spacer" type="Control" parent="HBoxContainer/StageVbox/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="HBoxContainer/StageVbox"]
+layout_mode = 2
+
+[node name="EditSubtitle" type="Label" parent="HBoxContainer/StageVbox/HBoxContainer5"]
 layout_mode = 2
 text = "Edit Subtitle"
-flat = true
-alignment = 0
 
-[node name="Render" type="Button" parent="HBoxContainer/StageVbox"]
+[node name="Spacer" type="Control" parent="HBoxContainer/StageVbox/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ContinueButton" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer5"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Continue
+"
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="HBoxContainer/StageVbox"]
+layout_mode = 2
+
+[node name="RenderLabel" type="Label" parent="HBoxContainer/StageVbox/HBoxContainer6"]
+layout_mode = 2
+text = "Render"
+
+[node name="Spacer" type="Control" parent="HBoxContainer/StageVbox/HBoxContainer6"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Render" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer6"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Render"

@@ -2,24 +2,30 @@ class_name PipelineContainer
 extends VBoxContainer
 
 @onready var url_edit: LineEdit = %UrlEdit
-@onready var start_button: Button = %StartButton
+@onready var download_button: Button = %DownloadButton
 @onready var load_button: Button = %LoadButton
 @onready var render: Button = %Render
 @onready var progress_indicator: ProgressIndicator = %ProgressIndicator
 
 
 func _ready() -> void:
+    EventBus.project_loaded.connect(func(): url_edit.text = ProjectManager.current_project.video_url)
     EventBus.pipeline_stage_changed.connect(func(stage): progress_indicator.stage = stage)
     EventBus.ai_translate_finished.connect(_ai_translate_callback)
-    start_button.pressed.connect(_start_pipeline)
+    download_button.pressed.connect(_start_pipeline)
     load_button.pressed.connect(_load_local_video)
     render.pressed.connect(func():
+        if not Util.check_path(ProjectManager.current_project.video_path):
+            return
+        if not Util.check_path(ProjectManager.current_project.get_save_basename() + ".ass"):
+            return
+
         ExecuterThreadPool.request_thread_execution(
             {
                 "type": "render_video",
                 "ass_path": ProjectManager.current_project.get_save_basename() + ".ass",
                 "video_title": ProjectManager.current_project.output_video_title,
-                "bit_rate": "6M",
+                "bit_rate": ProjectManager.get_setting_value("/video/render/bit_rate"),
             },
             func(response):
                 var err_flag = response["succeed"]
@@ -29,9 +35,6 @@ func _ready() -> void:
                 set_stage(5)
         )
     )
-
-    if ProjectManager.current_project:
-        url_edit.text = ProjectManager.current_project.video_url
 
 
 func set_stage(n: int) -> void:

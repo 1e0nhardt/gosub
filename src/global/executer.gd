@@ -34,7 +34,13 @@ static func download_video(url: String, output_path: String = "") -> bool:
         return true
 
     var yt_dlp_path = get_real_path("bin/yt-dlp.exe")
-    var args = '-o "%s" --proxy http://127.0.0.1:7890 --write-thumbnail --convert-thumbnails png -f "bestvideo[height<=1080][ext=mp4][vcodec^=avc1]+bestaudio[ext=m4a]" --merge-output-format mp4 "%s"' % [output_path, url]
+
+    var args = ""
+    var proxy = ProjectManager.get_setting_value("/video/download/proxy")
+    if proxy:
+        args += '-o "%s" --proxy %s --write-thumbnail --convert-thumbnails png -f "bestvideo[height<=1080][ext=mp4][vcodec^=avc1]+bestaudio[ext=m4a]" --merge-output-format mp4 "%s"' % [output_path, proxy, url]
+    else:
+        args += '-o "%s" --write-thumbnail --convert-thumbnails png -f "bestvideo[height<=1080][ext=mp4][vcodec^=avc1]+bestaudio[ext=m4a]" --merge-output-format mp4 "%s"' % [output_path, url]
     var executer_helper = ExecuterHelper.new(yt_dlp_path)
     executer_helper.set_args(args)
     return executer_helper.execute()
@@ -61,7 +67,10 @@ static func transcribe_audio(audio_file_path: String, output_path: String = "") 
         return true
 
     var whisper_cli_path = get_real_path("bin/whisper/cuda/whisper-cli.exe")
-    var model_path = get_real_path("bin/whisper/models/ggml-base.en.bin")
+    var model_real_path = ProjectManager.get_setting_value("/transcribe/whisper.cpp/model_path")
+    if not model_real_path:
+        model_real_path = "bin/whisper/models/ggml-base.en.bin"
+    var model_path = get_real_path(model_real_path)
     var args = '-m "%s" -f "%s" -of "%s" --output-json --split-on-word -ml 1' % [
         model_path,
         audio_file_path,
@@ -78,7 +87,10 @@ static func transcribe_audio(audio_file_path: String, output_path: String = "") 
 ## [param offset_to] 结束时间
 static func transcribe_segment(audio_file_path: String, offset_from: int, offset_to: int) -> bool:
     var whisper_cli_path = get_real_path("bin/whisper/cuda/whisper-cli.exe")
-    var model_path = get_real_path("bin/whisper/models/ggml-base.en.bin")
+    var model_real_path = ProjectManager.get_setting_value("/transcribe/whisper.cpp/model_path")
+    if not model_real_path:
+        model_real_path = "bin/whisper/models/ggml-base.en.bin"
+    var model_path = get_real_path(model_real_path)
     var args = '-m "%s" -f "%s" -of "%s" -ot %d -d %d --output-json --split-on-word -ml 1' % [
         model_path,
         audio_file_path,

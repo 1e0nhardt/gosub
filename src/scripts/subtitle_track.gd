@@ -92,7 +92,7 @@ func export_subtitle_file(filepath: String = "", only_first = false) -> void:
 
     var content: String = ""
     if filepath.get_extension() == "ass":
-        content += Util.ASS_TEMPLATE
+        content += ProjectManager.get_setting_value("/subtitle/ass/template")
         for clip in subtitle_clips:
             if only_first:
                 content += Util.ASS_DIALOG_FORMAT_ONLY_FIRST % [

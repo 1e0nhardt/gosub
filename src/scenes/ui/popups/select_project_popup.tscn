@@ -1,9 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://b16h34whyirj5"]
+[gd_scene load_steps=5 format=3 uid="uid://b16h34whyirj5"]
 
 [ext_resource type="Script" uid="uid://bfweggnye0wx8" path="res://scenes/ui/popups/select_project_popup.gd" id="1_k5ykc"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ipe1h"]
+bg_color = Color(0.0941176, 0.0941176, 0.0941176, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+
 [sub_resource type="LabelSettings" id="LabelSettings_rnepr"]
-font_size = 24
+font_size = 20
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d44at"]
+bg_color = Color(0.211765, 0.211765, 0.211765, 1)
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="SelectProjectPopup" type="Control"]
 layout_mode = 3
@@ -12,38 +22,61 @@ offset_right = 821.0
 offset_bottom = 536.0
 script = ExtResource("1_k5ykc")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="Layout" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="TopBar" type="PanelContainer" parent="Layout"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ipe1h")
+
+[node name="MarginContainer" type="MarginContainer" parent="Layout/TopBar"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Layout/TopBar/MarginContainer"]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="Layout/TopBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
 text = "Project"
 label_settings = SubResource("LabelSettings_rnepr")
 
-[node name="Control" type="Control" parent="VBoxContainer/HBoxContainer"]
+[node name="Control" type="Control" parent="Layout/TopBar/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="NewButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="NewButton" type="Button" parent="Layout/TopBar/MarginContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 20
 text = "New"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer"]
+[node name="Contents" type="PanelContainer" parent="Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_d44at")
+
+[node name="MarginContainer" type="MarginContainer" parent="Layout/Contents"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Layout/Contents/MarginContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="ProjectsContainer" type="HFlowContainer" parent="VBoxContainer/ScrollContainer"]
+[node name="ProjectsContainer" type="HFlowContainer" parent="Layout/Contents/MarginContainer/ScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3

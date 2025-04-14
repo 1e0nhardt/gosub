@@ -76,7 +76,7 @@ func json_to_clips(json_path: String) -> bool:
             clip = SubtitleClip.new()
 
     var start_time = Time.get_ticks_msec()
-    deepseek_chat_normal.set_system_prompt.call_deferred(Prompts.GOSUB_TRANSLATE)
+    deepseek_chat_normal.set_system_prompt.call_deferred(ProjectManager.get_setting_value("/deepseek/prompt/translate"))
     EventBus.ai_translate_progress_updated.emit.call_deferred(0)
     var source_contents := ""
 
@@ -112,7 +112,7 @@ func json_to_clips(json_path: String) -> bool:
 
 
 func translate_clips(clips: Array) -> void:
-    deepseek_chat_normal.set_system_prompt.call_deferred(Prompts.GOSUB_TRANSLATE)
+    deepseek_chat_normal.set_system_prompt.call_deferred(ProjectManager.get_setting_value("/deepseek/prompt/translate"))
     var source_contents := ""
 
     for i in range(0, len(clips), 8):

@@ -32,7 +32,7 @@ func send_message(message: String) -> void:
 
 
 func send_message_without_history(message: String) -> void:
-    var new_messages := [system_message]
+    var new_messages := [system_message_dict]
     new_messages.append({
         "role": "user",
         "content": message

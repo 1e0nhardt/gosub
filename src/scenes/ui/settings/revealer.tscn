@@ -1,0 +1,83 @@
+[gd_scene load_steps=9 format=3 uid="uid://cp6d6rfiw3ma7"]
+
+[ext_resource type="Script" uid="uid://b046yeeqeb250" path="res://scenes/ui/settings/revealer.gd" id="1_w7mc8"]
+[ext_resource type="Shader" uid="uid://b8kq0f8d146ju" path="res://assets/shaders/icon_modulate.gdshader" id="2_1ytam"]
+[ext_resource type="Texture2D" uid="uid://b31eovdw7hnxe" path="res://assets/icons/right_arrow.png" id="2_tc2du"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hexrk"]
+bg_color = Color(0.239216, 0.239216, 0.239216, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1u8x7"]
+bg_color = Color(0.211765, 0.211765, 0.211765, 1)
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_yc51h"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tc2du"]
+shader = ExtResource("2_1ytam")
+shader_parameter/color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_t0nal"]
+
+[node name="Revealer" type="Container"]
+clip_contents = true
+script = ExtResource("1_w7mc8")
+content_separation = 4
+title_panel_style = SubResource("StyleBoxFlat_hexrk")
+content_panel_style = SubResource("StyleBoxFlat_1u8x7")
+
+[node name="ToggleBar" type="PanelContainer" parent="."]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+mouse_filter = 2
+mouse_default_cursor_shape = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_yc51h")
+
+[node name="ToggleCapture" type="Button" parent="ToggleBar"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+toggle_mode = true
+flat = true
+
+[node name="TitleBar" type="HBoxContainer" parent="ToggleBar"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Control" type="Control" parent="ToggleBar/TitleBar"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Icon" type="TextureRect" parent="ToggleBar/TitleBar/Control"]
+unique_name_in_owner = true
+material = SubResource("ShaderMaterial_tc2du")
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -10.0
+offset_top = -10.0
+offset_right = 10.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(10, 10)
+mouse_filter = 2
+texture = ExtResource("2_tc2du")
+expand_mode = 1
+
+[node name="TitleLabel" type="Label" parent="ToggleBar/TitleBar"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxEmpty_t0nal")
+text = "Title Content"
+vertical_alignment = 1

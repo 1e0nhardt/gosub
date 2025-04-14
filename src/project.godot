@@ -38,6 +38,10 @@ window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/vsync/vsync_mode=0
 
+[gui]
+
+theme/custom="uid://dvmm57eyj0pq"
+
 [rendering]
 
 environment/defaults/default_clear_color=Color(0.129558, 0.129559, 0.129558, 1)

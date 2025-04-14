@@ -35,7 +35,8 @@ func _ready():
     )
 
     load_subtitle()
-    highlight_clip(0)
+    if text != "":
+        highlight_clip(0)
 
 
 func _gui_input(event: InputEvent) -> void:
