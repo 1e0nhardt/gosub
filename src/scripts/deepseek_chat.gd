@@ -5,7 +5,6 @@ const DEEPSEEK_HOST = "https://api.deepseek.com"
 const CHAT_COMPLETE_URL = "https://api.deepseek.com/chat/completions"
 const AUTHORIZATION_HEADER = "Authorization: Bearer %s"
 
-var messages := [system_message_dict.duplicate()]
 var payload := {
     "messages": [],
     "model": "deepseek-chat",
@@ -35,6 +34,8 @@ var system_message_dict := {
     "role": "system",
     "content": ProjectManager.get_setting_value("/llm/deepseek/prompt/chat")
 }
+var messages := [system_message_dict.duplicate()]
+
 
 func _init() -> void:
     payload_tmp = payload.duplicate(true)

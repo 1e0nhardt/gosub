@@ -31,16 +31,14 @@ const SUBTITLE_EDIT_SCENE = preload("res://scenes/ui/subtitle_edit_container.tsc
 
 var current_tab: int = 0:
     set(value):
-        if current_tab == value:
-            return
-
         current_tab = value
         if not is_node_ready():
             return
 
-        tab_panel.remove_child(tab_panel.get_child(0))
+        if content_margin.get_child(0):
+            content_margin.remove_child(content_margin.get_child(0))
         tab_scene_instances[current_tab] = get_tab_scene_instance(current_tab)
-        tab_panel.add_child(tab_scene_instances[current_tab])
+        content_margin.add_child(tab_scene_instances[current_tab])
 
         for i in tab_buttons.size():
             tab_buttons[i].selected = (i == value)
@@ -82,15 +80,12 @@ func _ready() -> void:
         tab_bar.add_child(tab_button)
         tab_buttons.append(tab_button)
 
-    current_tab = initial_tab_index
-    tab_buttons[current_tab].selected = true
-
     tab_panel = PanelContainer.new()
     layout_box.add_child(tab_panel)
     tab_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
     tab_panel.add_theme_stylebox_override("panel", tab_panel_stylebox)
 
-    var tab_scene = get_tab_scene_instance(current_tab)
+    var tab_scene = get_tab_scene_instance(initial_tab_index)
     tab_scene_instances[current_tab] = tab_scene
     content_margin = MarginContainer.new()
     content_margin.add_theme_constant_override("margin_left", content_margin_left)
@@ -99,6 +94,9 @@ func _ready() -> void:
     content_margin.add_theme_constant_override("margin_bottom", content_margin_bottom)
     content_margin.add_child(tab_scene)
     tab_panel.add_child(content_margin)
+
+    current_tab = initial_tab_index
+    tab_buttons[current_tab].selected = true
 
     queue_redraw.call_deferred()
 

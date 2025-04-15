@@ -32,7 +32,7 @@ func send_message(message: String) -> void:
 
 
 func send_message_without_history(message: String) -> void:
-    var new_messages := [system_message_dict]
+    var new_messages := [system_message_dict.duplicate()]
     new_messages.append({
         "role": "user",
         "content": message
@@ -44,6 +44,7 @@ func send_message_without_history(message: String) -> void:
 func get_message_from_stream_data(stream_data: String) -> String:
     var message = ""
     var data = stream_data.split("\n", false)
+    Logger.info(data)
     var json: Dictionary
     for line: String in data:
         if line.find("[DONE]") != -1:
