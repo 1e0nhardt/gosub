@@ -41,7 +41,7 @@ const DEFAULT_SETTINGS := {
         "download": {
             "proxy": {
                 "type": TYPE_STRING,
-                "data": "http://127.0.0.1:7890",
+                "data": "",
                 "tooltip": "Proxy for downloading video."
             },
         },
@@ -56,11 +56,17 @@ const DEFAULT_SETTINGS := {
     "transcribe": {
         "whisper.cpp": {
             "model_path": {
-                "type": TYPE_STRING,
-                "data": "ggml-deepseek-medium.bin",
+                "data": "",
+                "hint_string": "path",
                 "tooltip": "Path to the model file.",
+                "type": 4.0
             },
-        },
+            "smart_split": {
+                "data": false,
+                "tooltip": "Whether to use smart split. i.e transcribe with -ml 1, split with full stop.",
+                "type": 1.0
+            }
+        }
     },
     "llm": {
         "deepseek": {
@@ -73,11 +79,13 @@ const DEFAULT_SETTINGS := {
                 "translate": {
                     "type": TYPE_STRING,
                     "data": GOSUB_TRANSLATE,
+                    "hint_string": "multiline",
                     "tooltip": "Translate prompt for DeepSeek.",
                 },
                 "chat": {
                     "type": TYPE_STRING,
                     "data": DEFAULT_PROMPT,
+                    "hint_string": "multiline",
                     "tooltip": "Chat prompt for DeepSeek.",
                 }
             },
@@ -88,6 +96,7 @@ const DEFAULT_SETTINGS := {
             "template": {
                 "type": TYPE_STRING,
                 "data": ASS_TEMPLATE,
+                "hint_string": "multiline",
                 "tooltip": "Template for ASS subtitle.",
             }
         },

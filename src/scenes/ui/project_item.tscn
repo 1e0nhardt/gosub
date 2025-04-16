@@ -1,7 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://clhf06kdgoh7k"]
+[gd_scene load_steps=5 format=3 uid="uid://clhf06kdgoh7k"]
 
 [ext_resource type="Script" uid="uid://d0ck80satlun7" path="res://scenes/ui/project_item.gd" id="1_gl5jj"]
 [ext_resource type="Texture2D" uid="uid://bhpbsfkdbftct" path="res://icon.svg" id="2_gl5jj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gl5jj"]
+border_color = Color(0.533037, 0.533037, 0.533036, 0.392157)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2k77o"]
 texture = ExtResource("2_gl5jj")
@@ -11,6 +18,7 @@ custom_minimum_size = Vector2(160, 120)
 offset_right = 64.0
 offset_bottom = 27.0
 script = ExtResource("1_gl5jj")
+clicked_stylebox = SubResource("StyleBoxFlat_gl5jj")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 2

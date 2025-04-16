@@ -88,15 +88,33 @@ func prepare_value_component(field: Dictionary) -> Control:
             comp.button_pressed = field.get("data")
             comp.pressed.connect(func(): settings_valued_changed.emit(comp.get_meta("path"), comp.button_pressed))
         TYPE_STRING:
-            if field.get("hint_string", "") == "multiline":
-                comp = TextEdit.new()
-                comp.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
-                comp.scroll_fit_content_height = true
-                comp.text_changed.connect(func(): settings_valued_changed.emit(comp.get_meta("path"), comp.text))
-            else:
-                comp = LineEdit.new()
-                comp.text_submitted.connect(func(text): settings_valued_changed.emit(comp.get_meta("path"), text))
-            comp.text = field.get("data")
+            match field.get("hint_string", ""):
+                "multiline":
+                    comp = TextEdit.new()
+                    comp.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+                    comp.scroll_fit_content_height = true
+                    comp.text = field.get("data")
+                    comp.text_changed.connect(func(): settings_valued_changed.emit(comp.get_meta("path"), comp.text))
+                "path":
+                    comp = HBoxContainer.new()
+                    comp.add_theme_constant_override("separation", 8)
+                    var label = Label.new()
+                    label.size_flags_horizontal = SIZE_EXPAND_FILL
+                    label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+                    label.text = field.get("data")
+                    var button = Button.new()
+                    button.text = "select"
+                    button.pressed.connect(func(): ProjectManager.load_model(func(path):
+                        settings_valued_changed.emit(comp.get_meta("path"), path)
+                        label.text = path
+                    ))
+                    button.theme_type_variation = "SettingButton"
+                    comp.add_child(label)
+                    comp.add_child(button)
+                _:
+                    comp = LineEdit.new()
+                    comp.text = field.get("data")
+                    comp.text_submitted.connect(func(text): settings_valued_changed.emit(comp.get_meta("path"), text))
         TYPE_INT:
             comp = SpinBox.new()
             comp.value = field.get("data")

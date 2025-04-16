@@ -109,6 +109,15 @@ func load_project() -> void:
         Logger.warn("Invalid project.")
 
 
+func delete_project(p: Project) -> void:
+    if not p:
+        Logger.warn("Invalid project.")
+        return
+
+    registered_projects.erase(p.uid_string)
+    Util.delete_folder_recursive(p.project_folder)
+
+
 func register_projects() -> void:
     var dir = DirAccess.open(PROJECT_FILE_FOLDER)
     if dir:
@@ -264,6 +273,17 @@ func load_video(file_selected_callback: Callable) -> void:
     load_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
     load_dialog.title = "Load .mp4 Video"
     load_dialog.add_filter("*.mp4", "Video")
+    load_dialog.current_file = ""
+    load_dialog.file_selected.connect(file_selected_callback, CONNECT_ONE_SHOT)
+
+    show_file_dialog(load_dialog)
+
+
+func load_model(file_selected_callback: Callable) -> void:
+    var load_dialog := get_file_dialog()
+    load_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+    load_dialog.title = "Load .bin ggml model"
+    load_dialog.add_filter("*.bin", "ggml model")
     load_dialog.current_file = ""
     load_dialog.file_selected.connect(file_selected_callback, CONNECT_ONE_SHOT)
 

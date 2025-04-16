@@ -120,7 +120,6 @@ size_flags_horizontal = 3
 
 [node name="ContinueButton" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer5"]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 theme_type_variation = &"CommonButton"
 text = "Continue
@@ -139,6 +138,7 @@ size_flags_horizontal = 3
 
 [node name="Render" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer6"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 theme_type_variation = &"CommonButton"
 text = "Render"

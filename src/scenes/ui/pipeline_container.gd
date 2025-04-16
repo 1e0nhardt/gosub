@@ -17,30 +17,13 @@ func _ready() -> void:
     EventBus.ai_translate_finished.connect(_ai_translate_callback)
     download_button.pressed.connect(_start_pipeline)
     load_button.pressed.connect(_load_local_video)
-    continue_button.pressed.connect(func(): set_stage(4))
+    continue_button.pressed.connect(func():
+        set_stage(4)
+        _render_video()
+    )
     reasr_button.pressed.connect(_extract_audio_callback.bind({"succeed": true}))
     retry_button.pressed.connect(_transcribe_audio_callback.bind({"succeed": true}))
-    render.pressed.connect(func():
-        if not Util.check_path(ProjectManager.current_project.video_path):
-            return
-        if not Util.check_path(ProjectManager.current_project.get_save_basename() + ".ass"):
-            return
-
-        ExecuterThreadPool.request_thread_execution(
-            {
-                "type": "render_video",
-                "ass_path": ProjectManager.current_project.get_save_basename() + ".ass",
-                "video_title": ProjectManager.current_project.output_video_title,
-                "bit_rate": ProjectManager.get_setting_value("/video/render/bit_rate"),
-            },
-            func(response):
-                var err_flag = response["succeed"]
-                if not err_flag:
-                    Logger.warn("Render video failed!")
-                    return
-                set_stage(5)
-        )
-    )
+    # render.pressed.connect(_render_video)
 
 
 func set_stage(n: int) -> void:
@@ -48,6 +31,7 @@ func set_stage(n: int) -> void:
 
 
 func _load_local_video() -> void:
+    set_stage(-1)
     ProjectManager.load_video(
         func(file_path: String):
             ProjectManager.current_project.video_path = file_path
@@ -63,6 +47,8 @@ func _start_pipeline() -> void:
         return
 
     Logger.info("Start pipeline...")
+    EventBus.pipeline_started.emit()
+    set_stage(-1)
     ProjectManager.set_video_url(video_url)
 
     ExecuterThreadPool.request_thread_execution(
@@ -150,3 +136,28 @@ func _ai_translate_callback() -> void:
     set_stage(3)
     ProjectManager.current_project.reload_subtitle()
     Logger.info("Translate done!")
+
+
+func _render_video() -> void:
+    if not Util.check_path(ProjectManager.current_project.video_path):
+        return
+
+    if not Util.check_path(ProjectManager.current_project.get_save_basename() + ".ass"):
+        return
+
+    ExecuterThreadPool.request_thread_execution(
+        {
+            "type": "render_video",
+            "ass_path": ProjectManager.current_project.get_save_basename() + ".ass",
+            "video_title": ProjectManager.current_project.output_video_title,
+            "bit_rate": ProjectManager.get_setting_value("/video/render/bit_rate"),
+        },
+        func(response):
+            var err_flag = response["succeed"]
+            if not err_flag:
+                Logger.warn("Render video failed!")
+                return
+
+            set_stage(5)
+            EventBus.pipeline_finished.emit()
+    )

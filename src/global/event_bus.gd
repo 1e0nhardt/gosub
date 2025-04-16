@@ -6,6 +6,8 @@ signal project_saved
 signal project_loaded
 
 signal pipeline_stage_changed(stage: int)
+signal pipeline_started
+signal pipeline_finished
 
 signal video_changed(path: String)
 signal jump_to_here_requested(time: float)
