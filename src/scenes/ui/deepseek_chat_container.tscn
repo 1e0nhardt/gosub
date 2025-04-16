@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c2sp0pk0x7r54" path="res://scenes/ui/deepseek_chat_container.gd" id="1_t06ou"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i5ilr"]
-bg_color = Color(0.594, 0.596, 0.6, 1)
+bg_color = Color(0.4, 0.4, 0.4, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8

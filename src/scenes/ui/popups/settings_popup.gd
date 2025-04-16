@@ -86,23 +86,32 @@ func prepare_value_component(field: Dictionary) -> Control:
             comp = CheckBox.new()
             comp.theme_type_variation = "SettingCheckbox"
             comp.button_pressed = field.get("data")
-            comp.pressed.connect(func(): Logger.info(field))
+            comp.pressed.connect(func(): settings_valued_changed.emit(comp.get_meta("path"), comp.button_pressed))
         TYPE_STRING:
-            comp = LineEdit.new()
+            if field.get("hint_string", "") == "multiline":
+                comp = TextEdit.new()
+                comp.wrap_mode = TextEdit.LINE_WRAPPING_BOUNDARY
+                comp.scroll_fit_content_height = true
+                comp.text_changed.connect(func(): settings_valued_changed.emit(comp.get_meta("path"), comp.text))
+            else:
+                comp = LineEdit.new()
+                comp.text_submitted.connect(func(text): settings_valued_changed.emit(comp.get_meta("path"), text))
             comp.text = field.get("data")
-            comp.text_submitted.connect(func(text): settings_valued_changed.emit(comp.get_meta("path"), text))
         TYPE_INT:
             comp = SpinBox.new()
             comp.value = field.get("data")
+            comp.value_changed.connect(func(value): settings_valued_changed.emit(comp.get_meta("path"), value))
         TYPE_FLOAT:
             comp = HSlider.new()
             comp.min_value = 0.0
             comp.max_value = 1.0
             comp.step = 0.01
             comp.value = field.get("data")
+            comp.value_changed.connect(func(value): settings_valued_changed.emit(comp.get_meta("path"), value))
         TYPE_COLOR:
             comp = ColorPickerButton.new()
-            comp.color = field.get("data")
+            comp.color = Color(field.get("data"))
+            comp.color_changed.connect(func(color): settings_valued_changed.emit(comp.get_meta("path"), comp.color.to_html()))
         _:
             comp = Label.new()
             comp.text = "There is no type for this value."

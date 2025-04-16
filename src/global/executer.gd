@@ -63,18 +63,21 @@ static func extract_audio(video_file_path: String, output_path: String = "") -> 
 ## 使用 whisper.cpp 转录音频  [br]
 ## [param audio_file_path] 音频文件绝对路径
 static func transcribe_audio(audio_file_path: String, output_path: String = "") -> bool:
-    if FileAccess.file_exists(output_path):
-        return true
+    # if FileAccess.file_exists(output_path):
+    #     return true
 
     var whisper_cli_path = get_real_path("bin/whisper/cuda/whisper-cli.exe")
     var model_path = ProjectManager.get_setting_value("/transcribe/whisper.cpp/model_path")
     if not model_path:
         model_path = get_real_path("bin/whisper/models/ggml-base.en.bin")
-    var args = '-m "%s" -f "%s" -of "%s" --output-json --split-on-word -ml 1' % [
+    var args = '-m "%s" -f "%s" -of "%s" --output-json --split-on-word' % [
         model_path,
         audio_file_path,
         output_path.get_basename()
     ]
+    var smart = ProjectManager.get_setting_value("/transcribe/whisper.cpp/smart_split")
+    if smart:
+        args += " -ml 1"
     var executer_helper = ExecuterHelper.new(whisper_cli_path)
     executer_helper.set_args(args)
     return executer_helper.execute()
@@ -89,13 +92,16 @@ static func transcribe_segment(audio_file_path: String, offset_from: int, offset
     var model_path = ProjectManager.get_setting_value("/transcribe/whisper.cpp/model_path")
     if not model_path:
         model_path = get_real_path("bin/whisper/models/ggml-base.en.bin")
-    var args = '-m "%s" -f "%s" -of "%s" -ot %d -d %d --output-json --split-on-word -ml 1' % [
+    var args = '-m "%s" -f "%s" -of "%s" -ot %d -d %d --output-json --split-on-word' % [
         model_path,
         audio_file_path,
         audio_file_path.get_base_dir().path_join("temp_segment"),
         offset_from,
         offset_to - offset_from
     ]
+    var smart = ProjectManager.get_setting_value("/transcribe/whisper.cpp/smart_split")
+    if smart:
+        args += " -ml 1"
     var executer_helper = ExecuterHelper.new(whisper_cli_path)
     executer_helper.set_args(args)
     return executer_helper.execute()
@@ -104,6 +110,10 @@ static func transcribe_segment(audio_file_path: String, offset_from: int, offset
 static func render_video_with_hard_subtitles(video_file_path: String, subtitles_path: String, output_path: String = "", bit_rate: String = "6M") -> bool:
     if FileAccess.file_exists(output_path):
         return true
+
+    if not FileAccess.file_exists(subtitles_path):
+        Logger.info("Subtitle file not exists!")
+        return false
 
     var ffmpeg_path = get_real_path("bin/ffmpeg.exe")
     # 滤镜参数中 `:` 是特殊字符，需要转义，否则会报错

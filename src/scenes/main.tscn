@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://cbkm7rji7557q"]
+[gd_scene load_steps=21 format=3 uid="uid://cbkm7rji7557q"]
 
 [ext_resource type="Script" uid="uid://dlq5b3xgkd2ui" path="res://scenes/main.gd" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://bn14hy61lju6w" path="res://scenes/ui/custom_tab_container.tscn" id="2_0wfyh"]
-[ext_resource type="Texture2D" uid="uid://rvnbmym52mm0" path="res://assets/icons/video.svg" id="2_tefeu"]
+[ext_resource type="Texture2D" uid="uid://byu3u4k1nvegg" path="res://assets/icons/edit.svg" id="2_o6xl0"]
 [ext_resource type="Texture2D" uid="uid://d24j3q80b4slt" path="res://assets/icons/icon-start.svg" id="3_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://b7boml1k66pyo" path="res://scenes/ui/toggle_button.tscn" id="3_tefeu"]
 [ext_resource type="Script" uid="uid://c7nj8dnnatmfv" path="res://scenes/ui/popups/popup_manager.gd" id="4_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://dqmg41fqhpgnc" path="res://assets/icons/icon-maximize.svg" id="4_tefeu"]
 
@@ -23,6 +24,16 @@ bg_color = Color(0.211765, 0.211765, 0.211765, 1)
 bg_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
 
 [sub_resource type="ImageTexture" id="ImageTexture_o5qli"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o6xl0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tipki"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_85g3d"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_choun"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ya4ey"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0wfyh"]
 
@@ -54,15 +65,18 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="FileButton" type="Button" parent="MainLayout/MenuBar/LeftHbox"]
+[node name="FileMenuButton" type="MenuButton" parent="MainLayout/MenuBar/LeftHbox"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "File"
 
-[node name="EditButton" type="Button" parent="MainLayout/MenuBar/LeftHbox"]
+[node name="EditMenuButton" type="MenuButton" parent="MainLayout/MenuBar/LeftHbox"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Edit"
 
-[node name="HelpButton" type="Button" parent="MainLayout/MenuBar/LeftHbox"]
+[node name="HelpMenuButton" type="MenuButton" parent="MainLayout/MenuBar/LeftHbox"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Help"
 
@@ -86,7 +100,7 @@ context_menu_enabled = false
 emoji_menu_enabled = false
 shortcut_keys_enabled = false
 selecting_enabled = false
-right_icon = ExtResource("2_tefeu")
+right_icon = ExtResource("2_o6xl0")
 select_all_on_focus = true
 
 [node name="RightHbox" type="HBoxContainer" parent="MainLayout/MenuBar"]
@@ -132,6 +146,7 @@ unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 2
+theme_override_font_sizes/font_size = 24
 text = "这是字幕"
 horizontal_alignment = 1
 autowrap_mode = 3
@@ -141,6 +156,7 @@ unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(0, 5)
 layout_mode = 2
+theme_override_font_sizes/font_size = 16
 text = "这是字幕"
 horizontal_alignment = 1
 autowrap_mode = 3
@@ -165,11 +181,10 @@ layout_mode = 2
 text = "Prev
 "
 
-[node name="PlayButton" type="Button" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/CenterHBox"]
+[node name="PlayButton" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/CenterHBox" instance=ExtResource("3_tefeu")]
 unique_name_in_owner = true
 layout_mode = 2
 icon = ExtResource("3_tbgi4")
-flat = true
 
 [node name="NextButton" type="Button" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/CenterHBox"]
 visible = false
@@ -186,8 +201,20 @@ visible = false
 layout_mode = 2
 text = "16:9"
 
+[node name="SubtitleButton" type="Button" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/RightHbox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_hover_color = Color(0.3055, 0.575358, 0.65, 1)
+theme_override_styles/focus = SubResource("StyleBoxEmpty_o6xl0")
+theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_tipki")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_85g3d")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_choun")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ya4ey")
+text = "All"
+
 [node name="FullscreenButton" type="Button" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/RightHbox"]
 layout_mode = 2
+disabled = true
 icon = ExtResource("4_tefeu")
 flat = true
 

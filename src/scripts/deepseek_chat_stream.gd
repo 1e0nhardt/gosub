@@ -44,7 +44,7 @@ func send_message_without_history(message: String) -> void:
 func get_message_from_stream_data(stream_data: String) -> String:
     var message = ""
     var data = stream_data.split("\n", false)
-    Logger.info(data)
+    # Logger.info(data)
     var json: Dictionary
     for line: String in data:
         if line.find("[DONE]") != -1:
@@ -52,6 +52,8 @@ func get_message_from_stream_data(stream_data: String) -> String:
             continue
         line = line.split(":", false, 1)[1]
         json = JSON.parse_string(line)
+        if not json:
+            return "[ERR]"
         if json.has("choices") and json["choices"][0].has("delta"):
             message += json["choices"][0]["delta"]["content"]
     return message

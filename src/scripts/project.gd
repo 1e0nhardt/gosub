@@ -49,7 +49,10 @@ func load() -> void:
         video_path = get_save_basename() + ".mp4"
 
     EventBus.video_changed.emit.call_deferred(video_path)
+    reload_subtitle()
 
+
+func reload_subtitle() -> void:
     var ass_path := get_save_basename() + ".ass"
     if Util.check_path(ass_path):
         subtitle_track.load_subtitle(ass_path)

@@ -59,21 +59,35 @@ func json_to_clips(json_path: String) -> bool:
     var clip := SubtitleClip.new()
     var content := ""
 
-    for i in range(len(data)):
-        var segment = data[i]
-        if segment["text"] == "":
-            continue
+    # -ml 1
+    if ProjectManager.get_setting_value("/transcribe/whisper.cpp/smart_split"):
+        for i in range(len(data)):
+            var segment = data[i]
+            if segment["text"] == "":
+                continue
 
-        content = segment["text"]
-        clip.second_text += content
+            content = segment["text"]
+            clip.second_text += content
 
-        if i == 0 or clip.start == 0:
+            if i == 0 or clip.start == 0:
+                clip.start = segment["offsets"]["from"]
+
+            if content[-1] in ".!?！？。":
+                clip.end = segment["offsets"]["to"]
+                clips.append(clip)
+                clip = SubtitleClip.new()
+    else:
+        for i in range(len(data)):
+            var segment = data[i]
+            if segment["text"] == "":
+                continue
+
+            clip = SubtitleClip.new()
+            content = segment["text"]
+            clip.second_text += content
             clip.start = segment["offsets"]["from"]
-
-        if content[-1] in ".!?！？。":
             clip.end = segment["offsets"]["to"]
             clips.append(clip)
-            clip = SubtitleClip.new()
 
     var start_time = Time.get_ticks_msec()
     deepseek_chat_normal.set_system_prompt.call_deferred(ProjectManager.get_setting_value("/llm/deepseek/prompt/translate"))
@@ -91,11 +105,12 @@ func json_to_clips(json_path: String) -> bool:
         var result = received_message
         var result_contents = result.split("\n")
         for j in range(len(result_contents)):
-            if result_contents[j].begins_with("[") == false:
-                Logger.info("Unexpected result: " + result_contents[j])
-                continue
-
-            clips[i + j].first_text = result_contents[j].split("]")[1].strip_edges()
+            var r = result_contents[j].strip_edges()
+            if not r.begins_with("["):
+                Logger.info("Unexpected result: " + r)
+                clips[i + j].first_text = "Translate Error"
+            else:
+                clips[i + j].first_text = r.split("]")[1].strip_edges()
         source_contents = ""
         received_message = ""
 

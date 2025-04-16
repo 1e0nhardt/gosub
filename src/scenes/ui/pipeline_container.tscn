@@ -36,7 +36,7 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 8
+theme_override_constants/separation = 10
 
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/StageVbox"]
 layout_mode = 2
@@ -52,11 +52,13 @@ size_flags_horizontal = 3
 [node name="DownloadButton" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"CommonButton"
 text = "Download"
 
 [node name="LoadButton" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"CommonButton"
 text = "Load"
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/StageVbox"]
@@ -81,6 +83,12 @@ text = "Transcribe Audio"
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="ReasrButton" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CommonButton"
+text = "Reasr"
+
 [node name="HBoxContainer4" type="HBoxContainer" parent="HBoxContainer/StageVbox"]
 layout_mode = 2
 
@@ -91,6 +99,13 @@ text = "AI Translate"
 [node name="Spacer" type="Control" parent="HBoxContainer/StageVbox/HBoxContainer4"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="RetryButton" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer4"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"CommonButton"
+text = "Retry
+"
 
 [node name="HBoxContainer5" type="HBoxContainer" parent="HBoxContainer/StageVbox"]
 layout_mode = 2
@@ -105,7 +120,9 @@ size_flags_horizontal = 3
 
 [node name="ContinueButton" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer5"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
+theme_type_variation = &"CommonButton"
 text = "Continue
 "
 
@@ -123,6 +140,6 @@ size_flags_horizontal = 3
 [node name="Render" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer6"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"CommonButton"
 text = "Render"
-flat = true
 alignment = 0

@@ -1,0 +1,12 @@
+[gd_scene load_steps=4 format=3 uid="uid://b7boml1k66pyo"]
+
+[ext_resource type="Texture2D" uid="uid://d24j3q80b4slt" path="res://assets/icons/icon-start.svg" id="1_7d0ho"]
+[ext_resource type="Script" uid="uid://c3ph5p2cs84hf" path="res://scenes/ui/toggle_button.gd" id="1_b0ko4"]
+[ext_resource type="Texture2D" uid="uid://dyw8v6swpv4ai" path="res://assets/icons/icon-pause.svg" id="2_ylw6p"]
+
+[node name="ToggleButton" type="Button"]
+theme_type_variation = &"ToggleButton"
+toggle_mode = true
+script = ExtResource("1_b0ko4")
+on_icon = ExtResource("2_ylw6p")
+off_icon = ExtResource("1_7d0ho")

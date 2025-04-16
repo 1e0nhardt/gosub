@@ -22,11 +22,13 @@ var frame_time: float:
 var dragging = false
 var video: Video = Video.new()
 var mouse_on_project_name_edit: bool = false
+var subtitle_label_state: int = 0
 
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
 @onready var viewport: TextureRect = %Viewport
 @onready var play_button: Button = %PlayButton
+@onready var subtitle_button: Button = %SubtitleButton
 @onready var progress_slider: HSlider = %ProgressSlider
 @onready var time_label: Label = %TimeLabel
 @onready var project_name_edit: LineEdit = %ProjectNameEdit
@@ -34,6 +36,9 @@ var mouse_on_project_name_edit: bool = false
 @onready var subtitle_label2: Label = %SubtitleLabel2
 @onready var menu_bar: HBoxContainer = %MenuBar
 @onready var vsplit_container: VSplitContainer = %VSplitContainer
+@onready var file_menu_button: MenuButton = %FileMenuButton
+@onready var edit_menu_button: MenuButton = %EditMenuButton
+@onready var help_menu_button: MenuButton = %HelpMenuButton
 
 
 func _ready() -> void:
@@ -56,7 +61,7 @@ func _ready() -> void:
         Logger.info("AI translate finished")
     )
 
-    play_button.pressed.connect(_on_play_button_pressed)
+    play_button.toggled.connect(_on_play_button_toggled)
     progress_slider.drag_started.connect(_on_progress_slider_drag_started)
     progress_slider.drag_ended.connect(_on_progress_slider_drag_ended)
     project_name_edit.mouse_entered.connect(func(): mouse_on_project_name_edit = true)
@@ -66,6 +71,54 @@ func _ready() -> void:
         ProjectManager.current_project.project_name = new_name
         _on_project_name_changed(new_name)
     )
+    subtitle_button.pressed.connect(func():
+        subtitle_label_state = (subtitle_label_state + 1) % 3
+        var button_text: String
+        match subtitle_label_state:
+            0:
+                button_text = "ALL"
+            1:
+                button_text = "ZH"
+            2:
+                button_text = "EN"
+        subtitle_button.text = button_text
+        update_subtitle_labels_visibility()
+    )
+
+    # Menu Buttons
+    var file_menu_popup = file_menu_button.get_popup()
+    @warning_ignore_start("int_as_enum_without_cast")
+    @warning_ignore_start("int_as_enum_without_match")
+    file_menu_popup.add_item("Select Project", 0, KEY_MASK_CTRL | KEY_E)
+    file_menu_popup.add_item("Save Project", 1, KEY_MASK_CTRL | KEY_S)
+    file_menu_popup.add_item("Open project folder", 2)
+    file_menu_popup.id_pressed.connect(func(id):
+        match id:
+            0:
+                ProjectManager.show_select_project_popup()
+            1:
+                ProjectManager.save_project()
+            2:
+                OS.shell_show_in_file_manager(ProjectSettings.globalize_path(ProjectManager.current_project.project_folder), true)
+    )
+
+    var edit_menu_popup = edit_menu_button.get_popup()
+    edit_menu_popup.add_item("Settings", 0, KEY_MASK_CTRL | KEY_P)
+    edit_menu_popup.id_pressed.connect(func(id):
+        match id:
+            0:
+                ProjectManager.show_settings_popup()
+    )
+
+    var help_menu_popup = help_menu_button.get_popup()
+    help_menu_popup.add_item("About", 0)
+    help_menu_popup.id_pressed.connect(func(id):
+        match id:
+            0:
+                ProjectManager.show_message("About", "This is a test message.")
+    )
+    @warning_ignore_restore("int_as_enum_without_cast")
+    @warning_ignore_restore("int_as_enum_without_match")
 
     queue_redraw.call_deferred()
 
@@ -85,12 +138,6 @@ func _input(event: InputEvent) -> void:
             project_name_edit.selecting_enabled = false
             if ProjectManager.current_project:
                 ProjectManager.current_project.project_name = project_name_edit.text.replace("*", "")
-
-    if event is InputEventKey:
-        if event.is_pressed() and event.keycode == KEY_S and event.ctrl_pressed:
-            ProjectManager.save_project()
-        if event.is_pressed() and event.keycode == KEY_Q and event.ctrl_pressed:
-            ProjectManager.show_settings_popup()
 
 
 func _process(delta) -> void:
@@ -166,12 +213,24 @@ func play(flag: bool):
     audio_stream_player.stream_paused = !is_playing
 
 
+func update_subtitle_labels_visibility():
+    match subtitle_label_state:
+            0:
+                subtitle_label.show()
+                subtitle_label2.show()
+            1:
+                subtitle_label.show()
+                subtitle_label2.hide()
+            2:
+                subtitle_label.hide()
+                subtitle_label2.show()
+
+
 func update_subtitles():
     if ProjectManager.current_project and not ProjectManager.current_project.subtitle_track.is_empty():
         ProjectManager.current_project.subtitle_track.update(current_time)
         if ProjectManager.current_project.subtitle_track.current_clip.compare(current_time) == 0:
-            subtitle_label.show()
-            subtitle_label2.show()
+            update_subtitle_labels_visibility()
             subtitle_label.text = ProjectManager.current_project.subtitle_track.current_clip.first_text
             subtitle_label2.text = ProjectManager.current_project.subtitle_track.current_clip.second_text
         else:
@@ -179,9 +238,8 @@ func update_subtitles():
             subtitle_label2.hide()
 
 #region video player events
-func _on_play_button_pressed() -> void:
-    Logger.info("Play button pressed")
-    play(!is_playing)
+func _on_play_button_toggled(toggled_on: bool) -> void:
+    play(toggled_on)
 
 
 func _on_progress_slider_drag_ended(_value_changed):

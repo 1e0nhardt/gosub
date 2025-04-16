@@ -34,7 +34,7 @@ func _on_send_button_pressed() -> void:
 
 
 func _on_message_received(message: String) -> void:
-    Logger.info("Message received: %s" % message)
+    # Logger.info("Message received: %s" % message)
     var l_message_label = MARKDOWN_LABEL_SCENE.instantiate()
     l_message_label.is_sender = false
     l_message_label.text = message
@@ -67,8 +67,9 @@ func _on_message_received(message: String) -> void:
 #         var renderer = Renderer.new(parser.tokens)
 #         renderer.render(message_box)
 
+
 func _on_stream_data_received(data: String) -> void:
-    Logger.info("Stream data received: %s" % data)
+    # Logger.info("Stream data received: %s" % data)
     if message_label == null:
         message_label = MARKDOWN_LABEL_SCENE.instantiate()
         message_label.is_sender = false
@@ -76,7 +77,7 @@ func _on_stream_data_received(data: String) -> void:
 
     if data.find("[DONE]") != -1:
         received_stream_content += data.replace("[DONE]", "")
-        Logger.info(received_stream_content)
+        # Logger.info(received_stream_content)
         message_label.set_content(received_stream_content)
 
         received_stream_content = ""

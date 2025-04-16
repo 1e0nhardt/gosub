@@ -160,7 +160,7 @@ func get_select_project_popup() -> SelectProjectPopup:
     return _select_project_popup
 
 
-func show_select_project_popup(popup_size: Vector2 = Vector2(724, 384)) -> void:
+func show_select_project_popup(popup_size: Vector2 = Vector2(740, 384)) -> void:
     var popup := get_select_project_popup()
     popup.size = popup_size
     popup.popup_anchored(Vector2(0.5, 0.5), PopupManager.Direction.OMNI, true)

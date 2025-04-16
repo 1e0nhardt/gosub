@@ -6,6 +6,9 @@ extends VBoxContainer
 @onready var load_button: Button = %LoadButton
 @onready var render: Button = %Render
 @onready var progress_indicator: ProgressIndicator = %ProgressIndicator
+@onready var continue_button: Button = %ContinueButton
+@onready var reasr_button: Button = %ReasrButton
+@onready var retry_button: Button = %RetryButton
 
 
 func _ready() -> void:
@@ -14,6 +17,9 @@ func _ready() -> void:
     EventBus.ai_translate_finished.connect(_ai_translate_callback)
     download_button.pressed.connect(_start_pipeline)
     load_button.pressed.connect(_load_local_video)
+    continue_button.pressed.connect(func(): set_stage(4))
+    reasr_button.pressed.connect(_extract_audio_callback.bind({"succeed": true}))
+    retry_button.pressed.connect(_transcribe_audio_callback.bind({"succeed": true}))
     render.pressed.connect(func():
         if not Util.check_path(ProjectManager.current_project.video_path):
             return
@@ -142,5 +148,5 @@ func _transcribe_audio_callback(response: Dictionary) -> void:
 
 func _ai_translate_callback() -> void:
     set_stage(3)
-
+    ProjectManager.current_project.reload_subtitle()
     Logger.info("Translate done!")
