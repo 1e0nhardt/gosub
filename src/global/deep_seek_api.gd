@@ -5,7 +5,7 @@ signal translate_message_received(content: String)
 signal stream_data_received(content: String)
 
 ## for DeepSeekChatContainer
-var deepseek_chat_stream: DeepseekChat
+var deepseek_chat_stream: DeepSeekChatStream
 ## for translate
 var deepseek_chat_normal: DeepseekChatNormal
 var deepseek_chat_translate: DeepseekChatNormal

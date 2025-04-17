@@ -11,6 +11,10 @@ func _init() -> void:
     payload["stream"] = true
     payload_tmp["stream"] = true
     http_client = HTTPClient.new()
+    try_connect()
+
+
+func try_connect() -> void:
     var err = http_client.connect_to_host(DEEPSEEK_HOST)
     if err != OK:
         Logger.error("Failed to connect to DeepSeek server")
@@ -67,7 +71,11 @@ func poll() -> void:
     while http_client.get_status() == HTTPClient.STATUS_REQUESTING:
         # Keep polling for as long as the request is being processed.
         http_client.poll()
-        # Logger.info("Requesting...")
+
+    if http_client.get_status() == HTTPClient.STATUS_CONNECTION_ERROR:
+        Logger.error("Connection error. Trying to reconnect...")
+        try_connect()
+        http_client.request(HTTPClient.METHOD_POST, CHAT_COMPLETE_URL, deepseek_headers, JSON.stringify(payload))
 
     if http_client.get_status() == HTTPClient.STATUS_BODY or http_client.get_status() == HTTPClient.STATUS_CONNECTED:
         if http_client.has_response():

@@ -1,9 +1,8 @@
-[gd_scene load_steps=21 format=3 uid="uid://cbkm7rji7557q"]
+[gd_scene load_steps=20 format=3 uid="uid://cbkm7rji7557q"]
 
 [ext_resource type="Script" uid="uid://dlq5b3xgkd2ui" path="res://scenes/main.gd" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://bn14hy61lju6w" path="res://scenes/ui/custom_tab_container.tscn" id="2_0wfyh"]
 [ext_resource type="Texture2D" uid="uid://byu3u4k1nvegg" path="res://assets/icons/edit.svg" id="2_o6xl0"]
-[ext_resource type="Texture2D" uid="uid://d24j3q80b4slt" path="res://assets/icons/icon-start.svg" id="3_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://b7boml1k66pyo" path="res://scenes/ui/toggle_button.tscn" id="3_tefeu"]
 [ext_resource type="Script" uid="uid://c7nj8dnnatmfv" path="res://scenes/ui/popups/popup_manager.gd" id="4_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://dqmg41fqhpgnc" path="res://assets/icons/icon-maximize.svg" id="4_tefeu"]
@@ -188,7 +187,6 @@ text = "Prev
 [node name="PlayButton" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/CenterHBox" instance=ExtResource("3_tefeu")]
 unique_name_in_owner = true
 layout_mode = 2
-icon = ExtResource("3_tbgi4")
 
 [node name="NextButton" type="Button" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/CenterHBox"]
 visible = false
