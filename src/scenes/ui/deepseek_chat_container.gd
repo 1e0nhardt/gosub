@@ -15,7 +15,7 @@ var message_box: VBoxContainer = null
 
 func _ready() -> void:
     send_button.pressed.connect(_on_send_button_pressed)
-    DeepSeekApi.message_received.connect(_on_message_received)
+    # DeepSeekApi.message_received.connect(_on_message_received)
     DeepSeekApi.stream_data_received.connect(_on_stream_data_received)
     message_edit.text_changed.connect(_on_message_edit_text_changed)
     send_button.disabled = true
