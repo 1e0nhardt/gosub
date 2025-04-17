@@ -62,6 +62,9 @@ func save_subtitle():
 
 
 func highlight_clip(clip_index: int):
+    if not text.strip_edges():
+        return
+
     var lineno = clip_index * 4
     var last_lineno = last_highlight_clip_index * 4
     set_line_background_color(last_lineno, default_background_color)

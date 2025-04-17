@@ -120,12 +120,29 @@ func prepare_value_component(field: Dictionary) -> Control:
             comp.value = field.get("data")
             comp.value_changed.connect(func(value): settings_valued_changed.emit(comp.get_meta("path"), value))
         TYPE_FLOAT:
-            comp = HSlider.new()
-            comp.min_value = 0.0
-            comp.max_value = 1.0
-            comp.step = 0.01
-            comp.value = field.get("data")
-            comp.value_changed.connect(func(value): settings_valued_changed.emit(comp.get_meta("path"), value))
+            comp = HBoxContainer.new()
+            comp.add_theme_constant_override("separation", 8)
+            var label = Label.new()
+            label.size_flags_horizontal = SIZE_FILL
+            label.text = "%s s" % field.get("data")
+            var hslider = HSlider.new()
+            hslider.size_flags_horizontal = SIZE_EXPAND_FILL
+            if field.has("hint_string"):
+                var hint_arr = field.get("hint_string").split(",")
+                hslider.min_value = float(hint_arr[0].strip_edges())
+                hslider.max_value = float(hint_arr[1].strip_edges())
+                hslider.step = float(hint_arr[2].strip_edges())
+            else:
+                hslider.min_value = 0.0
+                hslider.max_value = 1.0
+                hslider.step = 0.01
+            hslider.value = field.get("data")
+            hslider.value_changed.connect(func(value):
+                settings_valued_changed.emit(comp.get_meta("path"), value)
+                label.text = "%s s" % value
+            )
+            comp.add_child(hslider)
+            comp.add_child(label)
         TYPE_COLOR:
             comp = ColorPickerButton.new()
             comp.color = Color(field.get("data"))

@@ -32,7 +32,7 @@ var deepseek_headers := [
 
 var system_message_dict := {
     "role": "system",
-    "content": ProjectManager.get_setting_value("/llm/deepseek/prompt/chat")
+    "content": ProjectManager.get_setting_value("/llm/common/prompt/chat")
 }
 var messages := [system_message_dict.duplicate()]
 
@@ -85,4 +85,4 @@ func get_deepseek_api_key() -> String:
 
 func set_system_prompt(prompt: String) -> void:
     system_message_dict["content"] = prompt
-    ProjectManager.set_setting_value("/llm/deepseek/prompt/chat", prompt)
+    ProjectManager.set_setting_value("/llm/common/prompt/chat", prompt)

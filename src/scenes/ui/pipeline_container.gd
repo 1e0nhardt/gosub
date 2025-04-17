@@ -22,7 +22,9 @@ func _ready() -> void:
         _render_video()
     )
     reasr_button.pressed.connect(_extract_audio_callback.bind({"succeed": true}))
+    reasr_button.pressed.connect(EventBus.pipeline_started.emit)
     retry_button.pressed.connect(_transcribe_audio_callback.bind({"succeed": true}))
+    retry_button.pressed.connect(EventBus.pipeline_started.emit)
     # render.pressed.connect(_render_video)
 
 

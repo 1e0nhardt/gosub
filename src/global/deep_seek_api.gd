@@ -72,6 +72,13 @@ func json_to_clips(json_path: String) -> bool:
             if i == 0 or clip.start == 0:
                 clip.start = segment["offsets"]["from"]
 
+            # try split long sentence
+            if content.ends_with(","):
+                if segment["offsets"]["to"] - clip.start > ProjectManager.get_setting_value("/transcribe/whisper.cpp/smart_split_threshold") * 1000:
+                    clip.end = segment["offsets"]["to"]
+                    clips.append(clip)
+                    clip = SubtitleClip.new()
+
             if content[-1] in ".!?！？。":
                 clip.end = segment["offsets"]["to"]
                 clips.append(clip)
@@ -90,12 +97,13 @@ func json_to_clips(json_path: String) -> bool:
             clips.append(clip)
 
     var start_time = Time.get_ticks_msec()
-    deepseek_chat_normal.set_system_prompt.call_deferred(ProjectManager.get_setting_value("/llm/deepseek/prompt/translate"))
+    deepseek_chat_normal.set_system_prompt.call_deferred(ProjectManager.get_setting_value("/llm/common/prompt/translate"))
     EventBus.ai_translate_progress_updated.emit.call_deferred(0)
     var source_contents := ""
 
-    for i in range(0, len(clips), 8):
-        for j in 8:
+    var clips_one_chat: int = ProjectManager.get_setting_value("/llm/common/clips_per_chat")
+    for i in range(0, len(clips), clips_one_chat):
+        for j in clips_one_chat:
             if i + j >= len(clips):
                 break
             source_contents += clips[i + j].list_line()
@@ -127,7 +135,7 @@ func json_to_clips(json_path: String) -> bool:
 
 
 func translate_clips(clips: Array) -> void:
-    deepseek_chat_normal.set_system_prompt.call_deferred(ProjectManager.get_setting_value("/llm/deepseek/prompt/translate"))
+    deepseek_chat_normal.set_system_prompt.call_deferred(ProjectManager.get_setting_value("/llm/common/prompt/translate"))
     var source_contents := ""
 
     for i in range(0, len(clips), 8):

@@ -58,27 +58,33 @@ const DEFAULT_SETTINGS := {
             "use_gpu": {
                 "data": false,
                 "tooltip": "Whether to use GPU for transcribe.",
-                "type": 1.0
+                "type": TYPE_BOOL
             },
             "model_path": {
                 "data": "",
                 "hint_string": "path",
                 "tooltip": "Path to the model file.",
-                "type": 4.0
+                "type": TYPE_STRING
             },
             "smart_split": {
                 "data": false,
                 "tooltip": "Whether to use smart split. i.e transcribe with -ml 1, split with full stop.",
-                "type": 1.0
-            }
+                "type": TYPE_BOOL
+            },
+            "smart_split_threshold": {
+                "data": 5.0,
+                "tooltip": "Long sentence threshold for smart split.",
+                "hint_string": "4.0, 20.0, 0.1, s",
+                "type": TYPE_FLOAT
+            },
         }
     },
     "llm": {
-        "deepseek": {
-            "api_key": {
-                "type": TYPE_STRING,
-                "data": "",
-                "tooltip": "API key for DeepSeek.",
+        "common": {
+            "clips_per_chat": {
+                "type": TYPE_INT,
+                "data": 16,
+                "tooltip": "Number of clips per chat.",
             },
             "prompt": {
                 "translate": {
@@ -93,6 +99,13 @@ const DEFAULT_SETTINGS := {
                     "hint_string": "multiline",
                     "tooltip": "Chat prompt for DeepSeek.",
                 }
+            },
+        },
+        "deepseek": {
+            "api_key": {
+                "type": TYPE_STRING,
+                "data": "",
+                "tooltip": "API key for DeepSeek.",
             },
         },
     },
