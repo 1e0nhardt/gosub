@@ -39,7 +39,7 @@ func _load_local_video() -> void:
             ProjectManager.current_project.video_path = file_path
             ProjectManager.current_project.video_title = file_path.get_file().get_basename()
             url_edit.text = file_path
-            _download_video_callback({ "succeed": true })
+            _download_video_callback({"succeed": true})
     )
 
 
@@ -89,6 +89,8 @@ func _download_video_callback(response: Dictionary) -> void:
     var err_flag = response["succeed"]
     if not err_flag:
         Logger.warn("Download video failed!")
+        ProjectManager.show_message("Error", "Download video failed!")
+        EventBus.pipeline_finished.emit()
         return
 
     set_stage(0)
@@ -127,6 +129,8 @@ func _transcribe_audio_callback(response: Dictionary) -> void:
     var err_flag = response["succeed"]
     if not err_flag:
         Logger.warn("Transcribe audio failed!")
+        ProjectManager.show_message("Error", "Transcribe audio failed! Please check transcribe/whisper.cpp/model_path in settings!")
+        EventBus.pipeline_finished.emit()
         return
 
     set_stage(2)
@@ -158,6 +162,8 @@ func _render_video() -> void:
             var err_flag = response["succeed"]
             if not err_flag:
                 Logger.warn("Render video failed!")
+                ProjectManager.show_message("Error", "Render video failed!")
+                EventBus.pipeline_finished.emit()
                 return
 
             set_stage(5)

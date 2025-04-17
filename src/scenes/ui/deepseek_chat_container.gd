@@ -70,6 +70,9 @@ func _on_message_received(message: String) -> void:
 
 func _on_stream_data_received(data: String) -> void:
     # Logger.info("Stream data received: %s" % data)
+    if data == "[KEEP-ALIVE]":
+        return
+
     if message_label == null:
         message_label = MARKDOWN_LABEL_SCENE.instantiate()
         message_label.is_sender = false

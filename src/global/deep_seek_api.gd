@@ -1,24 +1,32 @@
 extends Node
 
 signal message_received(content: String)
+signal translate_message_received(content: String)
 signal stream_data_received(content: String)
 
 ## for DeepSeekChatContainer
 var deepseek_chat_stream: DeepseekChat
 ## for translate
 var deepseek_chat_normal: DeepseekChatNormal
-var received_message: String = ""
+var deepseek_chat_translate: DeepseekChatNormal
+var received_translate_message: String = ""
 
 @onready var http_request: HTTPRequest = $HTTPRequest
+@onready var http_request_translate: HTTPRequest = $HTTPRequestTranslate
 
 
 func _ready() -> void:
     deepseek_chat_stream = DeepSeekChatStream.new()
     deepseek_chat_normal = DeepseekChatNormal.new(http_request)
+    deepseek_chat_translate = DeepseekChatNormal.new(http_request_translate)
     deepseek_chat_normal.message_received.connect(
         func(c):
-            received_message = c
             message_received.emit(c)
+    )
+    deepseek_chat_translate.message_received.connect(
+        func(c):
+            received_translate_message = c
+            translate_message_received.emit(c)
     )
     deepseek_chat_stream.stream_data_received.connect(func(c): stream_data_received.emit.call_deferred(c))
 
@@ -37,6 +45,10 @@ func chat_once(message: String, use_normal: bool = false) -> void:
         deepseek_chat_stream.send_message_without_history(message)
 
 
+func translate_once(message: String) -> void:
+    deepseek_chat_translate.send_message_without_history.call_deferred(message)
+
+
 func clear_history(use_normal: bool = false) -> void:
     if use_normal:
         deepseek_chat_normal.clear_history_messages()
@@ -51,6 +63,8 @@ func poll() -> void:
 func json_to_clips(json_path: String) -> bool:
     if FileAccess.file_exists(json_path) == false:
         Logger.info("json file not exists: %s" % json_path)
+        ProjectManager.show_message("Error", "Transcribe result file not exist! Please redo transcribe by click reasr button!")
+        EventBus.pipeline_finished.emit()
         return false
 
     var json = JSON.parse_string(FileAccess.get_file_as_string(json_path))
@@ -97,7 +111,7 @@ func json_to_clips(json_path: String) -> bool:
             clips.append(clip)
 
     var start_time = Time.get_ticks_msec()
-    deepseek_chat_normal.set_system_prompt.call_deferred(ProjectManager.get_setting_value("/llm/common/prompt/translate"))
+    deepseek_chat_translate.set_system_prompt.call_deferred(ProjectManager.get_setting_value("/llm/common/prompt/translate"))
     EventBus.ai_translate_progress_updated.emit.call_deferred(0)
     var source_contents := ""
 
@@ -108,9 +122,9 @@ func json_to_clips(json_path: String) -> bool:
                 break
             source_contents += clips[i + j].list_line()
 
-        chat_once(source_contents, true)
-        await message_received
-        var result = received_message
+        translate_once(source_contents)
+        await translate_message_received
+        var result = received_translate_message
         var result_contents = result.split("\n")
         for j in range(len(result_contents)):
             var r = result_contents[j].strip_edges()
@@ -120,7 +134,7 @@ func json_to_clips(json_path: String) -> bool:
             else:
                 clips[i + j].first_text = r.split("]")[1].strip_edges()
         source_contents = ""
-        received_message = ""
+        received_translate_message = ""
 
         EventBus.ai_translate_progress_updated.emit.call_deferred(clampf(float(i + 8) / len(clips), 0, 1))
 
@@ -135,7 +149,7 @@ func json_to_clips(json_path: String) -> bool:
 
 
 func translate_clips(clips: Array) -> void:
-    deepseek_chat_normal.set_system_prompt.call_deferred(ProjectManager.get_setting_value("/llm/common/prompt/translate"))
+    deepseek_chat_translate.set_system_prompt.call_deferred(ProjectManager.get_setting_value("/llm/common/prompt/translate"))
     var source_contents := ""
 
     for i in range(0, len(clips), 8):
@@ -144,9 +158,9 @@ func translate_clips(clips: Array) -> void:
                 break
             source_contents += clips[i + j].list_line()
 
-        chat_once(source_contents, true)
-        await message_received
-        var result = received_message
+        translate_once(source_contents)
+        await translate_message_received
+        var result = received_translate_message
         var result_contents = result.split("\n")
         for j in range(len(result_contents)):
             if result_contents[j].begins_with("[") == false:
@@ -155,6 +169,6 @@ func translate_clips(clips: Array) -> void:
 
             clips[i + j].first_text = result_contents[j].split("]")[1].strip_edges()
         source_contents = ""
-        received_message = ""
+        received_translate_message = ""
 
     EventBus.clips_translated.emit.call_deferred(clips)

@@ -85,4 +85,3 @@ func get_deepseek_api_key() -> String:
 
 func set_system_prompt(prompt: String) -> void:
     system_message_dict["content"] = prompt
-    ProjectManager.set_setting_value("/llm/common/prompt/chat", prompt)

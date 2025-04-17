@@ -42,6 +42,10 @@ func send_message_without_history(message: String) -> void:
 
 
 func get_message_from_stream_data(stream_data: String) -> String:
+    if stream_data.find("keep-alive") != -1:
+        Logger.info(stream_data)
+        return "[KEEP-ALIVE]"
+
     var message = ""
     var data = stream_data.split("\n", false)
     # Logger.info(data)
