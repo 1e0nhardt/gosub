@@ -1,9 +1,6 @@
 class_name Executer
 extends Object
 
-const WHISPER_CACHE_FOLDER := "user://whisper_cache/"
-const VIDEO_CACHE_FOLDER := "user://video_cache/"
-
 
 ## 将相对路径转换成绝对路径 [br]
 ## [param path] 相对路径
@@ -67,9 +64,13 @@ static func transcribe_audio(audio_file_path: String, output_path: String = "") 
     #     return true
 
     var whisper_cli_path = get_real_path("bin/whisper/cuda/whisper-cli.exe")
+    if not ProjectManager.get_setting_value("/transcribe/whisper.cpp/use_gpu"):
+        whisper_cli_path = get_real_path("bin/whisper/cpu/whisper-cli.exe")
+
     var model_path = ProjectManager.get_setting_value("/transcribe/whisper.cpp/model_path")
     if not model_path:
         model_path = get_real_path("bin/whisper/models/ggml-base.en.bin")
+
     var args = '-m "%s" -f "%s" -of "%s" --output-json --split-on-word' % [
         model_path,
         audio_file_path,
@@ -89,9 +90,13 @@ static func transcribe_audio(audio_file_path: String, output_path: String = "") 
 ## [param offset_to] 结束时间
 static func transcribe_segment(audio_file_path: String, offset_from: int, offset_to: int) -> bool:
     var whisper_cli_path = get_real_path("bin/whisper/cuda/whisper-cli.exe")
+    if not ProjectManager.get_setting_value("/transcribe/whisper.cpp/use_gpu"):
+        whisper_cli_path = get_real_path("bin/whisper/cpu/whisper-cli.exe")
+
     var model_path = ProjectManager.get_setting_value("/transcribe/whisper.cpp/model_path")
     if not model_path:
         model_path = get_real_path("bin/whisper/models/ggml-base.en.bin")
+
     var args = '-m "%s" -f "%s" -of "%s" -ot %d -d %d --output-json --split-on-word' % [
         model_path,
         audio_file_path,

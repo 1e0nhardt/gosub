@@ -7,6 +7,7 @@
 [node name="ToggleButton" type="Button"]
 theme_type_variation = &"ToggleButton"
 toggle_mode = true
+icon = ExtResource("1_7d0ho")
 script = ExtResource("1_b0ko4")
 on_icon = ExtResource("2_ylw6p")
 off_icon = ExtResource("1_7d0ho")

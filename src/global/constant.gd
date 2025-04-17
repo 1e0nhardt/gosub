@@ -55,6 +55,11 @@ const DEFAULT_SETTINGS := {
     },
     "transcribe": {
         "whisper.cpp": {
+            "use_gpu": {
+                "data": false,
+                "tooltip": "Whether to use GPU for transcribe.",
+                "type": 1.0
+            },
             "model_path": {
                 "data": "",
                 "hint_string": "path",
