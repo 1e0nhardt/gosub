@@ -18,6 +18,7 @@ func _ready() -> void:
     download_button.pressed.connect(_start_pipeline)
     load_button.pressed.connect(_load_local_video)
     continue_button.pressed.connect(func():
+        EventBus.pipeline_started.emit()
         set_stage(4)
         _render_video()
     )

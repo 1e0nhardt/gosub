@@ -9,7 +9,7 @@ var stage: int = -1:
         stage = value
         if stage >= amount:
             stage = amount - 1
-        if stage in [-1, 0, 1, 2, 5]:
+        if stage in [-1, 0, 1, 2, 4]:
             animating = true
         else:
             animating = false
