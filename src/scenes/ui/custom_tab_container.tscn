@@ -3,10 +3,14 @@
 [ext_resource type="Script" uid="uid://dhkux7e7357h7" path="res://scenes/ui/custom_tab_container.gd" id="1_n6von"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n6von"]
-bg_color = Color(0.113725, 0.113725, 0.113725, 1)
+bg_color = Color(0.121569, 0.121569, 0.121569, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ok0q"]
-bg_color = Color(0.239216, 0.239216, 0.239216, 1)
+bg_color = Color(0.14902, 0.14902, 0.14902, 1)
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="CustomTabContainer" type="Control"]
 layout_mode = 3

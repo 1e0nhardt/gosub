@@ -26,6 +26,7 @@ var subtitle_label_state: int = 0
 
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
+@onready var center_helper: Control = %CenterHelper
 @onready var viewport: TextureRect = %Viewport
 @onready var play_button: Button = %PlayButton
 @onready var subtitle_button: Button = %SubtitleButton
@@ -42,8 +43,6 @@ var subtitle_label_state: int = 0
 
 
 func _ready() -> void:
-    ProjectManager.show_select_project_popup()
-
     EventBus.project_name_changed.connect(_on_project_name_changed)
     EventBus.project_saved.connect(_on_project_saved)
 
@@ -59,6 +58,13 @@ func _ready() -> void:
     )
     EventBus.ai_translate_finished.connect(func():
         Logger.info("AI translate finished")
+    )
+
+    center_helper.resized.connect(func():
+        var new_size = center_helper.size
+        viewport.size.y = new_size.y
+        viewport.size.x = new_size.y * 16.0 / 9.0
+        viewport.position = (new_size - viewport.size) / 2.0
     )
 
     play_button.toggled.connect(_on_play_button_toggled)
@@ -119,6 +125,8 @@ func _ready() -> void:
     )
     @warning_ignore_restore("int_as_enum_without_cast")
     @warning_ignore_restore("int_as_enum_without_match")
+
+    ProjectManager.show_select_project_popup()
 
     queue_redraw.call_deferred()
 
