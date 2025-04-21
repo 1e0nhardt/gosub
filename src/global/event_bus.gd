@@ -4,6 +4,7 @@ extends Node
 signal project_name_changed(new_name: String)
 signal project_saved
 signal project_loaded
+signal status_message_sended(message: String)
 
 signal pipeline_stage_changed(stage: int)
 signal pipeline_started

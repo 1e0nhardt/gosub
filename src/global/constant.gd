@@ -1,6 +1,8 @@
 class_name Constant
 extends Object
 
+const DEFAULT_STATUS_MESSAGE = "Welcome to Gosub!"
+
 # Prompt
 const DEFAULT_PROMPT = "You are a helpful assistant"
 const GOSUB_TRANSLATE = """请你扮演专业翻译员的角色。将各种语言的输入翻译为中文。翻译时追求自然流畅、贴近原文。

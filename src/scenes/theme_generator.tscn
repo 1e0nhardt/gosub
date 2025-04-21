@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://wfxlstbwsk1f"]
+
+[ext_resource type="Script" uid="uid://bvn0hbw6c3c2v" path="res://scenes/theme_generator.gd" id="1_qb1ya"]
+
+[node name="ThemeGenerator" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_qb1ya")

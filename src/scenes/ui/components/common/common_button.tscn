@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://b6bxun4ognadf"]
+
+[ext_resource type="Script" uid="uid://dp54efi2i18sk" path="res://scenes/ui/components/common/common_button.gd" id="1_4cedx"]
+
+[node name="CommonButton" type="Button"]
+offset_right = 305.0
+offset_bottom = 72.0
+theme_type_variation = &"PrimaryButton"
+text = "Common Button"
+script = ExtResource("1_4cedx")
+type = 0

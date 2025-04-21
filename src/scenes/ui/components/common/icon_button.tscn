@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://dsuxgrhpmau6m"]
+
+[ext_resource type="Texture2D" uid="uid://ogemuvpp44oe" path="res://assets/icons/container_warning.svg" id="1_ah70v"]
+
+[node name="IconButton" type="Button"]
+offset_right = 8.0
+offset_bottom = 8.0
+theme_type_variation = &"IconButton"
+icon = ExtResource("1_ah70v")
+icon_alignment = 1

@@ -33,12 +33,12 @@ func save() -> void:
     subtitle_track.export_subtitle_file()
     var err := ResourceSaver.save(self, project_file_path)
     if err != OK:
-        Logger.info("Error saving project: " + str(err))
+        ProjectManager.send_status_message("Error saving project: " + str(err))
     else:
         modify_time = Util.get_current_timestamp()
         dirty = false
         EventBus.project_saved.emit()
-        Logger.info("Project <%s> saved." % project_name)
+        ProjectManager.send_status_message("Project <%s> saved." % project_name)
 
 
 func load() -> void:

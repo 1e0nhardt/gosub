@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://dyw8v6swpv4ai" path="res://assets/icons/icon-pause.svg" id="2_ylw6p"]
 
 [node name="ToggleButton" type="Button"]
-theme_type_variation = &"ToggleButton"
+theme_type_variation = &"IconToggleButton"
 toggle_mode = true
 icon = ExtResource("1_7d0ho")
 script = ExtResource("1_b0ko4")

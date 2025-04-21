@@ -22,8 +22,6 @@ const SUBTITLE_EDIT_SCENE = preload("res://scenes/ui/subtitle_edit_container.tsc
 @export var content_margin_right: int = 8
 @export var content_margin_top: int = 8
 @export var content_margin_bottom: int = 8
-@export var tab_bar_stylebox: StyleBox
-@export var tab_panel_stylebox: StyleBox
 @export var tab_font_size: int = 20
 @export var tab_height: int = 36
 @export var initial_tab_index: int = 0
@@ -37,6 +35,7 @@ var current_tab: int = 0:
 
         if content_margin.get_child(0):
             content_margin.remove_child(content_margin.get_child(0))
+
         tab_scene_instances[current_tab] = get_tab_scene_instance(current_tab)
         content_margin.add_child(tab_scene_instances[current_tab])
 
@@ -53,6 +52,9 @@ var tab_panel: PanelContainer
 var top_margin: MarginContainer
 var content_margin: MarginContainer
 
+var tab_bar_stylebox: StyleBox
+var tab_panel_stylebox: StyleBox
+
 
 func _init() -> void:
     layout_box = VBoxContainer.new()
@@ -60,6 +62,9 @@ func _init() -> void:
 
 
 func _ready() -> void:
+    tab_bar_stylebox = get_theme_stylebox("tab_bar", "GosubTabContainer")
+    tab_panel_stylebox = get_theme_stylebox("tab_panel", "GosubTabContainer")
+
     layout_box.add_theme_constant_override("separation", 0)
     layout_box.set_anchors_preset(Control.PRESET_FULL_RECT)
     add_child(layout_box)
@@ -80,20 +85,16 @@ func _ready() -> void:
         tab_bar.add_child(tab_button)
         tab_buttons.append(tab_button)
 
-    tab_panel = PanelContainer.new()
-    layout_box.add_child(tab_panel)
-    tab_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
-    tab_panel.add_theme_stylebox_override("panel", tab_panel_stylebox)
-
     var tab_scene = get_tab_scene_instance(initial_tab_index)
     tab_scene_instances[current_tab] = tab_scene
     content_margin = MarginContainer.new()
+    content_margin.size_flags_vertical = Control.SIZE_EXPAND_FILL
     content_margin.add_theme_constant_override("margin_left", content_margin_left)
     content_margin.add_theme_constant_override("margin_right", content_margin_right)
     content_margin.add_theme_constant_override("margin_top", content_margin_top)
     content_margin.add_theme_constant_override("margin_bottom", content_margin_bottom)
     content_margin.add_child(tab_scene)
-    tab_panel.add_child(content_margin)
+    layout_box.add_child(content_margin)
 
     current_tab = initial_tab_index
     tab_buttons[current_tab].selected = true
@@ -104,6 +105,9 @@ func _ready() -> void:
 func _draw() -> void:
     if tab_bar_stylebox:
         draw_style_box(tab_bar_stylebox, Rect2(Vector2.ZERO, top_margin.size))
+
+    if content_margin:
+        draw_style_box(tab_panel_stylebox, Rect2(Vector2(0, top_margin.size.y), content_margin.size))
 
 
 func _get_minimum_size() -> Vector2:

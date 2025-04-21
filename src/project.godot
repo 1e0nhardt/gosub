@@ -40,7 +40,7 @@ window/vsync/vsync_mode=0
 
 [gui]
 
-theme/custom="uid://dvmm57eyj0pq"
+theme/custom="res://assets/theme/main_theme_dark.tres"
 
 [rendering]
 

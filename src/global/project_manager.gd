@@ -149,6 +149,10 @@ func register_projects() -> void:
 #endregion Project Management
 
 
+func send_status_message(message: String) -> void:
+    EventBus.status_message_sended.emit(message)
+
+
 func get_settings_popup() -> SettingsPopup:
     if not _settings_popup:
         _settings_popup = SETTINGS_POPUP_SCENE.instantiate()

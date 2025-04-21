@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://cbkm7rji7557q"]
+[gd_scene load_steps=14 format=3 uid="uid://cbkm7rji7557q"]
 
 [ext_resource type="Script" uid="uid://dlq5b3xgkd2ui" path="res://scenes/main.gd" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://bn14hy61lju6w" path="res://scenes/ui/custom_tab_container.tscn" id="2_0wfyh"]
@@ -7,48 +7,27 @@
 [ext_resource type="Script" uid="uid://c7nj8dnnatmfv" path="res://scenes/ui/popups/popup_manager.gd" id="4_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://dqmg41fqhpgnc" path="res://assets/icons/icon-maximize.svg" id="4_tefeu"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tefeu"]
-bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o6xl0"]
-bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
-
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0wfyh"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sugp2"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jyhfs"]
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_tefeu"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tipki"]
-bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_o6xl0"]
-
 [sub_resource type="ImageTexture" id="ImageTexture_o5qli"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_o6xl0"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tipki"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_85g3d"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_choun"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ya4ey"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tefeu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_85g3d"]
 content_margin_left = 8.0
 content_margin_top = 8.0
 content_margin_right = 8.0
-bg_color = Color(0.262745, 0.262745, 0.262745, 1)
+bg_color = Color(0.121569, 0.121569, 0.121569, 1)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0wfyh"]
+bg_color = Color(0.121569, 0.121569, 0.121569, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tefeu"]
+bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -58,8 +37,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_o5qli")
-menu_bar_stylebox = SubResource("StyleBoxFlat_tefeu")
-bg_stylebox = SubResource("StyleBoxFlat_o6xl0")
 
 [node name="MainLayout" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -102,12 +79,14 @@ alignment = 1
 [node name="ProjectNameEdit" type="LineEdit" parent="MainLayout/MenuBar/CenterHbox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_uneditable_color = Color(1, 1, 1, 1)
-theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_uneditable_color = Color(1, 1, 1, 0.85098)
+theme_override_colors/font_color = Color(1, 1, 1, 0.85098)
+theme_override_font_sizes/font_size = 20
 theme_override_styles/focus = SubResource("StyleBoxEmpty_0wfyh")
 theme_override_styles/read_only = SubResource("StyleBoxEmpty_sugp2")
 theme_override_styles/normal = SubResource("StyleBoxEmpty_jyhfs")
 text = "Untitled*"
+max_length = 200
 editable = false
 expand_to_text_length = true
 context_menu_enabled = false
@@ -121,33 +100,27 @@ select_all_on_focus = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VSplitContainer" type="VSplitContainer" parent="MainLayout"]
+[node name="HSplitContainer" type="HSplitContainer" parent="MainLayout"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 4
-theme_override_constants/minimum_grab_thickness = 4
-theme_override_icons/grabber = SubResource("PlaceholderTexture2D_tefeu")
-theme_override_icons/v_grabber = SubResource("PlaceholderTexture2D_tefeu")
-theme_override_styles/split_bar_background = SubResource("StyleBoxFlat_tipki")
+theme_type_variation = &"GosubSplitContainer"
+dragger_visibility = 1
 
-[node name="HSplitContainer" type="HSplitContainer" parent="MainLayout/VSplitContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-size_flags_stretch_ratio = 3.25
-theme_override_constants/separation = 4
-theme_override_constants/minimum_grab_thickness = 4
-theme_override_icons/grabber = SubResource("PlaceholderTexture2D_o6xl0")
-theme_override_icons/h_grabber = SubResource("PlaceholderTexture2D_o6xl0")
-theme_override_styles/split_bar_background = SubResource("StyleBoxFlat_tipki")
-
-[node name="VideoInfo" type="VBoxContainer" parent="MainLayout/VSplitContainer/HSplitContainer"]
+[node name="VSplitContainer" type="VSplitContainer" parent="MainLayout/HSplitContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 2.05
+theme_type_variation = &"GosubSplitContainer"
+dragger_visibility = 1
+
+[node name="VideoInfo" type="VBoxContainer" parent="MainLayout/HSplitContainer/VSplitContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 3.25
 theme_override_constants/separation = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo"]
+[node name="MarginContainer" type="MarginContainer" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 4
@@ -155,20 +128,20 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="CenterHelper" type="Control" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/MarginContainer"]
+[node name="CenterHelper" type="Control" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 360)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Viewport" type="TextureRect" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/MarginContainer/CenterHelper"]
+[node name="Viewport" type="TextureRect" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer/CenterHelper"]
 unique_name_in_owner = true
 layout_mode = 0
 size_flags_vertical = 3
 texture = SubResource("ImageTexture_o5qli")
 expand_mode = 1
 
-[node name="SubtitelVBox" type="VBoxContainer" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/MarginContainer/CenterHelper/Viewport"]
+[node name="SubtitelVBox" type="VBoxContainer" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer/CenterHelper/Viewport"]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -177,7 +150,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="SubtitleLabel" type="Label" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/MarginContainer/CenterHelper/Viewport/SubtitelVBox"]
+[node name="SubtitleLabel" type="Label" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer/CenterHelper/Viewport/SubtitelVBox"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(0, 5)
@@ -189,7 +162,7 @@ text = "这是字幕"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="SubtitleLabel2" type="Label" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/MarginContainer/CenterHelper/Viewport/SubtitelVBox"]
+[node name="SubtitleLabel2" type="Label" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer/CenterHelper/Viewport/SubtitelVBox"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(0, 5)
@@ -201,119 +174,145 @@ text = "这是字幕"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="ControlBar" type="HBoxContainer" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo"]
+[node name="ControlBar" type="HBoxContainer" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
-[node name="TimeLabel" type="Label" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar"]
+[node name="TimeLabel" type="Label" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/ControlBar"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+theme_type_variation = &"SecondaryLabel"
 text = "00:00:00.00/00:00:00.00"
 
-[node name="CenterHBox" type="HBoxContainer" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar"]
+[node name="CenterHBox" type="HBoxContainer" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/ControlBar"]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="PrevButton" type="Button" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/CenterHBox"]
+[node name="PrevButton" type="Button" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/ControlBar/CenterHBox"]
 visible = false
 layout_mode = 2
 text = "Prev
 "
 icon = ExtResource("4_tefeu")
 
-[node name="PlayButton" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/CenterHBox" instance=ExtResource("3_tefeu")]
+[node name="PlayButton" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/ControlBar/CenterHBox" instance=ExtResource("3_tefeu")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="NextButton" type="Button" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/CenterHBox"]
+[node name="NextButton" type="Button" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/ControlBar/CenterHBox"]
 visible = false
 layout_mode = 2
 text = "Next"
 
-[node name="RightHbox" type="HBoxContainer" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar"]
+[node name="RightHbox" type="HBoxContainer" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/ControlBar"]
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 2
 
-[node name="AspectRatioButton" type="Button" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/RightHbox"]
+[node name="AspectRatioButton" type="Button" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/ControlBar/RightHbox"]
 visible = false
 layout_mode = 2
 text = "16:9"
 
-[node name="SubtitleButton" type="Button" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/RightHbox"]
+[node name="SubtitleButton" type="Button" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/ControlBar/RightHbox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_hover_color = Color(0.3055, 0.575358, 0.65, 1)
-theme_override_styles/focus = SubResource("StyleBoxEmpty_o6xl0")
-theme_override_styles/hover_pressed_mirrored = SubResource("StyleBoxEmpty_tipki")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_85g3d")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_choun")
-theme_override_styles/normal = SubResource("StyleBoxEmpty_ya4ey")
+theme_type_variation = &"TextButton"
+theme_override_font_sizes/font_size = 20
 text = "All"
 
-[node name="FullscreenButton" type="Button" parent="MainLayout/VSplitContainer/HSplitContainer/VideoInfo/ControlBar/RightHbox"]
+[node name="FullscreenButton" type="Button" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/ControlBar/RightHbox"]
 layout_mode = 2
-theme_override_styles/normal = SubResource("StyleBoxEmpty_tefeu")
+theme_type_variation = &"IconButton"
 icon = ExtResource("4_tefeu")
 
-[node name="CustomTabContainer" parent="MainLayout/VSplitContainer/HSplitContainer" instance=ExtResource("2_0wfyh")]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PanelContainer" type="PanelContainer" parent="MainLayout/VSplitContainer"]
+[node name="PanelContainer" type="PanelContainer" parent="MainLayout/HSplitContainer/VSplitContainer"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_85g3d")
 
-[node name="TimelineVBox" type="VBoxContainer" parent="MainLayout/VSplitContainer/PanelContainer"]
+[node name="TimelineVBox" type="VBoxContainer" parent="MainLayout/HSplitContainer/VSplitContainer/PanelContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="TimelineControlBar" type="HBoxContainer" parent="MainLayout/VSplitContainer/PanelContainer/TimelineVBox"]
+[node name="TimelineControlBar" type="HBoxContainer" parent="MainLayout/HSplitContainer/VSplitContainer/PanelContainer/TimelineVBox"]
 visible = false
 layout_mode = 2
 
-[node name="Button" type="Button" parent="MainLayout/VSplitContainer/PanelContainer/TimelineVBox/TimelineControlBar"]
+[node name="Button" type="Button" parent="MainLayout/HSplitContainer/VSplitContainer/PanelContainer/TimelineVBox/TimelineControlBar"]
 layout_mode = 2
 text = "Mode
 "
 
-[node name="Button3" type="Button" parent="MainLayout/VSplitContainer/PanelContainer/TimelineVBox/TimelineControlBar"]
+[node name="Button3" type="Button" parent="MainLayout/HSplitContainer/VSplitContainer/PanelContainer/TimelineVBox/TimelineControlBar"]
 layout_mode = 2
 text = "Filter
 "
 
-[node name="Button4" type="Button" parent="MainLayout/VSplitContainer/PanelContainer/TimelineVBox/TimelineControlBar"]
+[node name="Button4" type="Button" parent="MainLayout/HSplitContainer/VSplitContainer/PanelContainer/TimelineVBox/TimelineControlBar"]
 layout_mode = 2
 text = "Feature
 "
 
-[node name="Button5" type="Button" parent="MainLayout/VSplitContainer/PanelContainer/TimelineVBox/TimelineControlBar"]
+[node name="Button5" type="Button" parent="MainLayout/HSplitContainer/VSplitContainer/PanelContainer/TimelineVBox/TimelineControlBar"]
 layout_mode = 2
 text = "Scale"
 
-[node name="TimelineComp" type="VBoxContainer" parent="MainLayout/VSplitContainer/PanelContainer/TimelineVBox"]
+[node name="TimelineComp" type="VBoxContainer" parent="MainLayout/HSplitContainer/VSplitContainer/PanelContainer/TimelineVBox"]
 layout_mode = 2
 
-[node name="ProgressSlider" type="HSlider" parent="MainLayout/VSplitContainer/PanelContainer/TimelineVBox/TimelineComp"]
+[node name="ProgressSlider" type="HSlider" parent="MainLayout/HSplitContainer/VSplitContainer/PanelContainer/TimelineVBox/TimelineComp"]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="MainLayout/VSplitContainer/PanelContainer/TimelineVBox/TimelineComp"]
+[node name="Panel" type="Panel" parent="MainLayout/HSplitContainer/VSplitContainer/PanelContainer/TimelineVBox/TimelineComp"]
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_0wfyh")
 
-[node name="StatusBar" type="HBoxContainer" parent="MainLayout"]
+[node name="CustomTabContainer" parent="MainLayout/HSplitContainer" instance=ExtResource("2_0wfyh")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PanelContainer" type="PanelContainer" parent="MainLayout"]
 custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tefeu")
+
+[node name="StatusBar" type="HBoxContainer" parent="MainLayout/PanelContainer"]
+layout_mode = 2
+
+[node name="Spacer2" type="Control" parent="MainLayout/PanelContainer/StatusBar"]
+layout_mode = 2
+
+[node name="StatusMessageLabel" type="Label" parent="MainLayout/PanelContainer/StatusBar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"PrimaryLabel"
+text = "状态信息"
+
+[node name="Spacer" type="Control" parent="MainLayout/PanelContainer/StatusBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VersionLabel" type="Label" parent="MainLayout/PanelContainer/StatusBar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_type_variation = &"PrimaryLabel"
+text = "0.2.0"
+
+[node name="Spacer3" type="Control" parent="MainLayout/PanelContainer/StatusBar"]
 layout_mode = 2
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+
+[node name="StatusMessageTimer" type="Timer" parent="."]
+unique_name_in_owner = true
 
 [node name="PopupLayer" type="CanvasLayer" parent="."]
 script = ExtResource("4_jyhfs")

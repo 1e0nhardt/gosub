@@ -1,8 +1,5 @@
 extends Control
 
-@export var menu_bar_stylebox: StyleBox
-@export var bg_stylebox: StyleBox
-
 var is_playing: bool = false
 var max_frame: int = 0
 var raw_frame_rate: float = 0
@@ -24,6 +21,10 @@ var video: Video = Video.new()
 var mouse_on_project_name_edit: bool = false
 var subtitle_label_state: int = 0
 
+# theme_cache
+var menu_bar_stylebox: StyleBox
+var bg_stylebox: StyleBox
+
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
 @onready var center_helper: Control = %CenterHelper
@@ -36,15 +37,20 @@ var subtitle_label_state: int = 0
 @onready var subtitle_label: Label = %SubtitleLabel
 @onready var subtitle_label2: Label = %SubtitleLabel2
 @onready var menu_bar: HBoxContainer = %MenuBar
-@onready var vsplit_container: VSplitContainer = %VSplitContainer
+@onready var hsplit_container: HSplitContainer = %HSplitContainer
 @onready var file_menu_button: MenuButton = %FileMenuButton
 @onready var edit_menu_button: MenuButton = %EditMenuButton
 @onready var help_menu_button: MenuButton = %HelpMenuButton
+@onready var status_message_label: Label = %StatusMessageLabel
+# @onready var version_label: Label = %VersionLabel
+
+@onready var status_message_timer: Timer = %StatusMessageTimer
 
 
 func _ready() -> void:
     EventBus.project_name_changed.connect(_on_project_name_changed)
     EventBus.project_saved.connect(_on_project_saved)
+    EventBus.status_message_sended.connect(_on_status_message_sended)
 
     EventBus.video_changed.connect(open_video)
     EventBus.video_paused.connect(func(b): play(b))
@@ -54,16 +60,20 @@ func _ready() -> void:
     )
 
     EventBus.ai_translate_progress_updated.connect(func(progress):
-        Logger.info("AI translate progress: %.2f" % progress)
+        ProjectManager.send_status_message("AI translate progress: %.2f" % progress)
     )
     EventBus.ai_translate_finished.connect(func():
-        Logger.info("AI translate finished")
+        ProjectManager.send_status_message("AI translate finished")
     )
 
     center_helper.resized.connect(func():
         var new_size = center_helper.size
-        viewport.size.y = new_size.y
-        viewport.size.x = new_size.y * 16.0 / 9.0
+        if new_size.x < new_size.y * 16.0 / 9.0:
+            viewport.size.x = new_size.x
+            viewport.size.y = new_size.x * 9.0 / 16.0
+        else:
+            viewport.size.y = new_size.y
+            viewport.size.x = new_size.y * 16.0 / 9.0
         viewport.position = (new_size - viewport.size) / 2.0
     )
 
@@ -126,6 +136,14 @@ func _ready() -> void:
     @warning_ignore_restore("int_as_enum_without_cast")
     @warning_ignore_restore("int_as_enum_without_match")
 
+    status_message_label.text = Constant.DEFAULT_STATUS_MESSAGE
+    status_message_timer.wait_time = 1.5
+    status_message_timer.timeout.connect(_on_status_message_timeout)
+
+    # theme init
+    menu_bar_stylebox = get_theme_stylebox("menu_bar", "Main")
+    bg_stylebox = get_theme_stylebox("main_bg", "Main")
+
     ProjectManager.show_select_project_popup()
 
     queue_redraw.call_deferred()
@@ -133,7 +151,7 @@ func _ready() -> void:
 
 func _draw() -> void:
     draw_style_box(menu_bar_stylebox, Rect2(Vector2.ZERO, menu_bar.size))
-    draw_style_box(bg_stylebox, Rect2(Vector2(0, menu_bar.size.y), vsplit_container.size))
+    draw_style_box(bg_stylebox, Rect2(Vector2(0, menu_bar.size.y), hsplit_container.size))
 
 
 func _input(event: InputEvent) -> void:
@@ -269,3 +287,12 @@ func _on_project_name_changed(project_name: String) -> void:
 
 func _on_project_saved() -> void:
     project_name_edit.text = ProjectManager.current_project.project_name
+
+
+func _on_status_message_sended(message: String) -> void:
+    status_message_label.text = message
+    status_message_timer.start()
+
+
+func _on_status_message_timeout() -> void:
+    status_message_label.text = Constant.DEFAULT_STATUS_MESSAGE

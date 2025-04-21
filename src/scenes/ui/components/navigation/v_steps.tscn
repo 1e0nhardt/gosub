@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnlartphylos4"]
+
+[ext_resource type="Script" uid="uid://bqk72o2gmek35" path="res://scenes/ui/components/navigation/v_steps.gd" id="1_87o8i"]
+
+[node name="VSteps" type="VBoxContainer"]
+offset_right = 425.0
+offset_bottom = 422.0
+theme_override_constants/separation = 12
+script = ExtResource("1_87o8i")
+no_progress_index = null

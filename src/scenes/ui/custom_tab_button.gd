@@ -2,8 +2,7 @@
 class_name CustomTabButton
 extends Button
 
-@export var main_color: Color = Color.BLACK
-@export var focus_stylebox: StyleBox
+var selected_stylebox: StyleBox
 
 
 var selected: bool = false:
@@ -14,18 +13,10 @@ var selected: bool = false:
 
 
 func _ready() -> void:
-    add_theme_color_override("font_pressed_color", main_color)
-    add_theme_color_override("font_hover_color", main_color)
-    add_theme_color_override("font_hover_pressed_color", main_color)
-
-    var empty_stylebox = StyleBoxEmpty.new()
-    add_theme_stylebox_override("focus", empty_stylebox)
-    add_theme_stylebox_override("pressed", empty_stylebox)
-    add_theme_stylebox_override("hover", empty_stylebox)
-    add_theme_stylebox_override("normal", empty_stylebox)
-    add_theme_stylebox_override("hover_pressed", empty_stylebox)
+    selected_stylebox = get_theme_stylebox("selected", "TabButton")
+    theme_type_variation = "TabButton"
 
 
 func _draw() -> void:
     if selected:
-        draw_style_box(focus_stylebox, Rect2(Vector2.ZERO, size))
+        draw_style_box(selected_stylebox, Rect2(Vector2.ZERO, size))

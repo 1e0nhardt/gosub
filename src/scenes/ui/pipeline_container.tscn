@@ -1,145 +1,90 @@
-[gd_scene load_steps=3 format=3 uid="uid://c72l875u7gwpv"]
+[gd_scene load_steps=10 format=3 uid="uid://c72l875u7gwpv"]
 
 [ext_resource type="Script" uid="uid://cwr1dfprj0i7r" path="res://scenes/ui/pipeline_container.gd" id="1_7ehok"]
-[ext_resource type="PackedScene" uid="uid://0aj0bohe4mnr" path="res://scenes/ui/progress_indicator.tscn" id="2_2aq3f"]
+[ext_resource type="PackedScene" uid="uid://bnlartphylos4" path="res://scenes/ui/components/navigation/v_steps.tscn" id="3_xsv14"]
+[ext_resource type="Script" uid="uid://dqleuwqbbfi40" path="res://scripts/custom_resources/step_item.gd" id="4_4hdqg"]
+
+[sub_resource type="Resource" id="Resource_mn2xd"]
+script = ExtResource("4_4hdqg")
+name = "Prepare Video"
+description = "Download video from youtube or load local video.."
+metadata/_custom_type_script = "uid://dqleuwqbbfi40"
+
+[sub_resource type="Resource" id="Resource_3fo7d"]
+script = ExtResource("4_4hdqg")
+name = "Extract Audio"
+description = "Extract wav audio file from video."
+metadata/_custom_type_script = "uid://dqleuwqbbfi40"
+
+[sub_resource type="Resource" id="Resource_fuq2u"]
+script = ExtResource("4_4hdqg")
+name = "Transcribe Audio"
+description = "Use whisper to transcribe audio, should specify a ggml model."
+metadata/_custom_type_script = "uid://dqleuwqbbfi40"
+
+[sub_resource type="Resource" id="Resource_nhm3t"]
+script = ExtResource("4_4hdqg")
+name = "AI Translate"
+description = "Batch translate subtitles using deepseek API."
+metadata/_custom_type_script = "uid://dqleuwqbbfi40"
+
+[sub_resource type="Resource" id="Resource_8xi78"]
+script = ExtResource("4_4hdqg")
+name = "Edit Subtitle"
+description = "You can correct subtitles here."
+metadata/_custom_type_script = "uid://dqleuwqbbfi40"
+
+[sub_resource type="Resource" id="Resource_kkftd"]
+script = ExtResource("4_4hdqg")
+name = "Render"
+description = "Render subtitles to video frame."
+metadata/_custom_type_script = "uid://dqleuwqbbfi40"
 
 [node name="PipelineContainer" type="VBoxContainer"]
 offset_right = 344.0
 offset_bottom = 336.0
+theme_override_constants/separation = 8
 script = ExtResource("1_7ehok")
 
 [node name="Title" type="Label" parent="."]
 layout_mode = 2
+theme_type_variation = &"PrimaryLabel"
 text = "Video Translate Pipeline"
 horizontal_alignment = 1
 
 [node name="UrlInputHbox" type="HBoxContainer" parent="."]
 layout_mode = 2
-
-[node name="Label" type="Label" parent="UrlInputHbox"]
-layout_mode = 2
-text = "URL:"
+theme_override_constants/separation = 0
 
 [node name="UrlEdit" type="LineEdit" parent="UrlInputHbox"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+placeholder_text = "youtube video url"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-layout_mode = 2
-
-[node name="ProgressIndicator" parent="HBoxContainer" instance=ExtResource("2_2aq3f")]
+[node name="DownloadButton" type="Button" parent="UrlInputHbox"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"DefaultButton"
+text = "Start"
 
-[node name="StageVbox" type="VBoxContainer" parent="HBoxContainer"]
+[node name="LoadButton" type="Button" parent="UrlInputHbox"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 10
-
-[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/StageVbox"]
-layout_mode = 2
-
-[node name="PrepareVideo" type="Label" parent="HBoxContainer/StageVbox/HBoxContainer"]
-layout_mode = 2
-text = "Prepare Video"
-
-[node name="Spacer" type="Control" parent="HBoxContainer/StageVbox/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="DownloadButton" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"CommonButton"
-text = "Download"
-
-[node name="LoadButton" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"CommonButton"
+theme_type_variation = &"DefaultButton"
 text = "Load"
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="HBoxContainer/StageVbox"]
-layout_mode = 2
-
-[node name="ExtractAudio" type="Label" parent="HBoxContainer/StageVbox/HBoxContainer2"]
-layout_mode = 2
-text = "Extract Audio"
-
-[node name="Spacer" type="Control" parent="HBoxContainer/StageVbox/HBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="HBoxContainer/StageVbox"]
-layout_mode = 2
-
-[node name="Transcribe Audio" type="Label" parent="HBoxContainer/StageVbox/HBoxContainer3"]
-layout_mode = 2
-text = "Transcribe Audio"
-
-[node name="Spacer" type="Control" parent="HBoxContainer/StageVbox/HBoxContainer3"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="ReasrButton" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer3"]
+[node name="ContinueButton" type="Button" parent="UrlInputHbox"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_type_variation = &"CommonButton"
-text = "Reasr"
-
-[node name="HBoxContainer4" type="HBoxContainer" parent="HBoxContainer/StageVbox"]
-layout_mode = 2
-
-[node name="AiTranslate" type="Label" parent="HBoxContainer/StageVbox/HBoxContainer4"]
-layout_mode = 2
-text = "AI Translate"
-
-[node name="Spacer" type="Control" parent="HBoxContainer/StageVbox/HBoxContainer4"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="RetryButton" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer4"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"CommonButton"
-text = "Retry
-"
-
-[node name="HBoxContainer5" type="HBoxContainer" parent="HBoxContainer/StageVbox"]
-layout_mode = 2
-
-[node name="EditSubtitle" type="Label" parent="HBoxContainer/StageVbox/HBoxContainer5"]
-layout_mode = 2
-text = "Edit Subtitle"
-
-[node name="Spacer" type="Control" parent="HBoxContainer/StageVbox/HBoxContainer5"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="ContinueButton" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer5"]
-unique_name_in_owner = true
-layout_mode = 2
-theme_type_variation = &"CommonButton"
+theme_type_variation = &"DefaultButton"
 text = "Continue
 "
 
-[node name="HBoxContainer6" type="HBoxContainer" parent="HBoxContainer/StageVbox"]
+[node name="VSteps" parent="." instance=ExtResource("3_xsv14")]
 layout_mode = 2
-
-[node name="RenderLabel" type="Label" parent="HBoxContainer/StageVbox/HBoxContainer6"]
-layout_mode = 2
-text = "Render"
-
-[node name="Spacer" type="Control" parent="HBoxContainer/StageVbox/HBoxContainer6"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Render" type="Button" parent="HBoxContainer/StageVbox/HBoxContainer6"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-theme_type_variation = &"CommonButton"
-text = "Render"
-alignment = 0
+size_flags_vertical = 3
+steps = Array[ExtResource("4_4hdqg")]([SubResource("Resource_mn2xd"), SubResource("Resource_3fo7d"), SubResource("Resource_fuq2u"), SubResource("Resource_nhm3t"), SubResource("Resource_8xi78"), SubResource("Resource_kkftd")])
+text_separation = 4
+current = 5
+no_progress_index = 5
