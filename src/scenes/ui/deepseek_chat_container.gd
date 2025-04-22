@@ -7,6 +7,7 @@ const MARKDOWN_LABEL_SCENE := preload("res://scenes/ui/markdown_label.tscn")
 @onready var messages_vbox: VBoxContainer = %MessagesVBox
 @onready var message_edit: TextEdit = %MessageEdit
 @onready var send_button: Button = %SendButton
+@onready var panel_container: PanelContainer = %PanelContainer
 
 var received_stream_content := ""
 var message_label: MarkdownLabel = null
@@ -14,6 +15,7 @@ var message_box: VBoxContainer = null
 
 
 func _ready() -> void:
+    panel_container.add_theme_stylebox_override("panel", get_theme_stylebox("message_input", "DeepseekChatContainer"))
     send_button.pressed.connect(_on_send_button_pressed)
     # DeepSeekApi.message_received.connect(_on_message_received)
     DeepSeekApi.stream_data_received.connect(_on_stream_data_received)

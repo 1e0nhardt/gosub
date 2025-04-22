@@ -59,17 +59,26 @@ size_flags_horizontal = 3
 [node name="FileMenuButton" type="MenuButton" parent="MainLayout/MenuBar/LeftHbox"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"PopupMenuButton"
 text = "File"
+flat = false
 
 [node name="EditMenuButton" type="MenuButton" parent="MainLayout/MenuBar/LeftHbox"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"PopupMenuButton"
 text = "Edit"
+flat = false
 
 [node name="HelpMenuButton" type="MenuButton" parent="MainLayout/MenuBar/LeftHbox"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 4
+theme_type_variation = &"PopupMenuButton"
 text = "Help"
+flat = false
 
 [node name="CenterHbox" type="HBoxContainer" parent="MainLayout/MenuBar"]
 layout_mode = 2

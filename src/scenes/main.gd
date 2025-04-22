@@ -103,10 +103,12 @@ func _ready() -> void:
 
     # Menu Buttons
     var file_menu_popup = file_menu_button.get_popup()
+    file_menu_popup.theme_type_variation = "GosubPopupMenu"
     @warning_ignore_start("int_as_enum_without_cast")
     @warning_ignore_start("int_as_enum_without_match")
     file_menu_popup.add_item("Select Project", 0, KEY_MASK_CTRL | KEY_E)
     file_menu_popup.add_item("Save Project", 1, KEY_MASK_CTRL | KEY_S)
+    file_menu_popup.add_separator()
     file_menu_popup.add_item("Open project folder", 2)
     file_menu_popup.id_pressed.connect(func(id):
         match id:
@@ -119,6 +121,7 @@ func _ready() -> void:
     )
 
     var edit_menu_popup = edit_menu_button.get_popup()
+    edit_menu_popup.theme_type_variation = "GosubPopupMenu"
     edit_menu_popup.add_item("Settings", 0, KEY_MASK_CTRL | KEY_P)
     edit_menu_popup.id_pressed.connect(func(id):
         match id:
@@ -127,6 +130,7 @@ func _ready() -> void:
     )
 
     var help_menu_popup = help_menu_button.get_popup()
+    help_menu_popup.theme_type_variation = "GosubPopupMenu"
     help_menu_popup.add_item("About", 0)
     help_menu_popup.id_pressed.connect(func(id):
         match id:

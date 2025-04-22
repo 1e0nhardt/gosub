@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c2sp0pk0x7r54" path="res://scenes/ui/deepseek_chat_container.gd" id="1_t06ou"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i5ilr"]
-bg_color = Color(0.4, 0.4, 0.4, 1)
+bg_color = Color(1, 1, 1, 0.235294)
 corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
@@ -32,6 +32,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_i5ilr")
 
@@ -68,4 +69,5 @@ size_flags_horizontal = 3
 [node name="SendButton" type="Button" parent="PanelContainer/MarginContainer/BottomBar/Buttons"]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"PrimaryButton"
 text = "Send"

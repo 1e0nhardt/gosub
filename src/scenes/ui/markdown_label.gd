@@ -1,13 +1,15 @@
 class_name MarkdownLabel
 extends RichTextLabel
 
-
-@export var sender_stylebox: StyleBox
-@export var response_stylebox: StyleBox
 @export var is_sender: bool = true
+
+var sender_stylebox: StyleBox
+var response_stylebox: StyleBox
 
 
 func _ready() -> void:
+    sender_stylebox = get_theme_stylebox("sender_message", "DeepseekChatContainer")
+    response_stylebox = get_theme_stylebox("response_message", "DeepseekChatContainer")
     add_theme_stylebox_override("normal", sender_stylebox if is_sender else response_stylebox)
     size_flags_horizontal = Control.SIZE_SHRINK_END if is_sender else Control.SIZE_SHRINK_BEGIN
     adjust_minimum_width.call_deferred()

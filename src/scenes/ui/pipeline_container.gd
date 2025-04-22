@@ -25,6 +25,7 @@ func _ready() -> void:
 
 func set_stage(n: int) -> void:
     vsteps.current = n
+    ProjectManager.current_project.pipeline_stage = n
     if n == 5:
         continue_button.disabled = false
     else:

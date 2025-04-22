@@ -9,6 +9,7 @@ var last_highlight_clip_index: int = 0
 var subtitle_track: SubtitleTrack:
     get(): return ProjectManager.current_project.subtitle_track
 
+var highlight_bg_color: Color
 
 func _ready():
     EventBus.subtitle_loaded.connect(load_subtitle)
@@ -25,7 +26,6 @@ func _ready():
     var menu = get_menu()
     menu.item_count = menu.get_item_index(MENU_REDO) + 1
     menu.add_separator()
-    # Bug? accl不起作用，还有参数类型warning。
     menu.add_item("Jump Play", MENU_MAX + 1)
     menu.id_pressed.connect(func(id):
         match id:
@@ -33,6 +33,8 @@ func _ready():
                 @warning_ignore("integer_division")
                 EventBus.jump_to_here_requested.emit(subtitle_track.subtitle_clips[get_caret_line() / 4].start_time + 0.02)
     )
+
+    highlight_bg_color = get_theme_color("highlight_bg_color", "SubtitleTextEdit")
 
     load_subtitle()
     if text != "":
@@ -70,9 +72,9 @@ func highlight_clip(clip_index: int):
     set_line_background_color(last_lineno, default_background_color)
     set_line_background_color(last_lineno + 1, default_background_color)
     set_line_background_color(last_lineno + 2, default_background_color)
-    set_line_background_color(lineno, Color.DARK_OLIVE_GREEN)
-    set_line_background_color(lineno + 1, Color.DARK_OLIVE_GREEN)
-    set_line_background_color(lineno + 2, Color.DARK_OLIVE_GREEN)
+    set_line_background_color(lineno, highlight_bg_color)
+    set_line_background_color(lineno + 1, highlight_bg_color)
+    set_line_background_color(lineno + 2, highlight_bg_color)
     last_highlight_clip_index = clip_index
 
 

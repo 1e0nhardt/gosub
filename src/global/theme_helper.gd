@@ -55,6 +55,7 @@ static func generate_theme(main_color_name: String = "blue") -> void:
     update_theme_common(main_theme, ant_design)
     update_theme_layout(main_theme, ant_design)
     update_theme_navigation(main_theme, ant_design)
+    update_theme_data_entry(main_theme, ant_design)
 
     ResourceSaver.save(main_theme, "res://assets/theme/main_theme_%s.tres" % ("dark" if ant_design.is_dark else "light"))
 
@@ -115,6 +116,7 @@ static func update_theme_common(theme: Theme, ant_design: AntDesign) -> void:
     var normal_stylebox := get_flat_stylebox(ant_design.brand_color, 6, 4)
     var hover_stylebox := get_flat_stylebox(ant_design.hover_color, 6, 4)
     var pressed_stylebox := get_flat_stylebox(ant_design.click_color, 6, 4)
+    var disabled_stylebox := get_flat_bordered_stylebox(ant_design.disable_text_color, 1, 6, 4)
 
     add_theme_type(theme, "PrimaryButton", {
         "base_type": "Button",
@@ -125,6 +127,23 @@ static func update_theme_common(theme: Theme, ant_design: AntDesign) -> void:
             "normal": normal_stylebox,
             "hover": hover_stylebox,
             "pressed": pressed_stylebox,
+            "disabled": disabled_stylebox,
+            "focus": margin_stylebox,
+        },
+    })
+
+    var setting_normal_stylebox = get_flat_stylebox(ant_design.gray9, 6, 4)
+    hover_stylebox = get_flat_stylebox(ant_design.gray8, 6, 4)
+
+    add_theme_type(theme, "SettingButton", {
+        "base_type": "Button",
+        "color": {
+            "font_color": ant_design.primary_text_color,
+        },
+        "stylebox": {
+            "normal": setting_normal_stylebox,
+            "hover": hover_stylebox,
+            "pressed": normal_stylebox,
             "disabled": margin_stylebox,
             "focus": margin_stylebox,
         },
@@ -286,6 +305,14 @@ static func update_theme_layout(theme: Theme, ant_design: AntDesign) -> void:
         },
     })
 
+    add_theme_type(theme, "DeepseekChatContainer", {
+        "stylebox": {
+            "message_input": get_flat_stylebox(ant_design.gray9, 8, 8),
+            "sender_message": get_flat_stylebox(ant_design.palette[7], 8, 8),
+            "response_message": get_flat_stylebox(ant_design.gray8, 8, 8),
+        },
+    })
+
 
 static func update_theme_navigation(theme: Theme, ant_design: AntDesign) -> void:
     add_theme_type(theme, "VSteps", {
@@ -296,6 +323,74 @@ static func update_theme_navigation(theme: Theme, ant_design: AntDesign) -> void
         },
         "font_size": {
             "icon_font_size": 20
+        }
+    })
+
+    var panel_stylebox = StyleBoxFlat.new()
+    panel_stylebox.set_corner_radius_all(4)
+    panel_stylebox.set_content_margin_all(4)
+    panel_stylebox.bg_color = ant_design.gray10
+    panel_stylebox.shadow_color = ant_design.secondary_text_color
+    panel_stylebox.shadow_size = 2
+    var hover_stylebox = get_flat_stylebox(ant_design.secondary_text_color, 4, 2)
+    var separator_stylebox = StyleBoxLineEx.new()
+    separator_stylebox.set_content_margin_all(2)
+    separator_stylebox.color = ant_design.primary_text_color
+    separator_stylebox.offset = 2
+
+    add_theme_type(theme, "GosubPopupMenu", {
+        "base_type": "PopupMenu",
+        "font_size": {
+            "font_size": ant_design.default_font_size
+        },
+        "stylebox": {
+            "panel": panel_stylebox,
+            "hover": hover_stylebox,
+            "separator": separator_stylebox,
+        }
+    })
+
+    var margin_stylebox = get_flat_stylebox(Color.TRANSPARENT, 0, 4)
+    margin_stylebox.content_margin_top = 2
+    margin_stylebox.content_margin_bottom = 2
+    hover_stylebox = get_flat_stylebox(ant_design.hover_color, 6, 4)
+    hover_stylebox.content_margin_top = 2
+    hover_stylebox.content_margin_bottom = 2
+
+    add_theme_type(theme, "PopupMenuButton", {
+        "base_type": "MenuButton",
+        "color": {
+            "font_color": ant_design.primary_text_color,
+        },
+        "font_size": {
+            "font_size": ant_design.default_font_size
+        },
+        "stylebox": {
+            "normal": margin_stylebox,
+            "hover": hover_stylebox,
+            "pressed": hover_stylebox,
+            "disabled": margin_stylebox,
+            "focus": margin_stylebox,
+        },
+    })
+
+
+static func update_theme_data_entry(theme: Theme, ant_design: AntDesign) -> void:
+    var margin_stylebox = get_flat_stylebox(Color.TRANSPARENT, 0, 4)
+    margin_stylebox.content_margin_top = 2
+    margin_stylebox.content_margin_bottom = 2
+    margin_stylebox.content_margin_right = 8
+
+    add_theme_type(theme, "SubtitleTextEdit", {
+        "base_type": "TextEdit",
+        "color": {
+            "font_color": ant_design.primary_text_color,
+            "highlight_bg_color": ant_design.palette[6],
+        },
+        "stylebox": {
+            "normal": margin_stylebox,
+            "focus": margin_stylebox,
+            "readonly": margin_stylebox,
         }
     })
 
