@@ -60,9 +60,9 @@ const DEFAULT_SETTINGS := {
     "transcribe": {
         "whisper.cpp": {
             "use_gpu": {
+                "type": TYPE_BOOL,
                 "data": false,
-                "tooltip": "Whether to use GPU for transcribe.",
-                "type": TYPE_BOOL
+                "tooltip": "Whether to use GPU for transcribe."
             },
             "model_path": {
                 "data": "",
@@ -71,22 +71,34 @@ const DEFAULT_SETTINGS := {
                 "type": TYPE_STRING
             },
             "smart_split": {
+                "type": TYPE_BOOL,
                 "data": false,
-                "tooltip": "Whether to use smart split. i.e transcribe with -ml 1, split with full stop.",
-                "type": TYPE_BOOL
+                "tooltip": "Whether to use smart split. i.e transcribe with -ml 1, split with full stop."
             },
             "smart_split_threshold": {
+                "type": TYPE_FLOAT,
                 "data": 5.0,
                 "tooltip": "Long sentence threshold for smart split.",
-                "hint_string": "4.0, 20.0, 0.1, s",
-                "type": TYPE_FLOAT
+                "hint_string": "4.0, 20.0, 0.1, s"
             },
             "smart_punctuation_threshold": {
+                "type": TYPE_INT,
                 "data": 200,
                 "tooltip": "Long sentence threshold. If the sentence is longer than this value, will do punctuation automatically.",
-                "hint_string": "",
-                "type": TYPE_INT
-            }
+                "hint_string": "100, 300, 1"
+            },
+            "sentence_min_words": {
+                "type": TYPE_INT,
+                "data": 3,
+                "hint_string": "1, 20, 1",
+                "tooltip": "a sentence should have at least this number of words.",
+            },
+            "sentence_max_gap_time": {
+                "type": TYPE_FLOAT,
+                "data": 3.0,
+                "hint_string": "1.0, 10.0, 0.1, s",
+                "tooltip": "If the gap between two sentences is longer than this value, the sentences will not be merged.",
+            },
         }
     },
     "llm": {
@@ -94,6 +106,7 @@ const DEFAULT_SETTINGS := {
             "clips_per_chat": {
                 "type": TYPE_INT,
                 "data": 16,
+                "hint_string": "1, 100, 1",
                 "tooltip": "Number of clips per chat.",
             },
             "prompt": {

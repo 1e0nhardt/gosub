@@ -59,6 +59,11 @@ func split_long_sentences(json: Dictionary) -> void:
         content = result_data[i - empty_compensation - start_index]
         clip.second_text += " " + content
 
+        # 最后一个句子。可能不是以`.`结尾的。
+        if i == len(data) - 1:
+            clip.end = segment["offsets"]["to"]
+            new_clips.append(clip)
+
         if i == start_index or clip.start == 0:
             clip.start = segment["offsets"]["from"]
 
@@ -73,10 +78,5 @@ func split_long_sentences(json: Dictionary) -> void:
             clip.end = segment["offsets"]["to"]
             new_clips.append(clip)
             clip = SubtitleClip.new()
-
-        # 最后一个句子。可能不是以`.`结尾的。
-        if i == len(data) - 1:
-            clip.end = segment["offsets"]["to"]
-            new_clips.append(clip)
 
     _splited_clips = new_clips
