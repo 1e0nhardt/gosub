@@ -60,8 +60,8 @@ static func extract_audio(video_file_path: String, output_path: String = "") -> 
 ## 使用 whisper.cpp 转录音频  [br]
 ## [param audio_file_path] 音频文件绝对路径
 static func transcribe_audio(audio_file_path: String, output_path: String = "") -> bool:
-    # if FileAccess.file_exists(output_path):
-    #     return true
+    if FileAccess.file_exists(output_path):
+        return true
 
     var whisper_cli_path = get_real_path("bin/whisper/cuda/whisper-cli.exe")
     if not ProjectManager.get_setting_value("/transcribe/whisper.cpp/use_gpu"):

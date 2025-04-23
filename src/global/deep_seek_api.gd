@@ -2,6 +2,7 @@ extends Node
 
 signal message_received(content: String)
 signal translate_message_received(content: String)
+signal punctuation_message_received(content: String)
 signal stream_data_received(content: String)
 
 ## for DeepSeekChatContainer
@@ -9,16 +10,20 @@ var deepseek_chat_stream: DeepSeekChatStream
 ## for translate
 var deepseek_chat_normal: DeepseekChatNormal
 var deepseek_chat_translate: DeepseekChatNormal
+var deepseek_chat_punctuation: DeepseekChatNormal
 var received_translate_message: String = ""
+var received_punctuation_message: String = ""
 
 @onready var http_request: HTTPRequest = $HTTPRequest
 @onready var http_request_translate: HTTPRequest = $HTTPRequestTranslate
+@onready var http_request_punctuation: HTTPRequest = $HTTPRequestPunctuation
 
 
 func _ready() -> void:
     deepseek_chat_stream = DeepSeekChatStream.new()
     deepseek_chat_normal = DeepseekChatNormal.new(http_request)
     deepseek_chat_translate = DeepseekChatNormal.new(http_request_translate)
+    deepseek_chat_punctuation = DeepseekChatNormal.new(http_request_punctuation)
     deepseek_chat_normal.message_received.connect(
         func(c):
             message_received.emit(c)
@@ -27,6 +32,11 @@ func _ready() -> void:
         func(c):
             received_translate_message = c
             translate_message_received.emit(c)
+    )
+    deepseek_chat_punctuation.message_received.connect(
+        func(c):
+            received_punctuation_message = c
+            punctuation_message_received.emit(c)
     )
     deepseek_chat_stream.stream_data_received.connect(func(c): stream_data_received.emit.call_deferred(c))
 
@@ -47,6 +57,10 @@ func chat_once(message: String, use_normal: bool = false) -> void:
 
 func translate_once(message: String) -> void:
     deepseek_chat_translate.send_message_without_history.call_deferred(message)
+
+
+func punctuation_once(message: String) -> void:
+    deepseek_chat_punctuation.send_message_without_history.call_deferred(message)
 
 
 func clear_history(use_normal: bool = false) -> void:
@@ -97,6 +111,11 @@ func json_to_clips(json_path: String) -> bool:
                 clip.end = segment["offsets"]["to"]
                 clips.append(clip)
                 clip = SubtitleClip.new()
+
+            # 最后一个句子。可能不是以`.`结尾的。
+            if i == len(data) - 1:
+                clip.end = segment["offsets"]["to"]
+                clips.append(clip)
     else:
         for i in range(len(data)):
             var segment = data[i]
@@ -109,6 +128,16 @@ func json_to_clips(json_path: String) -> bool:
             clip.start = segment["offsets"]["from"]
             clip.end = segment["offsets"]["to"]
             clips.append(clip)
+
+    if ProjectManager.get_setting_value("/transcribe/whisper.cpp/smart_split"):
+        var new_clips: Array[SubtitleClip] = []
+        for new_clip in clips:
+            if new_clip.second_text.length() > ProjectManager.get_setting_value("/transcribe/whisper.cpp/smart_punctuation_threshold"):
+                await new_clip.split_long_sentences(json)
+                new_clips += new_clip._splited_clips
+            else:
+                new_clips.append(new_clip)
+        clips = new_clips
 
     var start_time = Time.get_ticks_msec()
     deepseek_chat_translate.set_system_prompt.call_deferred(ProjectManager.get_setting_value("/llm/common/prompt/translate"))
@@ -126,6 +155,7 @@ func json_to_clips(json_path: String) -> bool:
         await translate_message_received
         var result = received_translate_message
         var result_contents = result.split("\n")
+        Logger.debug(result_contents)
         for j in range(len(result_contents)):
             var r = result_contents[j].strip_edges()
             if not r.begins_with("["):

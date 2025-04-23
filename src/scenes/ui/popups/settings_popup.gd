@@ -117,6 +117,11 @@ func prepare_value_component(field: Dictionary) -> Control:
                     comp.text_submitted.connect(func(text): settings_valued_changed.emit(comp.get_meta("path"), text))
         TYPE_INT:
             comp = SpinBox.new()
+            if field.has("hint_string"):
+                var hint_arr = field.get("hint_string").split(",")
+                comp.min_value = int(hint_arr[0].strip_edges())
+                comp.max_value = int(hint_arr[1].strip_edges())
+                comp.step = int(hint_arr[2].strip_edges())
             comp.value = field.get("data")
             comp.value_changed.connect(func(value): settings_valued_changed.emit(comp.get_meta("path"), value))
         TYPE_FLOAT:

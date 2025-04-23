@@ -8,3 +8,5 @@ script = ExtResource("1_5bk3i")
 [node name="HTTPRequest" type="HTTPRequest" parent="."]
 
 [node name="HTTPRequestTranslate" type="HTTPRequest" parent="."]
+
+[node name="HTTPRequestPunctuation" type="HTTPRequest" parent="."]
