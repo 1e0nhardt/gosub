@@ -80,6 +80,8 @@ func new_project() -> void:
     l_new_project.project_name = uid_string
     current_project = l_new_project
 
+    registered_projects[uid_string] = l_new_project
+
 
 func save_project() -> void:
     if current_project:

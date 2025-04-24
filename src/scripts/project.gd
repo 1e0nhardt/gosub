@@ -56,6 +56,8 @@ func reload_subtitle() -> void:
     var ass_path := get_save_basename() + ".ass"
     if Util.check_path(ass_path):
         subtitle_track.load_subtitle(ass_path)
+    else:
+        subtitle_track.clear()
 
 
 func initialize(uid: String) -> void:

@@ -53,7 +53,7 @@ func _ready() -> void:
     EventBus.status_message_sended.connect(_on_status_message_sended)
 
     EventBus.video_changed.connect(open_video)
-    EventBus.video_paused.connect(func(b): play(b))
+    EventBus.video_paused.connect(func(b): play_button.button_pressed = b)
     EventBus.jump_to_here_requested.connect(func(time):
         seek_time(time, true)
         update_subtitles()
@@ -141,7 +141,7 @@ func _ready() -> void:
     @warning_ignore_restore("int_as_enum_without_match")
 
     status_message_label.text = Constant.DEFAULT_STATUS_MESSAGE
-    status_message_timer.wait_time = 1.5
+    status_message_timer.wait_time = 2.0
     status_message_timer.timeout.connect(_on_status_message_timeout)
 
     # theme init

@@ -11,6 +11,7 @@ var subtitle_track: SubtitleTrack:
 
 var highlight_bg_color: Color
 
+
 func _ready():
     EventBus.subtitle_loaded.connect(load_subtitle)
     EventBus.subtitle_clip_index_updated.connect(_on_subtitle_clip_index_updated)
@@ -79,6 +80,9 @@ func highlight_clip(clip_index: int):
 
 
 func focus_clip(clip_index: int) -> void:
+    if clip_index < 0 or clip_index >= subtitle_track.num_clips:
+        return
+
     highlight_clip(clip_index)
     set_line_as_center_visible(subtitle_track.current_clip_index * 4)
 

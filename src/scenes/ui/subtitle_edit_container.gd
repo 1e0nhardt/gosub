@@ -9,6 +9,14 @@ extends VBoxContainer
 @onready var goto_next_long_sentence_button: Button = %GotoNextLongSentenceButton
 
 
+func _enter_tree() -> void:
+    if not subtitle_edit:
+        await ready
+    else:
+        await subtitle_edit.tree_entered
+    subtitle_edit.focus_clip.call_deferred(subtitle_edit.subtitle_track.current_clip_index)
+
+
 func _ready() -> void:
     prev_clip_button.pressed.connect(_on_prev_clip_button_pressed)
     next_clip_button.pressed.connect(_on_next_clip_button_pressed)
@@ -19,6 +27,9 @@ func _ready() -> void:
     # 编辑时暂停，按esc退出编辑，继续播放。
     subtitle_edit.focus_entered.connect(func(): EventBus.video_paused.emit(false))
     subtitle_edit.yield_focus.connect(func(): EventBus.video_paused.emit(true))
+
+    Logger.info(prev_clip_button.get_signal_connection_list("pressed"))
+    Logger.info("SubtitleEditContainer ready!")
 
 
 #region SubtitleEdit Buttons

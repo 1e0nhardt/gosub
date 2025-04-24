@@ -125,6 +125,12 @@ func is_empty() -> bool:
     return num_clips == 0
 
 
+func clear() -> void:
+    subtitle_clips.clear()
+    current_clip_index = -1
+    EventBus.subtitle_clips_updated.emit()
+
+
 ## 随时间更新current_clip_index和高亮区域
 func update(play_time: float):
     if is_empty():
