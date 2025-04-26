@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnpw8b8qdfcji"]
+
+[ext_resource type="Script" uid="uid://c4r55yaek7vnb" path="res://scenes/ui/components/data_display/waveform_view.gd" id="1_orxba"]
+
+[node name="WaveformView" type="Control"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 513.0
+offset_bottom = 60.0
+script = ExtResource("1_orxba")

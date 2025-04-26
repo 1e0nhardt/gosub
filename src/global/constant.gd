@@ -1,6 +1,8 @@
 class_name Constant
 extends Object
 
+const MAX_16_BITS_VALUE := 32767.0
+
 const DEFAULT_STATUS_MESSAGE = "Welcome to Gosub!"
 
 # Prompt

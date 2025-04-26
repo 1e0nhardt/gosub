@@ -240,3 +240,53 @@ static func center_main_window(window: Window, window_size: Vector2i) -> void:
     window.size = window_size
     var centered_pos = (screen_size - window_size) / 2
     window.position = centered_pos
+
+
+static func calculate_audio_wave_envelope(audio_data: PackedByteArray, frames_per_block: int = 256) -> Array:
+    var pos_envelope: Array = []
+    var neg_envelope: Array = []
+    if audio_data.is_empty():
+        Logger.warn("Audio data is empty!")
+        return [[], []]
+
+    var bytes_size: float = 4 # 16 bit * stereo
+    var total_frames: int = int(audio_data.size() / bytes_size)
+    var total_blocks: int = ceili(float(total_frames) / frames_per_block)
+    var current_frame_index: int = 0
+
+    pos_envelope.resize(total_blocks)
+    neg_envelope.resize(total_blocks)
+
+    for i: int in total_blocks:
+        var max_abs_amplitude: float = 0.0
+        var min_abs_amplitude: float = 0.0
+        var start_frame: int = current_frame_index
+        var end_frame: int = min(start_frame + frames_per_block, total_frames)
+
+        for frame_index: int in range(start_frame, end_frame):
+            var byte_offset: int = int(frame_index * bytes_size)
+            var frame_max_amplitude: float = 0.0
+            var frame_min_amplitude: float = 0.0
+
+            if byte_offset + bytes_size > audio_data.size():
+                Logger.info("Attempted to read past end of audio data at frame %d." % frame_index)
+                break
+
+            var left_sample: int = audio_data.decode_s16(byte_offset)
+            var right_sample: int = audio_data.decode_s16(byte_offset + 2)
+
+            frame_max_amplitude = max(float(left_sample), float(right_sample))
+            frame_min_amplitude = min(float(left_sample), float(right_sample))
+
+            if frame_max_amplitude > max_abs_amplitude:
+                max_abs_amplitude = frame_max_amplitude
+
+            if frame_min_amplitude < min_abs_amplitude:
+                min_abs_amplitude = frame_min_amplitude
+
+        pos_envelope[i] = clamp(max_abs_amplitude / Constant.MAX_16_BITS_VALUE, 0.0, 1.0)
+        neg_envelope[i] = clamp(min_abs_amplitude / Constant.MAX_16_BITS_VALUE, -1.0, 0.0)
+
+        current_frame_index = end_frame
+
+    return [pos_envelope, neg_envelope]

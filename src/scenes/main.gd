@@ -45,6 +45,7 @@ var bg_stylebox: StyleBox
 # @onready var version_label: Label = %VersionLabel
 
 @onready var status_message_timer: Timer = %StatusMessageTimer
+@onready var tracks_view: VBoxContainer = %TracksView
 
 
 func _ready() -> void:
@@ -151,6 +152,7 @@ func _ready() -> void:
     ProjectManager.show_select_project_popup()
 
     queue_redraw.call_deferred()
+    tracks_view.custom_minimum_size = Vector2(1200, 300)
 
 
 func _draw() -> void:

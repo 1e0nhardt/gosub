@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://cyee50df6fbey"]
+
+[ext_resource type="Script" uid="uid://6flvfomvdmit" path="res://scenes/ui/components/data_display/timeline_metric_bar.gd" id="1_5d77a"]
+
+[node name="TimelineMetricBar" type="Control"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1200.0
+offset_bottom = 28.0
+script = ExtResource("1_5d77a")

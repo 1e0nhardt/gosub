@@ -76,6 +76,9 @@ static func update_theme_common(theme: Theme, ant_design: AntDesign) -> void:
     })
 
     add_theme_type(theme, "Main", {
+        "color": {
+            "waveform_color": ant_design.gray5,
+        },
         "stylebox": {
             "menu_bar": menu_bar_stylebox,
             "main_bg": main_bg_stylebox,

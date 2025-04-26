@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3ohjpea7nhlr"]
+
+[ext_resource type="Script" uid="uid://dsubhkwjbpxpr" path="res://scenes/ui/components/data_display/video_view.gd" id="1_4wo26"]
+
+[node name="VideoView" type="HBoxContainer"]
+offset_right = 612.0
+offset_bottom = 146.0
+theme_override_constants/separation = 0
+script = ExtResource("1_4wo26")
