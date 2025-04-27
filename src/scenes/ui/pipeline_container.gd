@@ -10,14 +10,27 @@ extends VBoxContainer
 
 func _ready() -> void:
     EventBus.project_loaded.connect(func(): url_edit.text = ProjectManager.current_project.video_url)
-    EventBus.pipeline_stage_changed.connect(func(stage): set_stage(stage))
+    EventBus.pipeline_stage_changed.connect(
+        func(stage):
+            set_stage(stage)
+            match stage:
+                2:
+                    _download_video_callback()
+                3:
+                    _extract_audio_callback()
+                4:
+                    _transcribe_audio_callback()
+                5:
+                    _ai_translate_callback()
+
+    )
     EventBus.ai_translate_finished.connect(_ai_translate_callback)
     download_button.pressed.connect(_start_pipeline)
     load_button.pressed.connect(_load_local_video)
     continue_button.pressed.connect(func():
         EventBus.pipeline_started.emit()
         set_stage(6)
-        _render_video()
+        _on_render_video()
     )
 
     continue_button.disabled = true
@@ -39,7 +52,7 @@ func _load_local_video() -> void:
             ProjectManager.current_project.video_title = file_path.get_file().get_basename()
             url_edit.text = file_path
             set_stage(1)
-            _download_video_callback({"succeed": true})
+            _download_video_callback()
     )
 
 
@@ -52,90 +65,77 @@ func _start_pipeline() -> void:
     EventBus.pipeline_started.emit()
     set_stage(1)
     ProjectManager.set_video_url(video_url)
-
-    ExecuterThreadPool.request_thread_execution(
-        {
-            "type": "query_video_title",
-            "url": video_url,
-        },
-        _get_video_title_callback
-    )
+    TaskThreadPool.add_task(StatedTask.new(_get_video_title.bind(video_url), _get_video_title_callback))
 
 
-func _get_video_title_callback(response: Dictionary) -> void:
-    var err_flag = response["succeed"]
+# 注意：连续使用 bind 绑定参数时，参数绑定的顺序是颠倒的(从右到左)。
+# 所以: task 的第一个参数得是 state。后面的参数需要和绑定顺序一致 task 的参数。
+# 例如:
+# ```
+# func foo(a, b, c):
+#    print("%s %s : %s" % [a, b, c])
+#
+# var f = foo.bind("bar").bind("hello", "world")
+# f.call() # -> hello world : bar
+# ```
+func _get_video_title(state: Dictionary, video_url: String) -> void:
+    var result = Executer.get_video_title(video_url)
+    result = result.strip_edges().split("\n")[-1]
+    Logger.debug(result)
+    state.merge({
+        "succeed": true,
+        "video_title": result,
+    })
+
+
+func _get_video_title_callback(state: Dictionary) -> void:
+    var err_flag = state["succeed"]
     if not err_flag:
         Logger.warn("Get video title failed!")
         return
 
-    var video_title = response["video_title"]
+    var video_title = state["video_title"]
     ProjectManager.set_video_title(video_title)
-
-    Logger.info("Video title: %s" % video_title)
-
     ProjectManager.send_status_message("Downloading video...")
-
-    ExecuterThreadPool.request_thread_execution(
-        {
-            "type": "download_video",
-            "url": ProjectManager.current_project.video_url,
-            "save_basename": ProjectManager.current_project.get_save_basename(),
-        },
-        _download_video_callback
+    var result = Executer.download_video_execute_prepare(
+        ProjectManager.current_project.video_url,
+        ProjectManager.current_project.get_save_basename() + ".mp4"
     )
+    var run_yt_dlp_task = RunProgramTask.new(result[0], result[1], _download_video_callback)
+    TaskThreadPool.run_program(run_yt_dlp_task)
 
 
-func _download_video_callback(response: Dictionary) -> void:
-    var err_flag = response["succeed"]
-    if not err_flag:
-        Logger.warn("Download video failed!")
-        ProjectManager.show_message("Error", "Download video failed!")
-        EventBus.pipeline_finished.emit()
-        return
-
+func _download_video_callback() -> void:
     set_stage(2)
-
     EventBus.video_changed.emit(ProjectManager.current_project.video_path)
-
     ProjectManager.send_status_message("Extracting audio...")
-    ExecuterThreadPool.request_thread_execution(
-        {
-            "type": "extract_audio",
-            "video_path": ProjectManager.current_project.video_path,
-        },
-        _extract_audio_callback
+    var result = Executer.extract_audio_execute_prepare(
+        ProjectManager.current_project.video_path,
+        ProjectManager.current_project.audio_path
     )
+    var run_ffmpeg_task = RunProgramTask.new(result[0], result[1], _extract_audio_callback)
+    TaskThreadPool.run_program(run_ffmpeg_task)
 
 
-func _extract_audio_callback(response: Dictionary) -> void:
-    var err_flag = response["succeed"]
-    if not err_flag:
-        Logger.warn("Extract audio failed!")
-        return
-
+func _extract_audio_callback() -> void:
     set_stage(3)
-
     ProjectManager.send_status_message("Transcribing audio...")
-    ExecuterThreadPool.request_thread_execution(
-        {
-            "type": "transcribe_audio",
-            "audio_path": ProjectManager.current_project.get_save_basename() + ".wav",
-        },
-        _transcribe_audio_callback
-    )
-
-
-func _transcribe_audio_callback(response: Dictionary) -> void:
-    var err_flag = response["succeed"]
-    if not err_flag:
-        Logger.warn("Transcribe audio failed!")
-        ProjectManager.show_message("Error", "Transcribe audio failed! Please check transcribe/whisper.cpp/model_path in settings!")
-        EventBus.pipeline_finished.emit()
+    if FileAccess.file_exists(ProjectManager.current_project.audio_path):
+        _transcribe_audio_callback()
         return
 
-    set_stage(4)
+    var result = Executer.transcribe_audio_execute_prepare(
+        ProjectManager.current_project.audio_path,
+        ProjectManager.current_project.transcribe_result_path
+    )
+    var run_whisper_task = RunProgramTask.new(result[0], result[1], _transcribe_audio_callback)
+    TaskThreadPool.run_program(run_whisper_task)
 
-    DeepSeekApi.json_to_clips(ProjectManager.current_project.get_save_basename() + ".json")
+
+func _transcribe_audio_callback() -> void:
+    set_stage(4)
+    ProjectManager.send_status_message("Translating start...")
+    DeepSeekApi.json_to_clips(ProjectManager.current_project.transcribe_result_path)
 
 
 func _ai_translate_callback() -> void:
@@ -144,28 +144,25 @@ func _ai_translate_callback() -> void:
     Logger.info("Translate done!")
 
 
-func _render_video() -> void:
+func _on_render_video() -> void:
     if not Util.check_path(ProjectManager.current_project.video_path):
         return
 
     if not Util.check_path(ProjectManager.current_project.get_save_basename() + ".ass"):
         return
 
-    ExecuterThreadPool.request_thread_execution(
-        {
-            "type": "render_video",
-            "ass_path": ProjectManager.current_project.get_save_basename() + ".ass",
-            "video_title": ProjectManager.current_project.output_video_title,
-            "bit_rate": ProjectManager.get_setting_value("/video/render/bit_rate"),
-        },
-        func(response):
-            var err_flag = response["succeed"]
-            if not err_flag:
-                Logger.warn("Render video failed!")
-                ProjectManager.show_message("Error", "Render video failed!")
-                EventBus.pipeline_finished.emit()
-                return
-
-            set_stage(7)
-            EventBus.pipeline_finished.emit()
+    var ass_path = ProjectManager.current_project.get_save_basename() + ".ass"
+    var video_title = ProjectManager.current_project.output_video_title
+    var result = Executer.render_video_with_hard_subtitles_execute_prepare(
+        ProjectManager.current_project.video_path,
+        ass_path,
+        ass_path.get_base_dir().path_join("%s.mp4" % video_title),
+        ProjectManager.get_setting_value("/video/render/bit_rate")
     )
+    var run_ffmpeg_task = RunProgramTask.new(result[0], result[1], _render_video_callback)
+    TaskThreadPool.run_program(run_ffmpeg_task)
+
+
+func _render_video_callback() -> void:
+    set_stage(7)
+    EventBus.pipeline_finished.emit()

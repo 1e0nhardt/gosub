@@ -28,9 +28,6 @@ func _ready() -> void:
     subtitle_edit.focus_entered.connect(func(): EventBus.video_paused.emit(false))
     subtitle_edit.yield_focus.connect(func(): EventBus.video_paused.emit(true))
 
-    Logger.info(prev_clip_button.get_signal_connection_list("pressed"))
-    Logger.info("SubtitleEditContainer ready!")
-
 
 #region SubtitleEdit Buttons
 func _on_next_clip_button_pressed():
@@ -63,21 +60,21 @@ func _on_reasr_button_pressed():
     EventBus.video_paused.emit(false)
     reasr_button.disabled = true
 
-    ExecuterThreadPool.request_thread_execution(
-        {
-            "type": "transcribe_segment",
-            "audio_path": ProjectManager.current_project.audio_path,
-            "from": subtitle_edit.subtitle_track.current_clip.start,
-            "to": subtitle_edit.subtitle_track.current_clip.end
-        },
-        func(response: Dictionary):
-            reasr_button.disabled = false
+    TaskThreadPool.add_task(StatedTask.new(_transcribe_segment.bind(
+        ProjectManager.current_project.audio_path,
+        subtitle_edit.subtitle_track.current_clip.start,
+        subtitle_edit.subtitle_track.current_clip.end
+    ), _transcribe_segment_callback))
 
-            var err_flag = response["succeed"]
-            if not err_flag:
-                Logger.warn("Transcribe failed!")
-                return
 
-            ProjectManager.show_asr_edit(response["data"])
-    )
+func _transcribe_segment(state: Dictionary, audio_path: String, from: int, to: int) -> void:
+    Executer.transcribe_segment(audio_path, from, to)
+    var json: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(ProjectManager.current_project.project_folder.path_join("temp_segment.json")))
+    state.merge({
+        "data": json
+    })
+
+
+func _transcribe_segment_callback(state: Dictionary) -> void:
+    ProjectManager.show_asr_edit(state["data"])
 #endregion

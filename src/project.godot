@@ -23,10 +23,10 @@ config/icon="res://icon.svg"
 
 Logger="*res://global/logger.gd"
 DeepSeekApi="*res://global/deep_seek_api.tscn"
-ExecuterThreadPool="*res://global/executer_thread_pool.gd"
 DeepseekThread="*res://global/deepseek_thread.gd"
 EventBus="*res://global/event_bus.gd"
 ProjectManager="*res://global/project_manager.gd"
+TaskThreadPool="*res://global/task_thread_pool.gd"
 
 [debug]
 
