@@ -149,7 +149,9 @@ func _ready() -> void:
     menu_bar_stylebox = get_theme_stylebox("menu_bar", "Main")
     bg_stylebox = get_theme_stylebox("main_bg", "Main")
 
+    Profiler.start("ProjectManager.show_select_project_popup")
     ProjectManager.show_select_project_popup()
+    Profiler.stop("ProjectManager.show_select_project_popup")
 
     queue_redraw.call_deferred()
     tracks_view.custom_minimum_size = Vector2(1200, 300)
@@ -297,7 +299,7 @@ func _on_project_saved() -> void:
 
 func _on_status_message_sended(message: String) -> void:
     status_message_label.text = message
-    status_message_timer.start()
+    # status_message_timer.start()
 
 
 func _on_status_message_timeout() -> void:

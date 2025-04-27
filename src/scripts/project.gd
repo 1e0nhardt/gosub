@@ -69,6 +69,10 @@ func initialize(uid: String) -> void:
 
 
 func set_video_title(title: String, use_as_project_name: bool = false) -> void:
+    if title == "":
+        Logger.info("Video title can not be empty")
+        return
+
     video_title = title
     dirty = true
     if use_as_project_name:

@@ -34,6 +34,11 @@ func split_long_sentences(json: Dictionary) -> void:
     await DeepSeekApi.punctuation_message_received
     var result = DeepSeekApi.received_punctuation_message
     var result_data = result.split(" ", false)
+    var raw_data = second_text.split(" ", false)
+
+    if result_data.size() != raw_data.size():
+        Logger.error("Punctuation error! Deepseek punctuation result length is not equal to raw data length!")
+        return
 
     var new_clips: Array[SubtitleClip] = []
     var data = json["transcription"]

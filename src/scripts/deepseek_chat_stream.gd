@@ -20,10 +20,12 @@ func try_connect() -> void:
         Logger.error("Failed to connect to DeepSeek server")
         return
 
+    Profiler.start("DeepseekChatStream connecting...")
     # Wait until resolved and connected.
     while http_client.get_status() == HTTPClient.STATUS_CONNECTING or http_client.get_status() == HTTPClient.STATUS_RESOLVING:
         http_client.poll()
         # Logger.info("Connecting...")
+    Profiler.stop("DeepseekChatStream connecting...")
 
     if http_client.get_status() != HTTPClient.STATUS_CONNECTED: # Check if the connection was made successfully.
         Logger.error("Connection failed")

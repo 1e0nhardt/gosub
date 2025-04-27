@@ -20,7 +20,9 @@ var received_punctuation_message: String = ""
 
 
 func _ready() -> void:
+    Profiler.start("Deepseek API")
     deepseek_chat_stream = DeepSeekChatStream.new()
+    Profiler.stop("Deepseek API")
     deepseek_chat_normal = DeepseekChatNormal.new(http_request)
     deepseek_chat_translate = DeepseekChatNormal.new(http_request_translate)
     deepseek_chat_punctuation = DeepseekChatNormal.new(http_request_punctuation)
