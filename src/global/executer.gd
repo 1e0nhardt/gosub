@@ -70,9 +70,11 @@ static func extract_audio(video_file_path: String, output_path: String = "") -> 
     return executer_helper.execute()
 
 
-static func extract_audio_execute_prepare(video_file_path: String, output_path: String = "") -> Array[String]:
+static func extract_audio_execute_prepare(video_file_path: String, output_path: String = "", override := true) -> Array[String]:
     var ffmpeg_path = get_real_path("bin/ffmpeg.exe")
-    var args = '-i "%s" -ar 16000 -ac 1 -c:a pcm_s16le "%s"' % [video_file_path, output_path]
+    var args := '-i "%s" -ar 16000 -ac 1 -c:a pcm_s16le "%s"' % [video_file_path, output_path]
+    if override:
+        args += " -y"
     return [ffmpeg_path, args]
 
 
@@ -163,7 +165,6 @@ static func render_video_with_hard_subtitles_execute_prepare(video_file_path: St
     # 滤镜参数中 `:` 是特殊字符，需要转义，否则会报错
     subtitles_path = subtitles_path.replace(":", "\\:")
     var args = '-i "%s" -vf "subtitles=\'%s\'" -b:v %s "%s"' % [video_file_path, subtitles_path, bit_rate, output_path]
-    Logger.info(args)
     return [ffmpeg_path, args]
 
 

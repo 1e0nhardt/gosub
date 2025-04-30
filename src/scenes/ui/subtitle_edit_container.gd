@@ -18,6 +18,8 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+    EventBus.asr_popup_closed.connect(func(): reasr_button.disabled = false)
+
     prev_clip_button.pressed.connect(_on_prev_clip_button_pressed)
     next_clip_button.pressed.connect(_on_next_clip_button_pressed)
     goto_next_long_sentence_button.pressed.connect(_on_goto_next_long_sentence_button_pressed)

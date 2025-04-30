@@ -97,6 +97,10 @@ func _get_video_title_callback(state: Dictionary) -> void:
     var video_title = state["video_title"]
     ProjectManager.set_video_title(video_title)
     ProjectManager.send_status_message("Downloading video...")
+    if FileAccess.file_exists(ProjectManager.current_project.get_save_basename() + ".mp4"):
+        _extract_audio_callback()
+        return
+
     var result = Executer.download_video_execute_prepare(
         ProjectManager.current_project.video_url,
         ProjectManager.current_project.get_save_basename() + ".mp4"
@@ -107,6 +111,10 @@ func _get_video_title_callback(state: Dictionary) -> void:
 
 func _download_video_callback() -> void:
     set_stage(2)
+    if FileAccess.file_exists(ProjectManager.current_project.audio_path):
+        _extract_audio_callback()
+        return
+
     EventBus.video_changed.emit(ProjectManager.current_project.video_path)
     ProjectManager.send_status_message("Extracting audio...")
     var result = Executer.extract_audio_execute_prepare(
@@ -120,7 +128,7 @@ func _download_video_callback() -> void:
 func _extract_audio_callback() -> void:
     set_stage(3)
     ProjectManager.send_status_message("Transcribing audio...")
-    if FileAccess.file_exists(ProjectManager.current_project.audio_path):
+    if FileAccess.file_exists(ProjectManager.current_project.transcribe_result_path):
         _transcribe_audio_callback()
         return
 

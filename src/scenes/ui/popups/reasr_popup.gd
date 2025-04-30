@@ -42,12 +42,14 @@ func _ready() -> void:
 func popup_anchored(anchor_position: Vector2, direction: PopupManager.Direction = PopupManager.Direction.BOTTOM_RIGHT, blocking: bool = true) -> void:
     ProjectManager.show_blocker()
     PopupManager.show_popup_anchored(self, anchor_position, direction, blocking)
+    ok_button.disabled = true
 
 
 func close_popup() -> void:
     mark_click_handled()
     PopupManager.hide_popup(self)
     ProjectManager.hide_blocker()
+    EventBus.asr_popup_closed.emit()
 
 
 func update_text_edit() -> void:

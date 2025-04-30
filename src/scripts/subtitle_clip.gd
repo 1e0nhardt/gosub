@@ -25,7 +25,7 @@ func list_line() -> String:
 
 
 func _to_string() -> String:
-    return "[%s(%d)->%s(%d)]%s -- %s" % [get_start_timestamp(), start, get_end_timestamp(), end, first_text, second_text]
+    return "[%s->%s]%s -- %s" % [get_start_timestamp(), get_end_timestamp(), first_text, second_text]
 
 
 func split_long_sentences(json: Dictionary) -> void:
@@ -37,7 +37,10 @@ func split_long_sentences(json: Dictionary) -> void:
     var raw_data = second_text.split(" ", false)
 
     if result_data.size() != raw_data.size():
-        Logger.error("Punctuation error! Deepseek punctuation result length is not equal to raw data length!")
+        Logger.info("Punctuation failed! Deepseek punctuation result length is not equal to raw data length!")
+        Logger.info(self)
+        Logger.info(result)
+        _splited_clips = [self]
         return
 
     var new_clips: Array[SubtitleClip] = []

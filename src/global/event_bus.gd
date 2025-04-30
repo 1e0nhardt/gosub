@@ -18,6 +18,7 @@ signal subtitle_clip_index_updated
 signal subtitle_loaded
 signal subtitle_clips_updated
 signal clips_translated(clips: Array)
+signal asr_popup_closed
 
 signal ai_translate_progress_updated(progress: float)
 signal ai_translate_finished
