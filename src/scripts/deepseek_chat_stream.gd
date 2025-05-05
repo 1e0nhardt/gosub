@@ -4,6 +4,7 @@ extends DeepseekChat
 signal stream_data_received(message: String)
 
 var http_client: HTTPClient
+var connected: bool = false
 
 
 func _init() -> void:
@@ -15,19 +16,26 @@ func _init() -> void:
 
 
 func try_connect() -> void:
-    var err = http_client.connect_to_host(DEEPSEEK_HOST)
+    connected = false
+    TaskThreadPool.add_task(Task.new(connect_to.bind(http_client, DEEPSEEK_HOST),
+        func():
+            connected = true
+            Logger.info("Connected to DeepSeek server")
+            if messages.size() > 1:
+                http_client.request(HTTPClient.METHOD_POST, CHAT_COMPLETE_URL, deepseek_headers, JSON.stringify(payload))
+    ))
+
+
+func connect_to(client: HTTPClient, host: String) -> void:
+    var err = client.connect_to_host(host)
     if err != OK:
         Logger.error("Failed to connect to DeepSeek server")
         return
 
-    Profiler.start("DeepseekChatStream connecting...")
-    # Wait until resolved and connected.
-    while http_client.get_status() == HTTPClient.STATUS_CONNECTING or http_client.get_status() == HTTPClient.STATUS_RESOLVING:
-        http_client.poll()
-        # Logger.info("Connecting...")
-    Profiler.stop("DeepseekChatStream connecting...")
+    while client.get_status() == HTTPClient.STATUS_CONNECTING or client.get_status() == HTTPClient.STATUS_RESOLVING:
+        client.poll()
 
-    if http_client.get_status() != HTTPClient.STATUS_CONNECTED: # Check if the connection was made successfully.
+    if client.get_status() != HTTPClient.STATUS_CONNECTED: # Check if the connection was made successfully.
         Logger.error("Connection failed")
         return
 
@@ -77,7 +85,6 @@ func poll() -> void:
     if http_client.get_status() == HTTPClient.STATUS_CONNECTION_ERROR:
         Logger.error("Connection error. Trying to reconnect...")
         try_connect()
-        http_client.request(HTTPClient.METHOD_POST, CHAT_COMPLETE_URL, deepseek_headers, JSON.stringify(payload))
 
     if http_client.get_status() == HTTPClient.STATUS_BODY or http_client.get_status() == HTTPClient.STATUS_CONNECTED:
         if http_client.has_response():
