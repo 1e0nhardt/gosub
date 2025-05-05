@@ -1,0 +1,103 @@
+[gd_scene load_steps=8 format=3 uid="uid://x4sb2sngyg8r"]
+
+[ext_resource type="Script" uid="uid://55suj8e4t01a" path="res://scenes/ui/panels/video_edit_panel.gd" id="1_qw6pr"]
+[ext_resource type="Texture2D" uid="uid://btnnp2otbf0ne" path="res://assets/icons/sound_on.svg" id="2_212hd"]
+[ext_resource type="Texture2D" uid="uid://ds4rukafbcyeq" path="res://assets/icons/sound_off.svg" id="3_5xk66"]
+[ext_resource type="PackedScene" uid="uid://cyee50df6fbey" path="res://scenes/ui/components/data_display/timeline_metric_bar.tscn" id="4_4vwsv"]
+[ext_resource type="PackedScene" uid="uid://du03q4po885xx" path="res://scenes/ui/components/data_display/tracks_view.tscn" id="5_1ppqx"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_85g3d"]
+bg_color = Color(0.121569, 0.121569, 0.121569, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_choun"]
+bg_color = Color(0.14, 0.167, 0.2, 1)
+
+[node name="VideoEditPanel" type="PanelContainer"]
+offset_right = 1217.0
+offset_bottom = 269.0
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_85g3d")
+script = ExtResource("1_qw6pr")
+
+[node name="VideoEditVbox" type="VBoxContainer" parent="."]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="TimelineControlBar" type="HBoxContainer" parent="VideoEditVbox"]
+visible = false
+layout_mode = 2
+
+[node name="Button" type="Button" parent="VideoEditVbox/TimelineControlBar"]
+layout_mode = 2
+text = "Mode
+"
+
+[node name="Button3" type="Button" parent="VideoEditVbox/TimelineControlBar"]
+layout_mode = 2
+text = "Filter
+"
+
+[node name="Button4" type="Button" parent="VideoEditVbox/TimelineControlBar"]
+layout_mode = 2
+text = "Feature
+"
+
+[node name="Button5" type="Button" parent="VideoEditVbox/TimelineControlBar"]
+layout_mode = 2
+text = "Scale"
+
+[node name="TimelineComp" type="VBoxContainer" parent="VideoEditVbox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TrackHBox" type="HBoxContainer" parent="VideoEditVbox/TimelineComp"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 0
+
+[node name="ButtonVBox" type="VBoxContainer" parent="VideoEditVbox/TimelineComp/TrackHBox"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="MuteButton" type="TextureButton" parent="VideoEditVbox/TimelineComp/TrackHBox/ButtonVBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+toggle_mode = true
+texture_normal = ExtResource("2_212hd")
+texture_pressed = ExtResource("3_5xk66")
+stretch_mode = 5
+
+[node name="Control" type="Control" parent="VideoEditVbox/TimelineComp/TrackHBox"]
+custom_minimum_size = Vector2(7.5, 0)
+layout_mode = 2
+
+[node name="TracksVBox" type="VBoxContainer" parent="VideoEditVbox/TimelineComp/TrackHBox"]
+unique_name_in_owner = true
+clip_children = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="TimelineMetricBar" parent="VideoEditVbox/TimelineComp/TrackHBox/TracksVBox" instance=ExtResource("4_4vwsv")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="TracksScrollContainer" type="ScrollContainer" parent="VideoEditVbox/TimelineComp/TrackHBox/TracksVBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_choun")
+
+[node name="TracksView" parent="VideoEditVbox/TimelineComp/TrackHBox/TracksVBox/TracksScrollContainer" instance=ExtResource("5_1ppqx")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1920, 180)
+layout_mode = 2
+
+[node name="PointerDrawer" type="Control" parent="."]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2

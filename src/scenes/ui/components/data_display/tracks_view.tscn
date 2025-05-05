@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://du03q4po885xx"]
 
+[ext_resource type="Script" uid="uid://b2vsm0u6ocfno" path="res://scenes/ui/components/data_display/tracks_view.gd" id="1_t14jd"]
 [ext_resource type="PackedScene" uid="uid://b3ohjpea7nhlr" path="res://scenes/ui/components/data_display/video_view.tscn" id="4_6eo17"]
-[ext_resource type="PackedScene" uid="uid://bnpw8b8qdfcji" path="res://scenes/ui/components/data_display/waveform_view.tscn" id="6_pliev"]
 
 [node name="TracksView" type="VBoxContainer"]
 offset_right = 684.0
@@ -9,11 +9,10 @@ offset_bottom = 248.0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 alignment = 1
+script = ExtResource("1_t14jd")
 
 [node name="VideoView" parent="." instance=ExtResource("4_6eo17")]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(0, 60)
-layout_mode = 2
-
-[node name="WaveformView" parent="." instance=ExtResource("6_pliev")]
 layout_mode = 2

@@ -4,6 +4,7 @@ extends RefCounted
 var id: int
 var task: Callable
 var callback: Callable
+var completed: bool = false
 
 
 func _init(a_task: Callable, a_callback: Callable = Callable()):
@@ -17,6 +18,11 @@ func run() -> void:
 
 func call_callback() -> void:
     callback.call()
+    completed = true
+
+
+func is_completed() -> bool:
+    return completed
 
 
 func check_callables() -> bool:

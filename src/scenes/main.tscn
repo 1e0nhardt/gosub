@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cbkm7rji7557q"]
+[gd_scene load_steps=13 format=3 uid="uid://cbkm7rji7557q"]
 
 [ext_resource type="Script" uid="uid://dlq5b3xgkd2ui" path="res://scenes/main.gd" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://bn14hy61lju6w" path="res://scenes/ui/custom_tab_container.tscn" id="2_0wfyh"]
@@ -6,10 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://b7boml1k66pyo" path="res://scenes/ui/toggle_button.tscn" id="3_tefeu"]
 [ext_resource type="Script" uid="uid://c7nj8dnnatmfv" path="res://scenes/ui/popups/popup_manager.gd" id="4_jyhfs"]
 [ext_resource type="Texture2D" uid="uid://dqmg41fqhpgnc" path="res://assets/icons/icon-maximize.svg" id="4_tefeu"]
-[ext_resource type="PackedScene" uid="uid://du03q4po885xx" path="res://scenes/ui/components/data_display/tracks_view.tscn" id="5_o6xl0"]
-[ext_resource type="Texture2D" uid="uid://btnnp2otbf0ne" path="res://assets/icons/sound_on.svg" id="6_85g3d"]
-[ext_resource type="Texture2D" uid="uid://ds4rukafbcyeq" path="res://assets/icons/sound_off.svg" id="7_choun"]
-[ext_resource type="PackedScene" uid="uid://cyee50df6fbey" path="res://scenes/ui/components/data_display/timeline_metric_bar.tscn" id="8_choun"]
+[ext_resource type="PackedScene" uid="uid://x4sb2sngyg8r" path="res://scenes/ui/panels/video_edit_panel.tscn" id="5_o6xl0"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0wfyh"]
 
@@ -18,17 +15,6 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jyhfs"]
 
 [sub_resource type="ImageTexture" id="ImageTexture_o5qli"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_85g3d"]
-content_margin_left = 8.0
-content_margin_top = 8.0
-content_margin_right = 8.0
-bg_color = Color(0.121569, 0.121569, 0.121569, 1)
-corner_radius_top_left = 8
-corner_radius_top_right = 8
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_choun"]
-bg_color = Color(0.7, 0.7, 0.7, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tefeu"]
 bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
@@ -241,89 +227,8 @@ layout_mode = 2
 theme_type_variation = &"IconButton"
 icon = ExtResource("4_tefeu")
 
-[node name="VideoEditPanel" type="PanelContainer" parent="MainLayout/HSplitContainer/VSplitContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_85g3d")
-
-[node name="TimelineVBox" type="VBoxContainer" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel"]
+[node name="VideoEditPanel" parent="MainLayout/HSplitContainer/VSplitContainer" instance=ExtResource("5_o6xl0")]
 unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="TimelineControlBar" type="HBoxContainer" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel/TimelineVBox"]
-visible = false
-layout_mode = 2
-
-[node name="Button" type="Button" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel/TimelineVBox/TimelineControlBar"]
-layout_mode = 2
-text = "Mode
-"
-
-[node name="Button3" type="Button" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel/TimelineVBox/TimelineControlBar"]
-layout_mode = 2
-text = "Filter
-"
-
-[node name="Button4" type="Button" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel/TimelineVBox/TimelineControlBar"]
-layout_mode = 2
-text = "Feature
-"
-
-[node name="Button5" type="Button" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel/TimelineVBox/TimelineControlBar"]
-layout_mode = 2
-text = "Scale"
-
-[node name="TimelineComp" type="VBoxContainer" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel/TimelineVBox"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="ProgressSlider" type="HSlider" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel/TimelineVBox/TimelineComp"]
-unique_name_in_owner = true
-layout_mode = 2
-
-[node name="TrackHBox" type="HBoxContainer" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel/TimelineVBox/TimelineComp"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 0
-
-[node name="ButtonVBox" type="VBoxContainer" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel/TimelineVBox/TimelineComp/TrackHBox"]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-alignment = 1
-
-[node name="MuteButton" type="TextureButton" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel/TimelineVBox/TimelineComp/TrackHBox/ButtonVBox"]
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-toggle_mode = true
-texture_normal = ExtResource("6_85g3d")
-texture_pressed = ExtResource("7_choun")
-stretch_mode = 5
-
-[node name="Control" type="Control" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel/TimelineVBox/TimelineComp/TrackHBox"]
-custom_minimum_size = Vector2(7.5, 0)
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel/TimelineVBox/TimelineComp/TrackHBox"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_constants/separation = 0
-
-[node name="TimelineMetricBar" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel/TimelineVBox/TimelineComp/TrackHBox/VBoxContainer" instance=ExtResource("8_choun")]
-layout_mode = 2
-
-[node name="ScrollContainer" type="ScrollContainer" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel/TimelineVBox/TimelineComp/TrackHBox/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxFlat_choun")
-
-[node name="TracksView" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel/TimelineVBox/TimelineComp/TrackHBox/VBoxContainer/ScrollContainer" instance=ExtResource("5_o6xl0")]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(1920, 180)
-layout_mode = 2
-
-[node name="Control2" type="Control" parent="MainLayout/HSplitContainer/VSplitContainer/VideoEditPanel/TimelineVBox/TimelineComp/TrackHBox"]
-custom_minimum_size = Vector2(7.5, 0)
 layout_mode = 2
 
 [node name="CustomTabContainer" parent="MainLayout/HSplitContainer" instance=ExtResource("2_0wfyh")]

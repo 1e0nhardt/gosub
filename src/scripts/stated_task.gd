@@ -15,6 +15,7 @@ func run() -> void:
 
 func call_callback() -> void:
     callback.call(state)
+    completed = true
 
 
 func check_callables_arguments() -> bool:

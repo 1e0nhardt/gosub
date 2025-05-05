@@ -13,6 +13,8 @@ signal pipeline_finished
 signal video_changed(path: String)
 signal jump_to_here_requested(time: float)
 signal video_paused(pause_or_play: bool)
+signal video_sought(time: float)
+signal audio_loaded(audio: AudioStream)
 
 signal subtitle_clip_index_updated
 signal subtitle_loaded

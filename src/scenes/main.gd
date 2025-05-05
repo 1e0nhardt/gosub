@@ -31,7 +31,6 @@ var bg_stylebox: StyleBox
 @onready var viewport: TextureRect = %Viewport
 @onready var play_button: Button = %PlayButton
 @onready var subtitle_button: Button = %SubtitleButton
-@onready var progress_slider: HSlider = %ProgressSlider
 @onready var time_label: Label = %TimeLabel
 @onready var project_name_edit: LineEdit = %ProjectNameEdit
 @onready var subtitle_label: Label = %SubtitleLabel
@@ -45,7 +44,7 @@ var bg_stylebox: StyleBox
 # @onready var version_label: Label = %VersionLabel
 
 @onready var status_message_timer: Timer = %StatusMessageTimer
-@onready var tracks_view: VBoxContainer = %TracksView
+@onready var video_edit_panel: VideoEditPanel = %VideoEditPanel
 
 
 func _ready() -> void:
@@ -55,6 +54,7 @@ func _ready() -> void:
 
     EventBus.video_changed.connect(open_video)
     EventBus.video_paused.connect(func(b): play_button.button_pressed = b)
+    EventBus.video_sought.connect(func(t): seek_time(t, true))
     EventBus.jump_to_here_requested.connect(func(time):
         seek_time(time, true)
         update_subtitles()
@@ -79,8 +79,6 @@ func _ready() -> void:
     )
 
     play_button.toggled.connect(_on_play_button_toggled)
-    progress_slider.drag_started.connect(_on_progress_slider_drag_started)
-    progress_slider.drag_ended.connect(_on_progress_slider_drag_ended)
     project_name_edit.mouse_entered.connect(func(): mouse_on_project_name_edit = true)
     project_name_edit.mouse_exited.connect(func(): mouse_on_project_name_edit = false)
     project_name_edit.text_submitted.connect(func(new_text):
@@ -154,7 +152,6 @@ func _ready() -> void:
     Profiler.stop("ProjectManager.show_select_project_popup")
 
     queue_redraw.call_deferred()
-    tracks_view.custom_minimum_size = Vector2(1200, 300)
 
 
 func _draw() -> void:
@@ -192,7 +189,8 @@ func _process(delta) -> void:
             else:
                 viewport.texture.set_image(video.next_frame())
 
-            progress_slider.value = current_frame
+            # progress_slider.value = current_frame
+            video_edit_panel.on_process(current_time)
 
         update_subtitles()
 
@@ -209,11 +207,12 @@ func open_video(filepath: String):
     # Logger.info("Video Path: %s" % filepath)
 
     video.open_video(filepath)
-    audio_stream_player.stream = video.get_audio()
+    var audio_stream = video.get_audio()
+    audio_stream_player.stream = audio_stream
+    EventBus.audio_loaded.emit(audio_stream)
     max_frame = video.get_total_frame_number()
     raw_frame_rate = video.get_frame_rate()
     frame_rate = raw_frame_rate
-    progress_slider.max_value = max_frame
 
     seek_frame(1, true)
     if FileAccess.file_exists(ProjectManager.current_project.thumbnail_path):
@@ -224,6 +223,8 @@ func open_video(filepath: String):
 func seek_frame(frame_number: int, flush_canvas = false):
     if frame_number < 0 or frame_number >= max_frame:
         Logger.info("Invalid frame number: %s" % frame_number)
+        viewport.texture.set_image(Image.create_empty(16, 9, false, Image.FORMAT_RGBA8))
+        play_button.button_pressed = false
         return
 
     var img = video.seek_frame(frame_number)
@@ -232,7 +233,7 @@ func seek_frame(frame_number: int, flush_canvas = false):
     current_frame = frame_number
     audio_stream_player.play(current_time)
     audio_stream_player.stream_paused = !is_playing
-    progress_slider.set_value_no_signal(current_frame)
+    # progress_slider.set_value_no_signal(current_frame)
 
 
 func seek_time(time: float, flush_canvas = false):
@@ -271,19 +272,10 @@ func update_subtitles():
             subtitle_label.hide()
             subtitle_label2.hide()
 
+
 #region video player events
 func _on_play_button_toggled(toggled_on: bool) -> void:
     play(toggled_on)
-
-
-func _on_progress_slider_drag_ended(_value_changed):
-    dragging = false
-    seek_frame(int(progress_slider.value))
-
-
-func _on_progress_slider_drag_started():
-    dragging = true
-    audio_stream_player.stream_paused = true
 #endregion
 
 
