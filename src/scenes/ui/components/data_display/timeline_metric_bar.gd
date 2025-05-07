@@ -67,7 +67,7 @@ class Metric extends RefCounted:
         pixels_per_ms_threshold.resize(ZOOM_FRAMES_PER_INTERVAL.size())
         for i in range(ZOOM_FRAMES_PER_INTERVAL.size()):
             pixels_per_ms_threshold[i] = (ZOOM_FRAMES_PER_INTERVAL[-1] / ZOOM_FRAMES_PER_INTERVAL[i]) * base_ppms
-        Logger.info(pixels_per_ms_threshold, {})
+        # Logger.info(pixels_per_ms_threshold, {})
 
     func draw(smaller: bool = false) -> void:
         var line_height := canvas_node.size.y / 2

@@ -64,8 +64,9 @@ func split_long_sentences(json: Dictionary) -> void:
             empty_compensation += 1
             continue
 
-        content = result_data[i - empty_compensation - start_index]
-        clip.second_text += " " + content
+        if i - empty_compensation - start_index < result_data.size():
+            content = result_data[i - empty_compensation - start_index]
+            clip.second_text += " " + content
 
         # 最后一个句子。可能不是以`.`结尾的。
         if i == len(data) - 1:

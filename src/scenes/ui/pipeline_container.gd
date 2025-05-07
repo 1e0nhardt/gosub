@@ -14,6 +14,8 @@ func _ready() -> void:
         func(stage):
             set_stage(stage)
             match stage:
+                1:
+                    _start_pipeline()
                 2:
                     _download_video_callback()
                 3:
