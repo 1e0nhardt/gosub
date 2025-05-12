@@ -2,7 +2,7 @@ class_name VideoEditPanel
 extends PanelContainer
 var audio_stream: AudioStreamWAV
 
-var pointer_line_width: int = 2
+var pointer_line_width: float = 0.5
 var pointer_local_pos_x: float = 0.0:
     set(value):
         if pointer_local_pos_x == value:
@@ -34,7 +34,7 @@ func _ready() -> void:
 func draw_pointer() -> void:
     var rel_pos = tracks_vbox.global_position - pointer_drawer.global_position
     rel_pos.x = rel_pos.x - pointer_line_width / 2.0 + pointer_local_pos_x
-    pointer_drawer.draw_rect(Rect2(rel_pos, Vector2(pointer_line_width, tracks_vbox.size.y)), Color(0.2, 0.8, 0.2))
+    pointer_drawer.draw_line(rel_pos, Vector2(rel_pos.x, tracks_vbox.size.y), Color(0.3, 0.8, 0.2), pointer_line_width, true)
 
 
 func on_process(t: float) -> void:
@@ -76,3 +76,4 @@ func _on_h_scroll_bar_value_changed(new_value: float) -> void:
     # -new_value 可以看做view的position.x
     var start := (new_value / tracks_view.max_audio_waveform_width) * audio_stream.get_length() * 1000
     timeline_metric.set_start_time(int(start))
+    pointer_drawer.queue_redraw()

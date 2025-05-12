@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://cp6d6rfiw3ma7"]
 
 [ext_resource type="Script" uid="uid://b046yeeqeb250" path="res://scenes/ui/settings/revealer.gd" id="1_w7mc8"]
-[ext_resource type="Shader" uid="uid://b8kq0f8d146ju" path="res://assets/shaders/icon_modulate.gdshader" id="2_1ytam"]
+[ext_resource type="Shader" uid="uid://b8kq0f8d146ju" path="res://shaders/icon_modulate.gdshader" id="2_1ytam"]
 [ext_resource type="Texture2D" uid="uid://b31eovdw7hnxe" path="res://assets/icons/right_arrow.png" id="2_tc2du"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hexrk"]

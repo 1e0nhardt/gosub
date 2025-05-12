@@ -29,7 +29,7 @@ func _to_string() -> String:
 
 
 func split_long_sentences(json: Dictionary) -> void:
-    var message = ProjectManager.get_setting_value("/llm/common/prompt/punctuation") + "\n" + second_text
+    var message = SettingHelper.get_setting_value("/llm/common/prompt/punctuation") + "\n" + second_text
     DeepSeekApi.punctuation_once(message)
     await DeepSeekApi.punctuation_message_received
     var result = DeepSeekApi.received_punctuation_message
@@ -78,7 +78,7 @@ func split_long_sentences(json: Dictionary) -> void:
 
         # try split long sentence
         if content.ends_with(","):
-            if segment["offsets"]["to"] - clip.start > ProjectManager.get_setting_value("/transcribe/whisper.cpp/smart_split_threshold") * 1000:
+            if segment["offsets"]["to"] - clip.start > SettingHelper.get_setting_value("/transcribe/whisper.cpp/smart_split_threshold") * 1000:
                 clip.end = segment["offsets"]["to"]
                 new_clips.append(clip)
                 clip = SubtitleClip.new()

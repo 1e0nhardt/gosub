@@ -32,7 +32,7 @@ var deepseek_headers := [
 
 var system_message_dict := {
     "role": "system",
-    "content": ProjectManager.get_setting_value("/llm/common/prompt/chat")
+    "content": SettingHelper.get_setting_value("/llm/common/prompt/chat")
 }
 var messages := [system_message_dict.duplicate()]
 
@@ -75,7 +75,7 @@ func get_message() -> String:
 
 
 func get_deepseek_api_key() -> String:
-    var api_key = ProjectManager.get_setting_value("/llm/deepseek/api_key")
+    var api_key = SettingHelper.get_setting_value("/llm/deepseek/api_key")
     if not api_key:
         Logger.warn("DeepseekChat: No API key found. Please set it in the project settings.")
         return ""

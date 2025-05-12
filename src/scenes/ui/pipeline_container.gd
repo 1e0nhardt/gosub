@@ -167,7 +167,7 @@ func _on_render_video() -> void:
         ProjectManager.current_project.video_path,
         ass_path,
         ass_path.get_base_dir().path_join("%s.mp4" % video_title),
-        ProjectManager.get_setting_value("/video/render/bit_rate")
+        SettingHelper.get_setting_value("/video/render/bit_rate")
     )
     var run_ffmpeg_task = RunProgramTask.new(result[0], result[1], _render_video_callback)
     TaskThreadPool.run_program(run_ffmpeg_task)

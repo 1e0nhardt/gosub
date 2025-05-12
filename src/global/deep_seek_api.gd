@@ -91,7 +91,7 @@ func json_to_clips(json_path: String) -> bool:
 
     # 将原始 JSON 数据转换为 SubtitleClip 数组
     # -ml 1
-    if ProjectManager.get_setting_value("/transcribe/whisper.cpp/smart_split"):
+    if SettingHelper.get_setting_value("/transcribe/whisper.cpp/smart_split"):
         for i in range(len(data)):
             var segment = data[i]
             # 最后一个句子。可能不是以`.`结尾的。
@@ -111,7 +111,7 @@ func json_to_clips(json_path: String) -> bool:
 
             # try split long sentence
             if content.ends_with(","):
-                if segment["offsets"]["to"] - clip.start > ProjectManager.get_setting_value("/transcribe/whisper.cpp/smart_split_threshold") * 1000:
+                if segment["offsets"]["to"] - clip.start > SettingHelper.get_setting_value("/transcribe/whisper.cpp/smart_split_threshold") * 1000:
                     clip.end = segment["offsets"]["to"]
                     clips.append(clip)
                     clip = SubtitleClip.new()
@@ -136,9 +136,9 @@ func json_to_clips(json_path: String) -> bool:
 
     # 如果发现很长的片段，则尝试用DeepSeek将其拆分为多个片段。(LLM 模型的结果不确定性高，很可能出错)
     var new_clips: Array[SubtitleClip] = []
-    if ProjectManager.get_setting_value("/transcribe/whisper.cpp/smart_split"):
+    if SettingHelper.get_setting_value("/transcribe/whisper.cpp/smart_split"):
         for new_clip in clips:
-            if new_clip.second_text.length() > ProjectManager.get_setting_value("/transcribe/whisper.cpp/smart_punctuation_threshold"):
+            if new_clip.second_text.length() > SettingHelper.get_setting_value("/transcribe/whisper.cpp/smart_punctuation_threshold"):
                 Logger.info("Split long sentence: %s" % new_clip)
                 await new_clip.split_long_sentences(json)
                 new_clips += new_clip._splited_clips
@@ -150,8 +150,8 @@ func json_to_clips(json_path: String) -> bool:
     # new_clips = []
     # var ind := 0
     # while ind < clips.size():
-    #     if clips[ind].second_text.length() > ProjectManager.get_setting_value("/transcribe/whisper.cpp/sentence_min_words"):
-    #         if ind < clips.size() - 1 and clips[ind + 1].start - clips[ind].end > ProjectManager.get_setting_value("/transcribe/whisper.cpp/sentence_max_gap_time") * 1000:
+    #     if clips[ind].second_text.length() > SettingHelper.get_setting_value("/transcribe/whisper.cpp/sentence_min_words"):
+    #         if ind < clips.size() - 1 and clips[ind + 1].start - clips[ind].end > SettingHelper.get_setting_value("/transcribe/whisper.cpp/sentence_max_gap_time") * 1000:
     #             clips[ind].second_text += clips[ind + 1].second_text
     #             clips[ind].end = clips[ind + 1].end
     #             new_clips.append(clips[ind])
@@ -164,11 +164,11 @@ func json_to_clips(json_path: String) -> bool:
     # Logger.info(new_clips)
 
     var start_time = Time.get_ticks_msec()
-    deepseek_chat_translate.set_system_prompt.call_deferred(ProjectManager.get_setting_value("/llm/common/prompt/translate"))
+    deepseek_chat_translate.set_system_prompt.call_deferred(SettingHelper.get_setting_value("/llm/common/prompt/translate"))
     EventBus.ai_translate_progress_updated.emit.call_deferred(0)
     var source_contents := ""
 
-    var clips_one_chat: int = ProjectManager.get_setting_value("/llm/common/clips_per_chat")
+    var clips_one_chat: int = SettingHelper.get_setting_value("/llm/common/clips_per_chat")
     for i in range(0, len(clips), clips_one_chat):
         for j in clips_one_chat:
             if i + j >= len(clips):
@@ -203,7 +203,7 @@ func json_to_clips(json_path: String) -> bool:
 
 
 func translate_clips(clips: Array) -> void:
-    deepseek_chat_translate.set_system_prompt.call_deferred(ProjectManager.get_setting_value("/llm/common/prompt/translate"))
+    deepseek_chat_translate.set_system_prompt.call_deferred(SettingHelper.get_setting_value("/llm/common/prompt/translate"))
     var source_contents := ""
 
     for i in range(0, len(clips), 8):

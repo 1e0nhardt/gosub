@@ -176,5 +176,5 @@ func _on_items_vbox_sort() -> void:
 
 func _on_settings_valued_changed(path: String, value) -> void:
     Logger.info("%s: %s" % [path, value])
-    ProjectManager.set_setting_value(path, value)
-    ProjectManager.save_settings()
+    SettingHelper.set_setting_value(path, value)
+    SettingHelper.save_settings()

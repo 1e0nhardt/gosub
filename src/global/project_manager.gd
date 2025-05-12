@@ -23,10 +23,7 @@ var _file_dialog_finalize_callable: Callable = Callable()
 
 
 func _init() -> void:
-    if FileAccess.file_exists(SETTINGS_PATH):
-        settings = JSON.parse_string(FileAccess.get_file_as_string(SETTINGS_PATH))
-    else:
-        settings = Constant.DEFAULT_SETTINGS
+    SettingHelper.load_settings()
 
     Util.ensure_dir(PROJECT_FILE_FOLDER)
     register_projects()
@@ -44,26 +41,6 @@ func _notification(what: int) -> void:
             _reasr_popup.queue_free()
         if is_instance_valid(_controls_blocker):
             _controls_blocker.queue_free()
-
-
-func save_settings() -> void:
-    var file = FileAccess.open(SETTINGS_PATH, FileAccess.WRITE)
-    file.store_string(JSON.stringify(settings))
-    file.close()
-
-
-func get_setting_value(path: String) -> Variant:
-    var dict = settings
-    for p in path.split("/", false):
-        dict = dict.get(p, {})
-    return dict.get("data", null)
-
-
-func set_setting_value(path: String, value: Variant) -> void:
-    var value_dict = settings
-    for p in path.split("/", false):
-        value_dict = value_dict.get(p)
-    value_dict["data"] = value
 
 
 #region Project Management

@@ -14,7 +14,8 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_jyhfs"]
 
-[sub_resource type="ImageTexture" id="ImageTexture_o5qli"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_o6xl0"]
+viewport_path = NodePath("MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer/VideoViewport")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tefeu"]
 bg_color = Color(0.0784314, 0.0784314, 0.0784314, 1)
@@ -127,21 +128,25 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="CenterHelper" type="Control" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer"]
+[node name="VideoCanvas" type="TextureRect" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 360)
 layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Viewport" type="TextureRect" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer/CenterHelper"]
-unique_name_in_owner = true
-layout_mode = 0
-size_flags_vertical = 3
-texture = SubResource("ImageTexture_o5qli")
+texture = SubResource("ViewportTexture_o6xl0")
 expand_mode = 1
+stretch_mode = 5
 
-[node name="SubtitelVBox" type="VBoxContainer" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer/CenterHelper/Viewport"]
-layout_mode = 1
+[node name="VideoViewport" type="SubViewport" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer"]
+unique_name_in_owner = true
+size = Vector2i(1920, 1080)
+
+[node name="Background" type="ColorRect" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer/VideoViewport"]
+offset_right = 1920.0
+offset_bottom = 1080.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0.194073, 0.382553, 0.434539, 1)
+
+[node name="SubtitelVBox" type="VBoxContainer" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer/VideoViewport"]
 anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
@@ -149,7 +154,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="SubtitleLabel" type="Label" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer/CenterHelper/Viewport/SubtitelVBox"]
+[node name="SubtitleLabel" type="Label" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer/VideoViewport/SubtitelVBox"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(0, 5)
@@ -161,7 +166,7 @@ text = "这是字幕"
 horizontal_alignment = 1
 autowrap_mode = 3
 
-[node name="SubtitleLabel2" type="Label" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer/CenterHelper/Viewport/SubtitelVBox"]
+[node name="SubtitleLabel2" type="Label" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/MarginContainer/VideoViewport/SubtitelVBox"]
 unique_name_in_owner = true
 visible = false
 custom_minimum_size = Vector2(0, 5)
@@ -214,6 +219,12 @@ alignment = 2
 visible = false
 layout_mode = 2
 text = "16:9"
+
+[node name="RenderButton" type="Button" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/VideoPlayControlBar/RightHbox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "render"
 
 [node name="SubtitleButton" type="Button" parent="MainLayout/HSplitContainer/VSplitContainer/VideoInfo/VideoPlayControlBar/RightHbox"]
 unique_name_in_owner = true

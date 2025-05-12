@@ -30,7 +30,6 @@ class Waveform extends RefCounted:
     var neg_envelope := []
     var canvas_node: Control
     var color: Color
-    var block_spacing: int = 4
     var width: float
     var dirty: bool = false
     var calculate_envelope_task: StatedTask
@@ -57,7 +56,7 @@ class Waveform extends RefCounted:
         if calculate_envelope_task and (not calculate_envelope_task.is_completed()):
             return
 
-        var frames_per_block = ceili(_calc_total_frames(audio_data) / canvas_node.size.x) * block_spacing
+        var frames_per_block = 512
         calculate_envelope_task = StatedTask.new(calculate_envelope_thread.bind(audio_data, frames_per_block), calculate_envelope_thread_callback)
         TaskThreadPool.add_task(calculate_envelope_task)
 
@@ -85,8 +84,8 @@ class Waveform extends RefCounted:
         for i in range(block_amount):
             var pos_h: float = half_height * pos_envelope[i]
             var neg_h: float = half_height * abs(neg_envelope[i])
-            canvas_node.draw_line(Vector2(i * w, half_height), Vector2(i * w, half_height - pos_h), color, max(w / block_spacing, 1.0))
-            canvas_node.draw_line(Vector2(i * w, half_height), Vector2(i * w, half_height + neg_h), color, max(w / block_spacing, 1.0))
+            canvas_node.draw_line(Vector2(i * w, half_height), Vector2(i * w, half_height - pos_h), color, w)
+            canvas_node.draw_line(Vector2(i * w, half_height), Vector2(i * w, half_height + neg_h), color, w)
 
     func _calc_total_frames(data: PackedByteArray) -> int:
         return ceili(data.size() / 4.0)

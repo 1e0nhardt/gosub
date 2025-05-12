@@ -16,7 +16,7 @@ static func get_real_path(rel_path: String) -> String:
 ## [param url] 视频链接
 static func get_video_title(url: String) -> String:
     var yt_dlp_path = get_real_path("bin/yt-dlp.exe")
-    var proxy = ProjectManager.get_setting_value("/video/download/proxy")
+    var proxy = SettingHelper.get_setting_value("/video/download/proxy")
     var args := ""
     if proxy:
         args = '--proxy http://127.0.0.1:7890 --get-title "%s"' % url
@@ -46,7 +46,7 @@ static func download_video(url: String, output_path: String = "") -> bool:
 static func download_video_execute_prepare(url: String, output_path: String = "") -> Array[String]:
     var yt_dlp_path = get_real_path("bin/yt-dlp.exe")
     var args = ""
-    var proxy = ProjectManager.get_setting_value("/video/download/proxy")
+    var proxy = SettingHelper.get_setting_value("/video/download/proxy")
     if proxy:
         args += '-o "%s" --proxy %s --write-thumbnail --convert-thumbnails png -f "bestvideo[height<=1080][ext=mp4][vcodec^=avc1]+bestaudio[ext=m4a]" --merge-output-format mp4 "%s"' % [output_path, proxy, url]
     else:
@@ -95,10 +95,10 @@ static func transcribe_audio(audio_file_path: String, output_path: String = "") 
 
 static func transcribe_audio_execute_prepare(audio_file_path: String, output_path: String = "") -> Array[String]:
     var whisper_cli_path = get_real_path("bin/whisper/cuda/whisper-cli.exe")
-    if not ProjectManager.get_setting_value("/transcribe/whisper.cpp/use_gpu"):
+    if not SettingHelper.get_setting_value("/transcribe/whisper.cpp/use_gpu"):
         whisper_cli_path = get_real_path("bin/whisper/cpu/whisper-cli.exe")
 
-    var model_path = ProjectManager.get_setting_value("/transcribe/whisper.cpp/model_path")
+    var model_path = SettingHelper.get_setting_value("/transcribe/whisper.cpp/model_path")
     if not model_path:
         model_path = get_real_path("bin/whisper/models/ggml-base.en.bin")
 
@@ -107,7 +107,7 @@ static func transcribe_audio_execute_prepare(audio_file_path: String, output_pat
         audio_file_path,
         output_path.get_basename()
     ]
-    var smart = ProjectManager.get_setting_value("/transcribe/whisper.cpp/smart_split")
+    var smart = SettingHelper.get_setting_value("/transcribe/whisper.cpp/smart_split")
     if smart:
         args += " -ml 1"
     return [whisper_cli_path, args]
@@ -126,10 +126,10 @@ static func transcribe_segment(audio_file_path: String, offset_from: int, offset
 
 static func transcribe_segment_execute_prepare(audio_file_path: String, offset_from: int, offset_to: int) -> Array[String]:
     var whisper_cli_path = get_real_path("bin/whisper/cuda/whisper-cli.exe")
-    if not ProjectManager.get_setting_value("/transcribe/whisper.cpp/use_gpu"):
+    if not SettingHelper.get_setting_value("/transcribe/whisper.cpp/use_gpu"):
         whisper_cli_path = get_real_path("bin/whisper/cpu/whisper-cli.exe")
 
-    var model_path = ProjectManager.get_setting_value("/transcribe/whisper.cpp/model_path")
+    var model_path = SettingHelper.get_setting_value("/transcribe/whisper.cpp/model_path")
     if not model_path:
         model_path = get_real_path("bin/whisper/models/ggml-base.en.bin")
 
@@ -140,7 +140,7 @@ static func transcribe_segment_execute_prepare(audio_file_path: String, offset_f
         offset_from,
         offset_to - offset_from
     ]
-    var smart = ProjectManager.get_setting_value("/transcribe/whisper.cpp/smart_split")
+    var smart = SettingHelper.get_setting_value("/transcribe/whisper.cpp/smart_split")
     if smart:
         args += " -ml 1"
     return [whisper_cli_path, args]
