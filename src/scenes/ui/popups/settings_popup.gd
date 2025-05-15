@@ -8,7 +8,7 @@ const REVEALER_SCENE = preload("res://scenes/ui/settings/revealer.tscn")
 @export var button_group: ButtonGroup
 
 var settings: Dictionary:
-    get(): return ProjectManager.settings
+    get(): return SettingHelper.settings
 
 @onready var close_button: Button = %CloseButton
 @onready var category_vbox: VBoxContainer = %CategoryVBox

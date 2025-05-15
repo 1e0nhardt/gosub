@@ -88,6 +88,8 @@ func seek_frame(frame_number: int):
 
     var t = frame_number / video.get_framerate()
     audio_player.play_at(t)
+    if not VideoManager.is_playing:
+        audio_player.play(false)
 
 
 func update_canvas():

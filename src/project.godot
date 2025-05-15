@@ -27,8 +27,8 @@ DeepseekThread="*res://global/deepseek_thread.gd"
 EventBus="*res://global/event_bus.gd"
 ProjectManager="*res://global/project_manager.gd"
 TaskThreadPool="*res://global/task_thread_pool.gd"
-AudioManager="*res://global/audio_manager.gd"
 VideoManager="*res://global/video_manager.gd"
+AudioManager="*res://global/audio_manager.gd"
 
 [debug]
 

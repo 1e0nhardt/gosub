@@ -8,7 +8,8 @@ var tracks: Array[Track] = []
 var is_playing: bool = false
 var frame_nr: int = 0
 var time_elapsed: float = 0.0
-var frame_time: float = 1.0 / 30.0 # Get's set when changing framerate
+var frame_time: float:
+    get(): return 1.0 / frame_rate if frame_rate > 0 else 1.0 / 30.0 # Get's set when changing framerate
 var skips: int = 0
 
 var frame_rate: int

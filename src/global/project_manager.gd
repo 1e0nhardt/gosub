@@ -5,9 +5,6 @@ const SELECT_PROJECT_POPUP_SCENE = preload("res://scenes/ui/popups/select_projec
 const SETTINGS_POPUP_SCENE = preload("res://scenes/ui/popups/settings_popup.tscn")
 const INFO_POPUP_SCENE = preload("res://scenes/ui/popups/info_popup.tscn")
 const REASR_POPUP_SCENE = preload("res://scenes/ui/popups/reasr_popup.tscn")
-const SETTINGS_PATH: String = "user://settings.json"
-
-var settings: Dictionary = {}
 
 var current_project: Project = null
 var registered_projects: Dictionary[String, Project] = {}

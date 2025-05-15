@@ -149,6 +149,8 @@ func _input(event: InputEvent) -> void:
 
 
 func _process(delta) -> void:
+    if not VideoManager:
+        return
     VideoManager.process(delta)
     time_label.text = VideoManager.get_time_label_text()
     update_subtitles()

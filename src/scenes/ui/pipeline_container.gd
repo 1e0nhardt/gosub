@@ -113,12 +113,11 @@ func _get_video_title_callback(state: Dictionary) -> void:
 
 func _download_video_callback() -> void:
     set_stage(2)
+    ProjectManager.send_status_message("Extracting audio...")
     if FileAccess.file_exists(ProjectManager.current_project.audio_path):
         _extract_audio_callback()
         return
 
-    EventBus.video_changed.emit(ProjectManager.current_project.video_path)
-    ProjectManager.send_status_message("Extracting audio...")
     var result = Executer.extract_audio_execute_prepare(
         ProjectManager.current_project.video_path,
         ProjectManager.current_project.audio_path
@@ -134,6 +133,7 @@ func _extract_audio_callback() -> void:
         _transcribe_audio_callback()
         return
 
+    EventBus.video_changed.emit(ProjectManager.current_project.video_path)
     var result = Executer.transcribe_audio_execute_prepare(
         ProjectManager.current_project.audio_path,
         ProjectManager.current_project.transcribe_result_path
